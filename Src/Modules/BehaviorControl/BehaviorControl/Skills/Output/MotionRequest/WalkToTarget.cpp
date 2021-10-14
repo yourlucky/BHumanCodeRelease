@@ -38,6 +38,10 @@ class WalkToTargetImpl : public WalkToTargetImplBase
     model = std::make_unique<NeuralNetwork::Model>("NeuralNets/test.h5");
     policy.compile(*model);
     
+    theMotionRequest.motion = MotionRequest::walk;
+
+
+    /*
     //Assigning the input for the policy
     std::vector<unsigned int> sizeOfInput {2};
     NeuralNetwork::TensorXf inputTensor(sizeOfInput,0);
@@ -54,6 +58,7 @@ class WalkToTargetImpl : public WalkToTargetImplBase
       theMotionRequest.motion = MotionRequest::walk;
     else
       theMotionRequest.motion = MotionRequest::stand;
+    */
     theMotionRequest.walkRequest.mode = WalkRequest::targetMode;
     theMotionRequest.walkRequest.target = p.target;
     theMotionRequest.walkRequest.speed = p.speed;
