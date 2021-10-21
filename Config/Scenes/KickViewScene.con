@@ -20,3 +20,5 @@ vp plot2 1000 -50 50
 vpd plot2 module:KickEngine:refx red
 vpd plot2 module:KickEngine:comx blue
 vpd plot2 module:KickEngine:diffx orange
+
+gc playing
