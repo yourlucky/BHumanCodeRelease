@@ -6,8 +6,11 @@
  * @author Arne Hasselbring
  */
 
+
+#include <fstream>
 #include <iostream>
 #include <math.h> 
+
 
 #include "Representations/BehaviorControl/Libraries/LibCheck.h"
 #include "Representations/BehaviorControl/Skills.h"
@@ -19,8 +22,8 @@
 #include "Tools/NeuralNetwork/CompiledNN.h"
 #include "Tools/NeuralNetwork/Model.h"
 #include "Tools/NeuralNetwork/Tensor.h"
+#include "Tools/NeuralNetwork/json.h"
 #include "Tools/Streams/OutStreams.h"
-#include "Tools/NeuralNetwork/date.h"
 
 #define STATS_GO_INLINE
 #define STATS_DONT_USE_OPENMP
@@ -41,20 +44,62 @@ class WalkToTargetImpl : public WalkToTargetImplBase
   void execute(const WalkToTarget& p) override
   {
     
+    std::ifstream metadataFile("/home/john/BHumanCodeRelease/Config/NeuralNets/metadata.json");
+    json::value metadata = json::parse(metadataFile);
     
+    std::string observationLengthString = to_string(metadata["observation_length"]);
+    unsigned int observationLength = (unsigned int)(std::stoi(observationLengthString));
 
-    Date d(1,1,1);
+    std::string actionLengthString = to_string(metadata["action_length"]);
+    unsigned int actionLength = (unsigned int)(std::stoi(actionLengthString));
 
 
+    std::cout <<  "OBSERVATION LENGTH" << std::endl;
+    std::cout << observationLength << std::endl;
+
+    std::cout <<  "ACTION LENGTH" << std::endl;
+    std::cout << actionLengthString << std::endl;
+
+    auto logStdArray = metadata["log_stds"];
+
+
+    Eigen::MatrixXd  stdDevs(1,1);
+    stdDevs.resize(actionLength,1);
+    std::cout << "Reached" << std::endl;
+
+
+    const json::array &stdArray = as_array(logStdArray);
+    int index = 0;
+    for (auto i =  stdArray.begin(); i != stdArray.end(); i++)
+    {
+      const json::value &logStd = *i;
+
+      double logStdDouble = (std::stod(to_string(logStd)));
+      std::cout << "Reached" << std::endl;
+
+      stdDevs(index) = exp(logStdDouble);
+      index += 1;
+      
+
+    }
+    std::cout << "Reached" << std::endl;
+
+    //unsigned int observationLength = 24;
+
+  /*
+    for (int i =0; i < action_length; i++)
+    {
+      stdDevs[i] = 
+    //stdDevs << exp(-0.03979301452636719), exp(-0.059911955147981644), exp(-0.08187924325466156), exp(-0.034654323011636734);
+    }*/
     
-    const int observationLength = 24;
-    
-    Eigen::Matrix< double, 4, 1> stdDevs;
-    stdDevs << exp(-0.03979301452636719), exp(-0.059911955147981644), exp(-0.08187924325466156), exp(-0.034654323011636734);
-    Eigen::Matrix< double, 4, 4> covarianceMatrix = stdDevs.array().matrix().asDiagonal();
-    std::cout << covarianceMatrix << std::endl;
-    //vector<int> stdDevs{ -0.03979301452636719, -0.059911955147981644, -0.08187924325466156, -0.034654323011636734 };
+    Eigen::MatrixXd covarianceMatrix(1,1);
+    covarianceMatrix.resize(actionLength, actionLength);
+    std::cout << "Reached" << std::endl;
 
+    covarianceMatrix = stdDevs.array().matrix().asDiagonal();
+    
+    
 
     
     //loading the shared feature extractor
@@ -84,27 +129,21 @@ class WalkToTargetImpl : public WalkToTargetImplBase
 
     std::vector<unsigned int> sizeOfInput {observationLength};
     NeuralNetwork::TensorXf inputTensor(sizeOfInput,0);
+
+    std::cout << "OBSERVATION :" << std::endl;
+    for (float i: inputTensor)
+    {
+      std::cout << i << std::endl;
+    }
+
+
+
     sharedPolicy.input(0) = inputTensor;
     sharedPolicy.apply();
 
 
 
 
-    /*
-    std::cout << "SHARED LAYERS OUTPUT 1 :" << std::endl;
-    std::vector<unsigned int> result1 =  sharedPolicy.output(0).dims();
-    for (unsigned int i: result1)
-    {
-      std::cout << i << std::endl;
-    }
-
-     std::cout << "SHARED LAYERS OUTPUT 2 :" << std::endl;
-    std::vector<unsigned int> result2 =  sharedPolicy.output(1).dims();
-    for (unsigned int i: result2)
-    {
-      std::cout << i << std::endl;
-    }
-    */
     std::cout << "SHARED LAYERS OUTPUT 1 :" << std::endl;
     NeuralNetwork::TensorXf latentAction =  sharedPolicy.output(0);
 
@@ -138,13 +177,12 @@ class WalkToTargetImpl : public WalkToTargetImplBase
     std::cout << "ACTION NET OUTPUT: " << std::endl;
     NeuralNetwork::TensorXf actionMeans =  actionPolicy.output(0);
 
-    Eigen::Matrix< double, 4, 1> actionEigen;
+    Eigen::MatrixXd actionEigen(actionLength,1);
 
     
     for (unsigned int i = 0; i < actionMeans.size(); i ++)
     {
-      actionEigen[i] = actionMeans[i];
-      std::cout << actionMeans[i] << std::endl;
+      actionEigen(i) = actionMeans[i];
     }
 
     std::cout << "mu vector: " << std::endl;
@@ -156,7 +194,7 @@ class WalkToTargetImpl : public WalkToTargetImplBase
     
 
 
-    Eigen::Matrix<double, 4, 1> test = stats::rmvnorm(actionEigen, covarianceMatrix, true);
+    Eigen::MatrixXd test = stats::rmvnorm(actionEigen, covarianceMatrix, true);
         
     std::cout << "action: " << std::endl;
 
