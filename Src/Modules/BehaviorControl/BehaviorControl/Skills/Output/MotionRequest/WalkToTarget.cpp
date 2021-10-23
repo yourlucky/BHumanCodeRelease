@@ -25,11 +25,14 @@
 #include "Tools/NeuralNetwork/json.h"
 #include "Tools/Streams/OutStreams.h"
 
+
+
 #define STATS_GO_INLINE
 #define STATS_DONT_USE_OPENMP
 #define STATS_ENABLE_EIGEN_WRAPPERS
 #define STATS_ENABLE_STDVEC_WRAPPERS
 #include "Tools/NeuralNetwork/stats.hpp"
+
 
 SKILL_IMPLEMENTATION(WalkToTargetImpl,
 {,
