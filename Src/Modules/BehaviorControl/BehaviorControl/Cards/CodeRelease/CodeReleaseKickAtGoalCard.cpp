@@ -9,6 +9,9 @@
  * @author Arne Hasselbring
  */
 
+
+#include <iostream>
+
 #include "Representations/BehaviorControl/FieldBall.h"
 #include "Representations/BehaviorControl/Skills.h"
 #include "Representations/Configuration/FieldDimensions.h"
@@ -16,6 +19,8 @@
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 #include "Tools/BehaviorControl/Framework/Card/CabslCard.h"
 #include "Tools/Math/BHMath.h"
+#include "Tools/Module/Blackboard.h"
+#include "Representations/Modeling/BallModel.h"
 
 CARD(CodeReleaseKickAtGoalCard,
 {,
@@ -76,7 +81,28 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       {
         // theLookForwardSkill();
         // theStandSkill();
+        {
+
+        std::cout << "TEST MESSAGE" << std::endl;
+
+        //BallModel * ballModel = new BallModel();
+        // *ballModel = (BallModel)(Blackboard::getInstance()[TypeRegistry::getEnumName(idBallModel) + 2]);
+        BallModel * ballModel = nullptr;
+
+        std::cout << TypeRegistry::getEnumName(idBallModel ) + 2 << std::endl;
+
+        if(Blackboard::getInstance().exists(TypeRegistry::getEnumName(idBallModel) + 2))
+        {
+        std::cout << "exists" << std::endl;
+        ballModel =  static_cast<BallModel*>(&(Blackboard::getInstance()[TypeRegistry::getEnumName(idBallModel) + 2]));
+        OutMapFile testFile("/home/john/BHumanCodeRelease/Build/Linux/SimRobot/Develop/test.log");
+        testFile << * ballModel;
+        }
+
         theWalkAtRelativeSpeedSkill(Pose2f(0.f, walkSpeed, 0.f));
+        
+        }
+      
       }
     }
 
