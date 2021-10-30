@@ -29,6 +29,7 @@
 #include "Tools/NeuralNetwork/Model.h"
 #include "Tools/NeuralNetwork/Tensor.h"
 #include "Tools/NeuralNetwork/json.h"
+#include "Tools/NeuralNetwork/SimpleNN.h"
 #include "Tools/Streams/OutStreams.h"
 
 
@@ -175,88 +176,119 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
         covarianceMatrix = stdDevs.array().matrix().asDiagonal();
         
-        
+
+
+        NeuralNetwork::CompilationSettings settings;  // not sure if this is necessary but it's unused since we're not compiling but was required
+        // for apply function signature
+        NeuralNetwork::Model sharedModel("NeuralNets/shared_policy.h5");
+        NeuralNetwork::Model actionModel("NeuralNets/action_policy.h5");
+        NeuralNetwork::Model valueModel("NeuralNets/value_policy.h5");
 
         
-        //loading the shared feature extractor
-        NeuralNetwork::CompiledNN sharedPolicy;
-        std::unique_ptr<NeuralNetwork::Model> sharedModel;
-
-        sharedModel = std::make_unique<NeuralNetwork::Model>("NeuralNets/shared_policy.h5");
-        sharedPolicy.compile(*sharedModel);
+    
         
 
-        //loading the action network
+        std::vector<NeuralNetwork::TensorXf> sharedOutputs(sharedModel.getOutputs().size());
 
-        NeuralNetwork::CompiledNN actionPolicy;
-        std::unique_ptr<NeuralNetwork::Model> actionModel;
-
-        actionModel = std::make_unique<NeuralNetwork::Model>("NeuralNets/action_policy.h5");
-        actionPolicy.compile(*actionModel);
-        
-        //loading the value network 
-
-        NeuralNetwork::CompiledNN valuePolicy;
-        std::unique_ptr<NeuralNetwork::Model> valueModel;
-
-        valueModel = std::make_unique<NeuralNetwork::Model>("NeuralNets/value_policy.h5");
-        valuePolicy.compile(*valueModel);
-        
-
-        std::vector<unsigned int> sizeOfInput {observationLength};
-        NeuralNetwork::TensorXf inputTensor(sizeOfInput,0);
-
-        inputTensor[0] = x;
-        inputTensor[1] = y;
-        inputTensor[2] = sinAngle;
-        inputTensor[3] = cosAngle;
-
-        std::cout << "OBSERVATION :" << std::endl;
-        for (float i: inputTensor)
+        std::vector<NeuralNetwork::TensorXf> observation(sharedModel.getInputs().size());
+        std::cout << "policy load and input setup complete" << std::endl;
+        //reshaping but not sure why, derived from check.cpp
+        const std::vector<NeuralNetwork::TensorLocation>& inputs = sharedModel.getInputs();
+        for(std::size_t i = 0; i < observation.size(); ++i)
         {
-          std::cout << i << std::endl;
+          observation[i].reshape(inputs[i].layer->nodes[inputs[i].nodeIndex].outputDimensions[inputs[i].tensorIndex]);
         }
 
 
 
-        sharedPolicy.input(0) = inputTensor;
-        sharedPolicy.apply();
+        observation[0][0] = x;
+        observation[0][1] = y;
+        observation[0][2] = sinAngle;
+        observation[0][3] = cosAngle;
 
+        std::cout << "OBSERVATION :" << std::endl;
+        for (float i: observation[0])
+        {
+          std::cout << i << std::endl;
+        }
+       
+        std::cout << "reached pre apply" << std::endl;
+        NeuralNetwork::SimpleNN::apply(observation, sharedOutputs, sharedModel, [&settings](const NeuralNetwork::Node& node, const std::vector<const NeuralNetwork::TensorXf*>& inputs, const std::vector<NeuralNetwork::TensorXf*>& outputs)
+        {
+        });
+
+
+        std::cout << "simpleNN test" << std::endl;
+
+        for (float i: sharedOutputs[0])
+        {
+          std::cout << i << ",";
+        }
+        std::cout << "" << std::endl;
+        
+
+
+
+        std::cout << "simplNN test complete" << std::endl;
+
+
+        NeuralNetwork::TensorXf latentAction =  sharedOutputs[0];
+        NeuralNetwork::TensorXf latentValue =  sharedOutputs[1];
 
 
 
         std::cout << "SHARED LAYERS OUTPUT 1 :" << std::endl;
-        NeuralNetwork::TensorXf latentAction =  sharedPolicy.output(0);
 
         for (float i: latentAction)
         {
           std::cout << i << std::endl;
         }
         std::cout << "SHARED LAYERS OUTPUT 2 :" << std::endl;
-        NeuralNetwork::TensorXf latentValue =  sharedPolicy.output(1);
 
         for (float i: latentValue)
         {
           std::cout << i << std::endl;
         }
 
-        valuePolicy.input(0) = latentValue;
-        valuePolicy.apply();
+        
+
+
+
+        std::vector<NeuralNetwork::TensorXf> valueInput(valueModel.getInputs().size());
+        valueInput[0] = latentValue;
+
+        std::vector<NeuralNetwork::TensorXf> valueOutput(valueModel.getOutputs().size());
+
+
+        NeuralNetwork::SimpleNN::apply(valueInput, valueOutput, valueModel, [&settings](const NeuralNetwork::Node& node, const std::vector<const NeuralNetwork::TensorXf*>& inputs, const std::vector<NeuralNetwork::TensorXf*>& outputs)
+        {
+        });
+
 
         std::cout << "VALUE NET OUTPUT :" << std::endl;
-        NeuralNetwork::TensorXf valueEstimate =  valuePolicy.output(0);
+        NeuralNetwork::TensorXf valueEstimate =  valueOutput[0];
 
         for (float i: valueEstimate)
         {
           std::cout << i << std::endl;
         }
+      
+
+        std::vector<NeuralNetwork::TensorXf> actionPolicyInput(actionModel.getInputs().size());
+        actionPolicyInput[0] = latentAction;
+
+        std::vector<NeuralNetwork::TensorXf> actionPolicyOutput(actionModel.getOutputs().size());
 
 
-        actionPolicy.input(0) = latentAction;
-        actionPolicy.apply();
+        NeuralNetwork::SimpleNN::apply(actionPolicyInput, actionPolicyOutput, actionModel, [&settings](const NeuralNetwork::Node& node, const std::vector<const NeuralNetwork::TensorXf*>& inputs, const std::vector<NeuralNetwork::TensorXf*>& outputs)
+        {
+        });
+
+
+
 
         std::cout << "ACTION NET OUTPUT: " << std::endl;
-        NeuralNetwork::TensorXf actionMeans =  actionPolicy.output(0);
+        NeuralNetwork::TensorXf actionMeans =  actionPolicyOutput[0];
 
         Eigen::MatrixXd actionEigen(actionLength,1);
 
