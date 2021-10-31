@@ -161,6 +161,7 @@ namespace SimRobot
     virtual void simStart() = 0;
     virtual void simStep() = 0;
     virtual void simStop() = 0;
+    virtual void resetSimulation() = 0;
   };
 }
 

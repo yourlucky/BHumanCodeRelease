@@ -177,6 +177,10 @@ private slots:
 public:
   // Provides information on whether the simulation is running or not
   bool isSimRunning() override { return running; }
+  void resetSimulation() override { emit reset();}
+
+signals:
+  void reset();
 
 public slots:
   void simReset() override;
