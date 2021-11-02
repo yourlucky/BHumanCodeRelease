@@ -212,7 +212,9 @@ void RoboCupCtrl::update()
     if(lastTime > t) // simulation is running faster then rt
     {
       if(lastTime > t + TOLERANCE)
-        Thread::sleep(int(lastTime - t - TOLERANCE));
+      {
+        //Thread::sleep(int(lastTime - t - TOLERANCE));
+      }
     }
     else if(t > lastTime + TOLERANCE) // slower then rt
       lastTime = t - TOLERANCE;
