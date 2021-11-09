@@ -41,6 +41,7 @@
 #include "Simulation/Sensors/ApproxDistanceSensor.h"
 #include "Simulation/Sensors/DepthImageSensor.h"
 #include "Tools/Math/Constants.h"
+#include "iostream"
 
 Parser::Parser() : errors(0), sceneMacro(0), recordingMacroElement(0), replayingMacroElement(0), element(0), elementData(0), passedSimulationTag(false)
 {
@@ -593,6 +594,13 @@ Element* Parser::translationElement()
   if(simObject)
   {
     ASSERT(!simObject->translation);
+    if (simObject->name == "robot3") {
+      translation = new Vector3f(getRandomFloat(-4.5, 4.5), getRandomFloat(-3.0, 3.0), getLength("z", false, 0.f));
+    }
+
+    if (simObject->name == "ball") {
+      translation = new Vector3f(getRandomFloat(-3.0, 3.0), getRandomFloat(-3.0, 3.0), getLength("z", false, 0.f));
+    }
     simObject->translation = translation;
   }
   else
@@ -603,6 +611,13 @@ Element* Parser::translationElement()
     mass->translation = translation;
   }
   return nullptr;
+}
+
+float Parser::getRandomFloat(float a, float b) {
+  float random = ((float) rand()) / (float) RAND_MAX;
+  float diff = b - a;
+  float r = random * diff;
+  return a + r;
 }
 
 Element* Parser::rotationElement()

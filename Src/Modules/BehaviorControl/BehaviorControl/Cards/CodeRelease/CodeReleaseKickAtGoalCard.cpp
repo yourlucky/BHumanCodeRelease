@@ -31,8 +31,7 @@
 #include "Tools/NeuralNetwork/json.h"
 #include "Tools/NeuralNetwork/SimpleNN.h"
 #include "Tools/Streams/OutStreams.h"
-
-
+#include "Controller/RoboCupCtrl.h"
 
 #define STATS_GO_INLINE
 #define STATS_DONT_USE_OPENMP
@@ -106,25 +105,27 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
 
         if(Blackboard::getInstance().exists("GroundTruthRobotPose")){
-        std::cout << "exists" << std::endl;
+        //std::cout << "exists" << std::endl;
         const GroundTruthRobotPose& theGroundTruthRobotPose = static_cast<const GroundTruthRobotPose&>(Blackboard::getInstance()["GroundTruthRobotPose"]); \
         double x = theGroundTruthRobotPose.translation[0];
         double y = theGroundTruthRobotPose.translation[1];
         double angle = theGroundTruthRobotPose.rotation;
 
-        std::cout<< "x" << std::endl;
+        /*std::cout<< "x" << std::endl;
         std::cout << x << std::endl;
         std::cout<< "y" << std::endl;
         std::cout << y << std::endl;
         std::cout<< "angle" << std::endl;
         std::cout << angle << std::endl;
+         */
         double sinAngle = sin(angle* (PI/180));
         double cosAngle = cos(angle* (PI/180));
+
 
         char buff[FILENAME_MAX]; //create string buffer to hold path
         getcwd( buff, FILENAME_MAX );
         std::string currentWorkingDir(buff);
-        std::cout << currentWorkingDir << std::endl;
+        //std::cout << currentWorkingDir << std::endl;
                 
         //std::ifstream metadataFile("/home/john/BHumanCodeRelease/Config/NeuralNets/metadata.json");
         std::ifstream metadataFile("../../Config/NeuralNets/metadata.json");
@@ -138,18 +139,18 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         unsigned int actionLength = (unsigned int)(std::stoi(actionLengthString));
 
 
-        std::cout <<  "OBSERVATION LENGTH" << std::endl;
+        /*std::cout <<  "OBSERVATION LENGTH" << std::endl;
         std::cout << observationLength << std::endl;
 
         std::cout <<  "ACTION LENGTH" << std::endl;
-        std::cout << actionLengthString << std::endl;
+        std::cout << actionLengthString << std::endl;*/
 
         auto logStdArray = metadata["log_stds"];
 
 
         Eigen::MatrixXd  stdDevs(1,1);
         stdDevs.resize(actionLength,1);
-        std::cout << "Reached" << std::endl;
+        //std::cout << "Reached" << std::endl;
 
 
         const json::array &stdArray = as_array(logStdArray);
@@ -159,20 +160,20 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
           const json::value &logStd = *i;
 
           double logStdDouble = (std::stod(to_string(logStd)));
-          std::cout << "Reached" << std::endl;
+          //std::cout << "Reached" << std::endl;
 
           stdDevs(index) = exp(logStdDouble);
           index += 1;
           
 
         }
-        std::cout << "Reached" << std::endl;
+        //std::cout << "Reached" << std::endl;
 
         
         
         Eigen::MatrixXd covarianceMatrix(1,1);
         covarianceMatrix.resize(actionLength, actionLength);
-        std::cout << "Reached" << std::endl;
+        //std::cout << "Reached" << std::endl;
 
         covarianceMatrix = stdDevs.array().matrix().asDiagonal();
         
@@ -191,7 +192,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         std::vector<NeuralNetwork::TensorXf> sharedOutputs(sharedModel.getOutputs().size());
 
         std::vector<NeuralNetwork::TensorXf> observation(sharedModel.getInputs().size());
-        std::cout << "policy load and input setup complete" << std::endl;
+        //std::cout << "policy load and input setup complete" << std::endl;
         //reshaping but not sure why, derived from check.cpp
         const std::vector<NeuralNetwork::TensorLocation>& inputs = sharedModel.getInputs();
         for(std::size_t i = 0; i < observation.size(); ++i)
@@ -206,30 +207,30 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         observation[0][2] = sinAngle;
         observation[0][3] = cosAngle;
 
-        std::cout << "OBSERVATION :" << std::endl;
+        //std::cout << "OBSERVATION :" << std::endl;
         for (float i: observation[0])
         {
-          std::cout << i << std::endl;
+          //std::cout << i << std::endl;
         }
        
-        std::cout << "reached pre apply" << std::endl;
+        //std::cout << "reached pre apply" << std::endl;
         NeuralNetwork::SimpleNN::apply(observation, sharedOutputs, sharedModel, [&settings](const NeuralNetwork::Node& node, const std::vector<const NeuralNetwork::TensorXf*>& inputs, const std::vector<NeuralNetwork::TensorXf*>& outputs)
         {
         });
 
 
-        std::cout << "simpleNN test" << std::endl;
+        //std::cout << "simpleNN test" << std::endl;
 
         for (float i: sharedOutputs[0])
         {
-          std::cout << i << ",";
+          //std::cout << i << ",";
         }
-        std::cout << "" << std::endl;
+        //std::cout << "" << std::endl;
         
 
 
 
-        std::cout << "simplNN test complete" << std::endl;
+        //std::cout << "simplNN test complete" << std::endl;
 
 
         NeuralNetwork::TensorXf latentAction =  sharedOutputs[0];
@@ -237,17 +238,17 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
 
 
-        std::cout << "SHARED LAYERS OUTPUT 1 :" << std::endl;
+        //std::cout << "SHARED LAYERS OUTPUT 1 :" << std::endl;
 
         for (float i: latentAction)
         {
-          std::cout << i << std::endl;
+          //std::cout << i << std::endl;
         }
-        std::cout << "SHARED LAYERS OUTPUT 2 :" << std::endl;
+        //std::cout << "SHARED LAYERS OUTPUT 2 :" << std::endl;
 
         for (float i: latentValue)
         {
-          std::cout << i << std::endl;
+          //std::cout << i << std::endl;
         }
 
         
@@ -265,12 +266,12 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         });
 
 
-        std::cout << "VALUE NET OUTPUT :" << std::endl;
+        //std::cout << "VALUE NET OUTPUT :" << std::endl;
         NeuralNetwork::TensorXf valueEstimate =  valueOutput[0];
 
         for (float i: valueEstimate)
         {
-          std::cout << i << std::endl;
+          //std::cout << i << std::endl;
         }
       
 
@@ -287,7 +288,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
 
 
-        std::cout << "ACTION NET OUTPUT: " << std::endl;
+        //std::cout << "ACTION NET OUTPUT: " << std::endl;
         NeuralNetwork::TensorXf actionMeans =  actionPolicyOutput[0];
 
         Eigen::MatrixXd actionEigen(actionLength,1);
@@ -298,33 +299,40 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
           actionEigen(i) = actionMeans[i];
         }
 
+        /*
         std::cout << "mu vector: " << std::endl;
 
         std::cout << actionEigen << std::endl;
         std::cout << "cov matrix: " << std::endl;
 
         std::cout << covarianceMatrix << std::endl;
-        
+        */
 
 
         Eigen::MatrixXd actionChoice = stats::rmvnorm(actionEigen, covarianceMatrix, true);
             
-        std::cout << "action: " << std::endl;
+        //std::cout << "action: " << std::endl;
 
-        std::cout << actionChoice << std::endl;
+        //std::cout << actionChoice << std::endl;
 
         double logProb = stats::dmvnorm(actionChoice,actionEigen, covarianceMatrix, true);
 
-        std::cout << "action log prob: " << std::endl;
+        //std::cout << "action log prob: " << std::endl;
 
-        std::cout << logProb << std::endl;
+        //std::cout << logProb << std::endl;
 
       
         
         theWalkAtRelativeSpeedSkill(Pose2f(actionChoice(0),actionChoice(1), actionChoice(2)));
 
+          SimRobotCore2::Scene* scene = (SimRobotCore2::Scene*)RoboCupCtrl::application->resolveObject("RoboCup", SimRobotCore2::scene);
 
-
+          if (scene != NULL) {
+            std::cout<<scene->getStep()<<std::endl;
+            if (scene -> getStep() >= 1000) {
+              RoboCupCtrl::application->resetSimulation();
+            }
+          }
         }
         else{
        

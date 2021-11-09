@@ -6,6 +6,7 @@
  * @author Arne Hasselbring
  */
 
+#include "Controller/RoboCupCtrl.h"
 #include "Representations/Communication/GameInfo.h"
 #include "Representations/Communication/TeamInfo.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
@@ -41,6 +42,8 @@ class GameplayCard : public GameplayCardBase
   {
     if(theGameInfo.state == STATE_READY)
     {
+      RoboCupCtrl::application->resetSimulation();
+      /*
       if(theGameInfo.kickingTeam == theOwnTeamInfo.teamNumber)
       {
         dealer.deal(ownKickoff)->call();
@@ -50,7 +53,7 @@ class GameplayCard : public GameplayCardBase
       {
         dealer.deal(opponentKickoff)->call();
         setState("opponentKickoff");
-      }
+      }*/
     }
     else
     {

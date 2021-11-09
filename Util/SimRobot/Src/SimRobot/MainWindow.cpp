@@ -94,6 +94,7 @@ MainWindow::MainWindow(int argc, char *argv[]) :
   simResetAct->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F5));
   simResetAct->setEnabled(false);
   connect(simResetAct, SIGNAL(triggered()), this, SLOT(simReset()));
+  connect(this, SIGNAL(reset()), this, SLOT(simReset()));
 
   simStartAct = new QAction(QIcon(":/Icons/control_play_blue.png"), tr("&Start"), this);
   simStartAct->setStatusTip(tr("Start or stop the simulation"));

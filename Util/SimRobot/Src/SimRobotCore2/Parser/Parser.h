@@ -187,6 +187,7 @@ private:
   float getVelocity(const char* key, bool required, float defaultValue);
   float getAcceleration(const char* key, bool required, float defaultValue);
   float getTimeNonZeroPositive(const char* key, bool required, float defaultValue);
+  float getRandomFloat(float a, float b);
   bool getColor(const char* key, bool required, float* color);
 
   // element classes

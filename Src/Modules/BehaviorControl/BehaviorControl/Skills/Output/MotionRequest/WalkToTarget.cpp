@@ -25,8 +25,6 @@
 #include "Tools/NeuralNetwork/json.h"
 #include "Tools/Streams/OutStreams.h"
 
-
-
 #define STATS_GO_INLINE
 #define STATS_DONT_USE_OPENMP
 #define STATS_ENABLE_EIGEN_WRAPPERS
@@ -57,18 +55,18 @@ class WalkToTargetImpl : public WalkToTargetImplBase
     unsigned int actionLength = (unsigned int)(std::stoi(actionLengthString));
 
 
-    std::cout <<  "OBSERVATION LENGTH" << std::endl;
-    std::cout << observationLength << std::endl;
+    //std::cout <<  "OBSERVATION LENGTH" << std::endl;
+    //std::cout << observationLength << std::endl;
 
-    std::cout <<  "ACTION LENGTH" << std::endl;
-    std::cout << actionLengthString << std::endl;
+    //std::cout <<  "ACTION LENGTH" << std::endl;
+    //std::cout << actionLengthString << std::endl;
 
     auto logStdArray = metadata["log_stds"];
 
 
     Eigen::MatrixXd  stdDevs(1,1);
     stdDevs.resize(actionLength,1);
-    std::cout << "Reached" << std::endl;
+    //std::cout << "Reached" << std::endl;
 
 
     const json::array &stdArray = as_array(logStdArray);
@@ -78,14 +76,14 @@ class WalkToTargetImpl : public WalkToTargetImplBase
       const json::value &logStd = *i;
 
       double logStdDouble = (std::stod(to_string(logStd)));
-      std::cout << "Reached" << std::endl;
+      //std::cout << "Reached" << std::endl;
 
       stdDevs(index) = exp(logStdDouble);
       index += 1;
       
 
     }
-    std::cout << "Reached" << std::endl;
+    //std::cout << "Reached" << std::endl;
 
     //unsigned int observationLength = 24;
 
@@ -98,7 +96,7 @@ class WalkToTargetImpl : public WalkToTargetImplBase
     
     Eigen::MatrixXd covarianceMatrix(1,1);
     covarianceMatrix.resize(actionLength, actionLength);
-    std::cout << "Reached" << std::endl;
+    //std::cout << "Reached" << std::endl;
 
     covarianceMatrix = stdDevs.array().matrix().asDiagonal();
     
@@ -133,10 +131,10 @@ class WalkToTargetImpl : public WalkToTargetImplBase
     std::vector<unsigned int> sizeOfInput {observationLength};
     NeuralNetwork::TensorXf inputTensor(sizeOfInput,0);
 
-    std::cout << "OBSERVATION :" << std::endl;
+    //std::cout << "OBSERVATION :" << std::endl;
     for (float i: inputTensor)
     {
-      std::cout << i << std::endl;
+      //std::cout << i << std::endl;
     }
 
 
@@ -147,37 +145,37 @@ class WalkToTargetImpl : public WalkToTargetImplBase
 
 
 
-    std::cout << "SHARED LAYERS OUTPUT 1 :" << std::endl;
+    //std::cout << "SHARED LAYERS OUTPUT 1 :" << std::endl;
     NeuralNetwork::TensorXf latentAction =  sharedPolicy.output(0);
 
     for (float i: latentAction)
     {
-      std::cout << i << std::endl;
+      //std::cout << i << std::endl;
     }
-    std::cout << "SHARED LAYERS OUTPUT 2 :" << std::endl;
+    //std::cout << "SHARED LAYERS OUTPUT 2 :" << std::endl;
     NeuralNetwork::TensorXf latentValue =  sharedPolicy.output(1);
 
     for (float i: latentValue)
     {
-      std::cout << i << std::endl;
+      //std::cout << i << std::endl;
     }
 
     valuePolicy.input(0) = latentValue;
     valuePolicy.apply();
 
-    std::cout << "VALUE NET OUTPUT :" << std::endl;
+    //std::cout << "VALUE NET OUTPUT :" << std::endl;
     NeuralNetwork::TensorXf valueEstimate =  valuePolicy.output(0);
 
     for (float i: valueEstimate)
     {
-      std::cout << i << std::endl;
+      //std::cout << i << std::endl;
     }
 
 
     actionPolicy.input(0) = latentAction;
     actionPolicy.apply();
 
-    std::cout << "ACTION NET OUTPUT: " << std::endl;
+    //std::cout << "ACTION NET OUTPUT: " << std::endl;
     NeuralNetwork::TensorXf actionMeans =  actionPolicy.output(0);
 
     Eigen::MatrixXd actionEigen(actionLength,1);
@@ -188,37 +186,33 @@ class WalkToTargetImpl : public WalkToTargetImplBase
       actionEigen(i) = actionMeans[i];
     }
 
-    std::cout << "mu vector: " << std::endl;
+    //std::cout << "mu vector: " << std::endl;
 
-    std::cout << actionEigen << std::endl;
-    std::cout << "cov matrix: " << std::endl;
+    //std::cout << actionEigen << std::endl;
+    //std::cout << "cov matrix: " << std::endl;
 
-    std::cout << covarianceMatrix << std::endl;
+    //std::cout << covarianceMatrix << std::endl;
     
 
 
     Eigen::MatrixXd test = stats::rmvnorm(actionEigen, covarianceMatrix, true);
         
-    std::cout << "action: " << std::endl;
+    //std::cout << "action: " << std::endl;
 
-    std::cout << test << std::endl;
+    //std::cout << test << std::endl;
 
     double logProb = stats::dmvnorm(test,actionEigen, covarianceMatrix, true);
 
-    std::cout << "action log prob: " << std::endl;
+    //std::cout << "action log prob: " << std::endl;
 
-    std::cout << logProb << std::endl;
+    //std::cout << logProb << std::endl;
 
     //OutMapFile stream("./test.log");
     //stream<<actionMeans;
 
-
-
     //exit(0);
   
     theMotionRequest.motion = MotionRequest::walk;
-
-
 
     /*
     //Assigning the input for the policy
