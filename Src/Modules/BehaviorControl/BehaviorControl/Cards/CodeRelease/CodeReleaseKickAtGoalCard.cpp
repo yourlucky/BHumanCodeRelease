@@ -15,6 +15,9 @@
 #include <math.h>
 #include <unistd.h>
 #include <string>
+#include <chrono>
+#include <thread>
+#include <stdio.h>
 
 
 #include "Representations/BehaviorControl/FieldBall.h"
@@ -44,17 +47,19 @@
 
 
 #define PI 3.14159265
-#define BATCHSIZE 20
+#define BATCHSIZE 2000
+#define EPISODE_LENGTH 500
 #define DEBUG_MODE true
+#define TRAIN_MODE true
 
 
 int batchStep  = 0; // frame index number within batch we are on
 int episodeStep = -1; // the episode needs to complete one step before we can start logging
-
+int batchIndex = 0;
 
       
 
-auto trajectories = json::object{}; // an object to hold the curret batch of trajectories
+auto trajectories = json::object{}; // an object to hold the current batch of trajectories
 std::ifstream metadataFile("../metadata.json");
 json::value metadata = json::parse(metadataFile);
 std::string actionLengthString = to_string(metadata["action_length"]);
@@ -70,9 +75,10 @@ double prevLogProb;
 double currentLogProb;
 float currentValue;
 float prevValue;
+NeuralNetwork::Model * sharedModel;
+NeuralNetwork::Model * actionModel;
+NeuralNetwork::Model *  valueModel;
 
-
- 
 
 std::string getCurrentDirectory()
 {
@@ -81,6 +87,18 @@ std::string getCurrentDirectory()
   std::string currentWorkingDir(buff);
   return currentWorkingDir;
 }
+
+
+
+void saveTrajectories(int batchIndex)
+{
+    std::string outputString = stringify(trajectories, json::PrettyPrint);
+    std::ofstream outputFile(getCurrentDirectory() + "/../trajectories_" + std::to_string(batchIndex) + ".json");
+    outputFile << outputString;
+    outputFile.close();
+
+}
+ 
 
 
 
@@ -103,14 +121,13 @@ void debugPrintFloatVector(std::vector<float> v){
 
 
 // derived from https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-14-17-c
-
-
   bool doesFileExist (const std::string& name) {
     std::ifstream f(name.c_str());
     return f.good();
   }
 
-
+// worth noting, this is probably not presently windows-compatible due to forward slashes in file
+// paths, but I think it should be Mac Compatible
 void waitForNewPolicy()
 {
   while (true)
@@ -135,6 +152,9 @@ void waitForNewPolicy()
       debugPrintString("waiting for meta data");
       continue;
     }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
     break;
   }
 }
@@ -248,7 +268,11 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         {
 
 
-       if(Blackboard::getInstance().exists("GroundTruthRobotPose")){
+        debugPrintString("main reached");
+        SimRobotCore2::Scene* scene = (SimRobotCore2::Scene*)RoboCupCtrl::application->resolveObject("RoboCup", SimRobotCore2::scene);
+
+
+       if(Blackboard::getInstance().exists("GroundTruthRobotPose") && scene != NULL){
        const GroundTruthRobotPose& theGroundTruthRobotPose = static_cast<const GroundTruthRobotPose&>(Blackboard::getInstance()["GroundTruthRobotPose"]); 
 
 
@@ -258,14 +282,15 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
        
         
        
-        NeuralNetwork::Model sharedModel("shared_policy.h5");
-        NeuralNetwork::Model actionModel("action_policy.h5");
-        NeuralNetwork::Model valueModel("value_policy.h5");
+        //NeuralNetwork::Model sharedModel("shared_policy.h5");
+        //NeuralNetwork::Model actionModel("action_policy.h5");
+        //NeuralNetwork::Model valueModel("value_policy.h5");
 
-        
+      
 
 
-        SimRobotCore2::Scene* scene = (SimRobotCore2::Scene*)RoboCupCtrl::application->resolveObject("RoboCup", SimRobotCore2::scene);
+
+        //SimRobotCore2::Scene* scene = (SimRobotCore2::Scene*)RoboCupCtrl::application->resolveObject("RoboCup", SimRobotCore2::scene);
 
         /*
         if (scene != NULL) {
@@ -289,9 +314,24 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         }
 
 
-        if (batchStep == 0) // setting up our first trajectories file descriptor, this will be exchanged on each 
+        if (batchStep == 0 && episodeStep == -1) // setting up our first trajectories file descriptor, this will be exchanged on each 
         {
-          trajectories = newTrajectoriesJSON();
+        trajectories = newTrajectoriesJSON();
+        waitForNewPolicy();
+        delete sharedModel;
+        delete actionModel;
+        delete valueModel;
+        sharedModel = new NeuralNetwork::Model("shared_policy.h5");
+        actionModel = new NeuralNetwork::Model("action_policy.h5");
+        valueModel = new NeuralNetwork::Model("value_policy.h5");
+
+        if (TRAIN_MODE)
+        {
+          std::remove((getCurrentDirectory() + "/../shared_policy.h5").c_str());
+          std::remove((getCurrentDirectory() + "/../action_policy.h5").c_str());
+          std::remove((getCurrentDirectory() + "/../value_policy.h5").c_str());
+        }
+        //delete policy off filesystem
         }
   
 
@@ -353,12 +393,12 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
     
         
 
-        std::vector<NeuralNetwork::TensorXf> sharedOutputs(sharedModel.getOutputs().size());
-
-        std::vector<NeuralNetwork::TensorXf> observationInput(sharedModel.getInputs().size());
+        std::vector<NeuralNetwork::TensorXf> sharedOutputs(sharedModel->getOutputs().size());
+        debugPrintString("struct field access");
+        std::vector<NeuralNetwork::TensorXf> observationInput(sharedModel->getInputs().size());
         //std::cout << "policy load and input setup complete" << std::endl;
         //reshaping but not sure why, derived from check.cpp
-        const std::vector<NeuralNetwork::TensorLocation>& inputs = sharedModel.getInputs();
+        const std::vector<NeuralNetwork::TensorLocation>& inputs = sharedModel->getInputs();
         for(std::size_t i = 0; i < observationInput.size(); ++i)
         {
           observationInput[i].reshape(inputs[i].layer->nodes[inputs[i].nodeIndex].outputDimensions[inputs[i].tensorIndex]);
@@ -383,12 +423,14 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         trajectories["observations"].push_back(newObs);
         */
         
-        
+        debugPrintString("before nn forward");
+
         //std::cout << "reached pre apply" << std::endl;
-        NeuralNetwork::SimpleNN::apply(observationInput, sharedOutputs, sharedModel, [&settings](const NeuralNetwork::Node& node, const std::vector<const NeuralNetwork::TensorXf*>& inputs, const std::vector<NeuralNetwork::TensorXf*>& outputs)
+        NeuralNetwork::SimpleNN::apply(observationInput, sharedOutputs, *sharedModel, [&settings](const NeuralNetwork::Node& node, const std::vector<const NeuralNetwork::TensorXf*>& inputs, const std::vector<NeuralNetwork::TensorXf*>& outputs)
         {
         });
 
+        debugPrintString("after nn forward");
 
         //std::cout << "simpleNN test" << std::endl;
 
@@ -423,16 +465,17 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         }
 
         
+        debugPrintString("before nn forward");
 
 
 
-        std::vector<NeuralNetwork::TensorXf> valueInput(valueModel.getInputs().size());
+        std::vector<NeuralNetwork::TensorXf> valueInput(valueModel->getInputs().size());
         valueInput[0] = latentValue;
 
-        std::vector<NeuralNetwork::TensorXf> valueOutput(valueModel.getOutputs().size());
+        std::vector<NeuralNetwork::TensorXf> valueOutput(valueModel->getOutputs().size());
 
 
-        NeuralNetwork::SimpleNN::apply(valueInput, valueOutput, valueModel, [&settings](const NeuralNetwork::Node& node, const std::vector<const NeuralNetwork::TensorXf*>& inputs, const std::vector<NeuralNetwork::TensorXf*>& outputs)
+        NeuralNetwork::SimpleNN::apply(valueInput, valueOutput, *valueModel, [&settings](const NeuralNetwork::Node& node, const std::vector<const NeuralNetwork::TensorXf*>& inputs, const std::vector<NeuralNetwork::TensorXf*>& outputs)
         {
         });
 
@@ -448,13 +491,13 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         currentValue = valueEstimate(0);
 
 
-        std::vector<NeuralNetwork::TensorXf> actionPolicyInput(actionModel.getInputs().size());
+        std::vector<NeuralNetwork::TensorXf> actionPolicyInput(actionModel->getInputs().size());
         actionPolicyInput[0] = latentAction;
 
-        std::vector<NeuralNetwork::TensorXf> actionPolicyOutput(actionModel.getOutputs().size());
+        std::vector<NeuralNetwork::TensorXf> actionPolicyOutput(actionModel->getOutputs().size());
 
 
-        NeuralNetwork::SimpleNN::apply(actionPolicyInput, actionPolicyOutput, actionModel, [&settings](const NeuralNetwork::Node& node, const std::vector<const NeuralNetwork::TensorXf*>& inputs, const std::vector<NeuralNetwork::TensorXf*>& outputs)
+        NeuralNetwork::SimpleNN::apply(actionPolicyInput, actionPolicyOutput, *actionModel, [&settings](const NeuralNetwork::Node& node, const std::vector<const NeuralNetwork::TensorXf*>& inputs, const std::vector<NeuralNetwork::TensorXf*>& outputs)
         {
         });
 
@@ -511,7 +554,6 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
           trajectories["observations"].push_back(floatVectToJSON(prevObservation));
           trajectories["actions"].push_back(floatVectToJSON(prevAction));
           trajectories["values"].push_back(prevValue);
-          trajectories["last_values"].push_back(currentValue);
           trajectories["log_probs"].push_back(prevLogProb);
 
 
@@ -547,28 +589,36 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         episodeStep += 1;
 
 
-        if (episodeStep >= 10) {
-          std::cout << stringify(trajectories, json::PrettyPrint) << std::endl;
-          RoboCupCtrl::application->resetSimulation();
-          episodeStep = 0;
+        debugPrintString("reached0");
+        if (episodeStep >= EPISODE_LENGTH) {
+          //std::cout << stringify(trajectories, json::PrettyPrint) << std::endl;
+          episodeStep = -1;
           if (batchStep >= BATCHSIZE)
           {
-            waitForNewPolicy();
-            //load new policy
-            //delete new policy from filesystem
-            trajectories = newTrajectoriesJSON();
+            trajectories["last_values"].push_back(currentValue);
+            saveTrajectories(batchIndex);
+            
+            batchStep = 0;
+            batchIndex += 1;
           }
-          
+          //std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+          RoboCupCtrl::application->resetSimulation();
+
         }
-      
+        else{
+        debugPrintString("reached3");
+
         prevObservation = std::vector<float>(currentObservation);
         prevAction = std::vector<float>(currentAction);
         prevValue = currentValue;
         prevLogProb = currentLogProb;
 
+
         theWalkAtRelativeSpeedSkill(Pose2f(actionChoice(0),actionChoice(1), actionChoice(2)));
 
+        debugPrintString("reached 4");
 
+        }
 
         //currentObservation = getObservation(theGroundTruthRobotPose);
         //debugPrintFloatVector(prevObservation);
