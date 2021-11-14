@@ -96,7 +96,9 @@ void saveTrajectories(int batchIndex)
     std::ofstream outputFile(getCurrentDirectory() + "/../trajectories_" + std::to_string(batchIndex) + ".json");
     outputFile << outputString;
     outputFile.close();
-
+    std::ofstream outputFile2(getCurrentDirectory() + "/../complete_" + std::to_string(batchIndex) + ".txt");
+    outputFile2 << "complete";
+    outputFile2.close();
 }
  
 
@@ -593,6 +595,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
           {
             trajectories["last_values"].push_back(currentValue);
             saveTrajectories(batchIndex);
+
             
             batchStep = 0;
             batchIndex += 1;
