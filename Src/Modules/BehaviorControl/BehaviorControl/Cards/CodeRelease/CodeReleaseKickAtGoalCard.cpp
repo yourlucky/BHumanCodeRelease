@@ -49,7 +49,7 @@
 #define PI 3.14159265
 #define BATCHSIZE 2000
 #define EPISODE_LENGTH 500
-#define DEBUG_MODE true
+#define DEBUG_MODE false
 #define TRAIN_MODE true
 
 
@@ -560,10 +560,6 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
           debugPrintFloatVector(prevObservation);
           debugPrintFloatVector(currentObservation);
-          std::cout << "open" << std::endl;
-          std::cout << currentValue << std::endl;
-          std::cout << prevValue << std::endl;
-          std::cout << "close" << std::endl;
 
           //log here
         }
