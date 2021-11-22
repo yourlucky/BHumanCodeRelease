@@ -198,8 +198,8 @@ std::vector<float> getObservation(GroundTruthRobotPose pose)
   double x = pose.translation[0];
   double y = pose.translation[1];
   double angle = pose.rotation;
-  double sinAngle = sin(angle* (PI/180));
-  double cosAngle = cos(angle* (PI/180));
+  double sinAngle = sin(angle);
+  double cosAngle = cos(angle);
   observationVector[0] = x/4500.0;
   observationVector[1] = y/3000.0;
   observationVector[2] = sinAngle;
