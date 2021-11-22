@@ -49,8 +49,8 @@
 #define PI 3.14159265
 #define BATCHSIZE 2000
 #define EPISODE_LENGTH 500
-#define DEBUG_MODE false
-#define TRAIN_MODE true
+#define DEBUG_MODE true
+#define TRAIN_MODE false
 
 
 int batchStep  = 0; // frame index number within batch we are on
@@ -198,8 +198,11 @@ std::vector<float> getObservation(GroundTruthRobotPose pose)
   double x = pose.translation[0];
   double y = pose.translation[1];
   double angle = pose.rotation;
-  double sinAngle = sin(angle* (PI/180));
-  double cosAngle = cos(angle* (PI/180));
+  std::cout << "angle" << std::endl;
+  std::cout << pose.rotation << std::endl;
+
+  double sinAngle = sin(angle);
+  double cosAngle = cos(angle);
   observationVector[0] = x/4500.0;
   observationVector[1] = y/3000.0;
   observationVector[2] = sinAngle;
@@ -545,8 +548,10 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         currentAction = std::vector<float>();
         for (unsigned int i = 0; i < actionChoice.size(); i++)
         {
-          currentAction.push_back(actionChoice(i));
+          currentAction.push_back(actionChoice(i));     
         }
+        debugPrintString("actionchoice");
+        debugPrintFloatVector(currentAction);
 
         
 
@@ -612,17 +617,20 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         prevValue = currentValue;
         prevLogProb = currentLogProb;
 
-
         theWalkAtRelativeSpeedSkill(Pose2f(actionChoice(0),actionChoice(1), actionChoice(2)));
+
+        //theWalkAtRelativeSpeedSkill(Pose2f(actionChoice(0),actionChoice(1), actionChoice(2)));
 
         debugPrintString("reached 4");
 
         }
 
-        //currentObservation = getObservation(theGroundTruthRobotPose);
+
+        debugPrintString("current obs");
+
+        currentObservation = getObservation(theGroundTruthRobotPose);
         //debugPrintFloatVector(prevObservation);
-        //debugPrintFloatVector(currentObservation);
-        //exit(1);
+        debugPrintFloatVector(currentObservation);
 
 
         }
