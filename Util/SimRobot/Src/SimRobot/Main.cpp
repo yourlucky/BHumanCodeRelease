@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
   app.setApplicationName("SimRobot");
 
 #ifdef MACOS
-  mainWindow.show();
+  //mainWindow.show();
 #endif
 
   // open file from commandline
