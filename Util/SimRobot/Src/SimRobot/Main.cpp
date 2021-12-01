@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
     }
 
 #ifndef MACOS
-  mainWindow.show();
+ // mainWindow.show();
 #endif
 
   return app.exec();
