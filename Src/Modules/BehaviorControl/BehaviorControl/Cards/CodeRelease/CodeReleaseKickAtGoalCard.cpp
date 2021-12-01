@@ -173,6 +173,7 @@ json::object newTrajectoriesJSON()
         emptyTrajectories.insert("episode_starts", json::array{});
         emptyTrajectories.insert("values",json::array{});
         emptyTrajectories.insert("actions",json::array{});
+        emptyTrajectories.insert("action_means", json::array{});
         emptyTrajectories.insert("log_probs", json::array{});
         return emptyTrajectories;
 }
@@ -510,11 +511,11 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         NeuralNetwork::TensorXf actionMeans =  actionPolicyOutput[0];
 
         Eigen::MatrixXd actionEigen(actionLength,1);
-
-        
+        std::vector<float> actionMeanVector= std::vector<float>(); // this vector is created for compatibility with floatvectortojson
         for (unsigned int i = 0; i < actionMeans.size(); i ++)
         {
           actionEigen(i) = actionMeans[i];
+          actionMeanVector.push_back(actionMeans[i]);
         }
 
         /*
@@ -557,7 +558,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
           trajectories["actions"].push_back(floatVectToJSON(prevAction));
           trajectories["values"].push_back(prevValue);
           trajectories["log_probs"].push_back(prevLogProb);
-
+          trajectories["action_means"].push_back(floatVectToJSON(actionMeanVector));
 
 
           debugPrintFloatVector(prevObservation);

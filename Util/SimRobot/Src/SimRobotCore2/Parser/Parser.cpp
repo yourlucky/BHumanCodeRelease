@@ -594,10 +594,11 @@ Element* Parser::translationElement()
   if(simObject)
   {
     ASSERT(!simObject->translation);
+    /*
     if (simObject->name == "robot3") {
       translation = new Vector3f(getRandomFloat(-4.5, 4.5), getRandomFloat(-3.0, 3.0), getLength("z", false, 0.f));
     }
-
+    */
     if (simObject->name == "ball") {
       translation = new Vector3f(getRandomFloat(-3.0, 3.0), getRandomFloat(-3.0, 3.0), getLength("z", false, 0.f));
     }
