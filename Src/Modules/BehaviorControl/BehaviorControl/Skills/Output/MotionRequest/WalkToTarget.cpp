@@ -22,7 +22,7 @@
 #include "Tools/NeuralNetwork/CompiledNN.h"
 #include "Tools/NeuralNetwork/Model.h"
 #include "Tools/NeuralNetwork/Tensor.h"
-#include "Tools/NeuralNetwork/json.h"
+#include "Tools/json.h"
 #include "Tools/Streams/OutStreams.h"
 
 #define STATS_GO_INLINE

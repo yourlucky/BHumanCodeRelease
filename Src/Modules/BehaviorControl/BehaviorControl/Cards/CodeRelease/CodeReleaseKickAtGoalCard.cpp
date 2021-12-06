@@ -33,7 +33,8 @@
 #include "Tools/NeuralNetwork/CompiledNN.h"
 #include "Tools/NeuralNetwork/Model.h"
 #include "Tools/NeuralNetwork/Tensor.h"
-#include "Tools/NeuralNetwork/json.h"
+#include "Tools/json.h"
+#include "Tools/Config.h"
 #include "Tools/NeuralNetwork/SimpleNN.h"
 #include "Tools/Streams/OutStreams.h"
 #include "Controller/RoboCupCtrl.h"
@@ -270,6 +271,8 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         // theStandSkill();
         {
 
+
+        //std::cout << RLConfig::mode << std::endl;
 
         debugPrintString("main reached");
         SimRobotCore2::Scene* scene = (SimRobotCore2::Scene*)RoboCupCtrl::application->resolveObject("RoboCup", SimRobotCore2::scene);

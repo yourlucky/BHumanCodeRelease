@@ -15,6 +15,9 @@
 #ifdef MACOS
 #include <QFileOpenEvent>
 
+
+int g_test;
+
 /** The address of the main window object used by the following class. */
 MainWindow* mainWindow;
 
