@@ -18,12 +18,14 @@
 #include <chrono>
 #include <thread>
 #include <stdio.h>
-
+#include <SimRobot.h>
 
 #include "Representations/BehaviorControl/FieldBall.h"
 #include "Representations/BehaviorControl/Skills.h"
 #include "Representations/Configuration/FieldDimensions.h"
 #include "Representations/Modeling/RobotPose.h"
+#include "Representations/Modeling/BallModel.h"
+#include "Representations/Infrastructure/GroundTruthWorldState.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 #include "Tools/BehaviorControl/Framework/Card/CabslCard.h"
 #include "Tools/Module/Blackboard.h"
@@ -58,7 +60,8 @@ int batchStep  = 0; // frame index number within batch we are on
 int episodeStep = -1; // the episode needs to complete one step before we can start logging
 int batchIndex = 0;
 
-      
+  
+extern std::string RLConfig::mode;
 
 auto trajectories = json::object{}; // an object to hold the current batch of trajectories
 std::ifstream metadataFile("../metadata.json");
@@ -194,7 +197,7 @@ json::array floatVectToJSON(std::vector<float> inputVector)
 
 
 // returns an observation from the environment as a vector
-std::vector<float> getObservation(GroundTruthRobotPose pose)
+std::vector<float> getWalkForwardObservation(GroundTruthRobotPose pose)
 {
   std::vector<float> observationVector(4); // observation length is hardcoded for the time being
   double x = pose.translation[0];
@@ -206,6 +209,40 @@ std::vector<float> getObservation(GroundTruthRobotPose pose)
   observationVector[1] = y/3000.0;
   observationVector[2] = sinAngle;
   observationVector[3] = cosAngle;
+  return observationVector;
+}
+
+
+std::vector<float> getBallTargetingObservation(GroundTruthRobotPose pose, Vector2f ballPosition)
+{
+  std::vector<float> observationVector(4); // observation length is hardcoded for the time being
+  double x = pose.translation[0];
+  double y = pose.translation[1];
+  double angle = pose.rotation;
+  double target_x = ballPosition[0];
+  double target_y = ballPosition[1];
+  double angle_to_target = atan2(target_y -y,target_x - x);
+  double target_angle_offset = atan2(sin(angle_to_target- angle),cos(angle_to_target- angle));
+  //double normalized_x = x/4500.0;
+  //double normalized_y = y/3000.0;
+  //double normalized_target_x = target_x/4500.0;
+  //double normalized_target_y = target_y/3000.0;
+  double distance = sqrt(std::pow((target_x - x),2) + std::pow((target_y - y),2));
+
+  double normalized_distance = distance / 4609.77223; //this is the maximum possible euclidiean distance between two points 
+  // in the rectangle +-4500,+=3000 
+  
+  
+
+  
+  //double sinAngle = sin(angle);
+  //double cosAngle = cos(angle);
+
+
+
+  observationVector[0] = sin(target_angle_offset);
+  observationVector[1] = cos(target_angle_offset);
+  observationVector[2] = normalized_distance;
   return observationVector;
 }
 
@@ -271,16 +308,28 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         // theStandSkill();
         {
 
-
-        //std::cout << RLConfig::mode << std::endl;
+        
+        std::cout <<"debug" << std::endl;
+        std::cout << RLConfig::mode << std::endl;
+        
 
         debugPrintString("main reached");
         SimRobotCore2::Scene* scene = (SimRobotCore2::Scene*)RoboCupCtrl::application->resolveObject("RoboCup", SimRobotCore2::scene);
 
 
-       if(Blackboard::getInstance().exists("GroundTruthRobotPose") && scene != NULL){
-       const GroundTruthRobotPose& theGroundTruthRobotPose = static_cast<const GroundTruthRobotPose&>(Blackboard::getInstance()["GroundTruthRobotPose"]); 
+       std::cout << Blackboard::getInstance().exists("GroundTruthWorldState")  << std::endl;
 
+       if(Blackboard::getInstance().exists("GroundTruthRobotPose") && Blackboard::getInstance().exists("GroundTruthWorldState") && scene != NULL){
+       const GroundTruthRobotPose& theGroundTruthRobotPose = static_cast<const GroundTruthRobotPose&>(Blackboard::getInstance()["GroundTruthRobotPose"]); 
+       const GroundTruthWorldState& theGroundTruthWorldState = static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]); 
+       //const BallState& theBallState = static_cast<const BallState&>(Blackboard::getInstance()["BallState"]);
+
+        //std::cout << theBallState.position << std::endl;
+        
+        const Vector2f ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
+        const Vector2f ballVelocity = theGroundTruthWorldState.balls[0].velocity.head<2>();
+
+        std::cout << ballPosition << std::endl;
 
 
         NeuralNetwork::CompilationSettings settings;  // not sure if this is necessary but it's unused since we're not compiling but was required
@@ -307,8 +356,14 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
           exit(1);
         }
         */
-        currentObservation = getObservation(theGroundTruthRobotPose);
-
+        if (RLConfig::mode == "move_forward")
+        {
+        currentObservation = getWalkForwardObservation(theGroundTruthRobotPose);
+        }
+        else if (RLConfig::mode == "ball_targeting")
+        {
+        currentObservation = getBallTargetingObservation(theGroundTruthRobotPose, ballPosition);
+        }
 
 
         if (episodeStep == 0)
@@ -623,7 +678,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
         }
 
-        //currentObservation = getObservation(theGroundTruthRobotPose);
+        //currentObservation = getWalkForwardObservation(theGroundTruthRobotPose);
         //debugPrintFloatVector(prevObservation);
         //debugPrintFloatVector(currentObservation);
         //exit(1);

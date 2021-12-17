@@ -12,8 +12,36 @@
 
 #include "MainWindow.h"
 
+#include "json.h"
+#include <fstream>
+#include <unistd.h>
+
+/*
+std::string localGetCurrentDirectory()
+{
+  char buff[FILENAME_MAX]; //create string buffer to hold path
+  getcwd( buff, FILENAME_MAX );
+  std::string currentWorkingDir(buff);
+  std::cout << currentWorkingDir << std::endl;
+  return currentWorkingDir;
+}
+*/
+
+//std::string test = localGetCurrentDirectory();
+
+std::ifstream configFile("../../../../Config/rl_config.json");
+json::value configData = json::parse(configFile);
+bool VISUALIZATION_MODE = to_bool(configData["visualization_mode"]);
+
+
+
 #ifdef MACOS
 #include <QFileOpenEvent>
+
+
+
+
+
 
 
 int g_test;
@@ -87,7 +115,10 @@ int main(int argc, char *argv[])
   app.setApplicationName("SimRobot");
 
 #ifdef MACOS
-  //mainWindow.show();
+  if (VISUALIZATION_MODE)
+  {
+    mainWindow.show();
+  }
 #endif
 
   // open file from commandline
@@ -99,7 +130,10 @@ int main(int argc, char *argv[])
     }
 
 #ifndef MACOS
- // mainWindow.show();
+if (VISUALIZATION_MODE)
+{
+ mainWindow.show();
+}
 #endif
 
   return app.exec();
