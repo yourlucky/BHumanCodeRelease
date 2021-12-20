@@ -1,6 +1,6 @@
 {
-    "mode" : "move_forward",
-    "mode2" : "ball_targeting",
+    "mode" : "ball_targeting",
+    "mode2" : "move_forward",
     "mode3" : "ball_to_goal",
-    "visualization_mode" : false
+    "visualization_mode" : true
 }
