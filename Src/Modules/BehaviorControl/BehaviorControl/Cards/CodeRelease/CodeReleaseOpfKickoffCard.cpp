@@ -10,7 +10,7 @@
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 
 
-CARD(CodeReleaseOPFKickoffCard,
+CARD(CodeReleaseOpfKickoffCard,
  {,
   CALLS(Activity),
   CALLS(LookForward),
@@ -18,7 +18,7 @@ CARD(CodeReleaseOPFKickoffCard,
   CALLS(Stand),
 });
 
-class CodeReleaseOPFKickoffCard : public CodeReleaseOPFKickoffCardBase
+class CodeReleaseOpfKickoffCard : public CodeReleaseOpfKickoffCardBase
 {
   bool preconditions() const override
   {
@@ -40,4 +40,4 @@ class CodeReleaseOPFKickoffCard : public CodeReleaseOPFKickoffCardBase
   }
 };
 
-MAKE_CARD(CodeReleaseOPFKickoffCard);
+MAKE_CARD(CodeReleaseOpfKickoffCard);

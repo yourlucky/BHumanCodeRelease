@@ -10,7 +10,7 @@
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 
 
-CARD(CodeReleaseOFreeKickCard
+CARD(CodeReleaseOpfKickCard,
  {,
   CALLS(Activity),
   CALLS(LookForward),
@@ -18,7 +18,7 @@ CARD(CodeReleaseOFreeKickCard
   CALLS(Stand),
 });
 
-class CodeReleaseOFreeKickCard : public CodeReleaseOFreeKickCardBase
+class CodeReleaseOpfKickCard : public CodeReleaseOpfKickCardBase
 {
   bool preconditions() const override
   {
@@ -36,8 +36,8 @@ class CodeReleaseOFreeKickCard : public CodeReleaseOFreeKickCardBase
     //theLookForwardSkill();
     //theStandSkill();
     // Not implemented in the Code Release.
-    theSaySkill("Own Free Kick");
+    theSaySkill("Opponent Free Kick");
   }
 };
 
-MAKE_CARD(CodeReleaseOFreeKickCard);
+MAKE_CARD(CodeReleaseOpfKickCard);
