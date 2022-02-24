@@ -22,6 +22,7 @@ CARD(CodeReleaseRunSpeedCard,
       CALLS(InWalkKick),
       CALLS(LookForward),
       CALLS(Stand),
+      CALLS(Say),
       CALLS(SpecialAction),
       CALLS(WalkAtRelativeSpeed),
       CALLS(WalkToTarget),
@@ -77,6 +78,7 @@ class CodeReleaseRunSpeedCard : public CodeReleaseRunSpeedCardBase
         {
           theLookForwardSkill();
           theStandSkill();
+          theSaySkill("initial state");
         }
       }
 
@@ -91,6 +93,7 @@ class CodeReleaseRunSpeedCard : public CodeReleaseRunSpeedCardBase
           action
           {
             theStandSkill();
+            theSaySkill("get up");
           }
       }
 
@@ -111,6 +114,7 @@ class CodeReleaseRunSpeedCard : public CodeReleaseRunSpeedCardBase
         {
           theLookForwardSkill();
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
+          theSaySkill("turn to ball");
         }
       }
 
@@ -136,6 +140,7 @@ class CodeReleaseRunSpeedCard : public CodeReleaseRunSpeedCardBase
         {
           theLookForwardSkill();
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
+          theSaySkill("speed one");
         }
       }
 
@@ -161,6 +166,7 @@ class CodeReleaseRunSpeedCard : public CodeReleaseRunSpeedCardBase
           {
             theLookForwardSkill();
             theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
+            theSaySkill("speed two");
           }
       }
 
@@ -186,6 +192,7 @@ class CodeReleaseRunSpeedCard : public CodeReleaseRunSpeedCardBase
           {
             theLookForwardSkill();
             theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
+            theSaySkill("speed three");
           }
       }
 
@@ -211,6 +218,7 @@ class CodeReleaseRunSpeedCard : public CodeReleaseRunSpeedCardBase
           {
             theLookForwardSkill();
             theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
+            theSaySkill("speed four");
           }
       }
 
@@ -226,6 +234,7 @@ class CodeReleaseRunSpeedCard : public CodeReleaseRunSpeedCardBase
         {
           theLookForwardSkill();
           theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+          theSaySkill("search");
         }
       }
     }
