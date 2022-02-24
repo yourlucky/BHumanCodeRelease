@@ -35,7 +35,7 @@ class CodeReleasePositionForKickOffCard : public CodeReleasePositionForKickOffCa
     theLookForwardSkill();
     theStandSkill();
     // Not implemented in the Code Release.
-    theSaySkill("Please implement a behavior for me!");
+    theSaySkill("hahahahahaha I made Scene");
   }
 };
 
