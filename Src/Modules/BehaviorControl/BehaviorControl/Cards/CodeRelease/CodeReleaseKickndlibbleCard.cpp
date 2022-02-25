@@ -32,9 +32,9 @@ CARD(CodeReleaseKickndlibbleCard,
   DEFINES_PARAMETERS(
   {,
     (float)(0.8f) walkSpeed,
-    (int)(1000) initialWaitTime,
+    (int)(500) initialWaitTime,
     (int)(7000) ballNotSeenTimeout,
-    (Angle)(5_deg) ballAlignThreshold,
+    (Angle)(1_deg) ballAlignThreshold,
     (float)(500.f) ballNearThreshold,
     (Angle)(10_deg) angleToGoalThreshold,
     (float)(400.f) ballAlignOffsetX,
@@ -49,7 +49,7 @@ CARD(CodeReleaseKickndlibbleCard,
   }),
 });
 
-class CodeReleaseKickndlibbleCard: public CCodeReleaseKickndlibbleCardBase
+class CodeReleaseKickndlibbleCard: public CodeReleaseKickndlibbleCardBase
 {
   bool preconditions() const override
   {
