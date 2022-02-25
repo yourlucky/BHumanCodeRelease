@@ -25,19 +25,21 @@ CARD(CodeReleaseKickAtGoalCard,
   CALLS(Stand),
   CALLS(WalkAtRelativeSpeed),
   CALLS(WalkToTarget),
+  CALLS(Say),
   REQUIRES(FieldBall),
   REQUIRES(FieldDimensions),
   REQUIRES(RobotPose),
   DEFINES_PARAMETERS(
   {,
     (float)(0.8f) walkSpeed,
-    (int)(1000) initialWaitTime,
+    (int)(500) initialWaitTime,
     (int)(7000) ballNotSeenTimeout,
     (Angle)(5_deg) ballAlignThreshold,
     (float)(500.f) ballNearThreshold,
-    (Angle)(10_deg) angleToGoalThreshold,
+    (Angle)(90_deg) angleToGoalThreshold,//애초에 10_deg
     (float)(400.f) ballAlignOffsetX,
-    (float)(100.f) ballYThreshold,
+    (float)(500.f) b_ballYThreshold, //애초에 100
+    (float)(100.f) s_ballYThreshold,
     (Angle)(2_deg) angleToGoalThresholdPrecise,
     (float)(150.f) ballOffsetX,
     (Rangef)({140.f, 170.f}) ballOffsetXRange,
@@ -76,6 +78,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       {
         theLookForwardSkill();
         theStandSkill();
+        theSaySkill("initial state");
       }
     }
 
@@ -93,10 +96,10 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       {
         theLookForwardSkill();
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
+        theSaySkill("turn turn  turn turn turn to Ball");
       }
     }
-
-    state(walkToBall)
+  state(walkToBall)
     {
       transition
       {
@@ -110,6 +113,8 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       {
         theLookForwardSkill();
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
+        theSaySkill("walk walk walk walk to ball");
+
       }
     }
 
@@ -121,35 +126,19 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       {
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto searchForBall;
-        if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold)
-          goto alignBehindBall;
-      }
-
-      action
-      {
-        theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
-      }
-    }
-
-    state(alignBehindBall)
-    {
-      const Angle angleToGoal = calcAngleToGoal();
-
-      transition
-      {
-        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-          goto searchForBall;
-        if(std::abs(angleToGoal) < angleToGoalThresholdPrecise && ballOffsetXRange.isInside(theFieldBall.positionRelative.x()) && ballOffsetYRange.isInside(theFieldBall.positionRelative.y()))
+        if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < b_ballYThreshold && std::abs(theFieldBall.positionRelative.y()) > s_ballYThreshold)
           goto kick;
       }
 
       action
       {
         theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
+        theSaySkill("align align align align to ball");
       }
     }
+
+  
 
     state(kick)
     {
@@ -165,6 +154,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       {
         theLookForwardSkill();
         theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+        theSaySkill("kick kick kick");
       }
     }
 
@@ -180,6 +170,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       {
         theLookForwardSkill();
         theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+        theSaySkill("search search search search ball");
       }
     }
   }
