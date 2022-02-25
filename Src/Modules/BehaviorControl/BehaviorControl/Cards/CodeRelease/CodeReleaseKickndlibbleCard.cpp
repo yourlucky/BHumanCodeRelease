@@ -32,14 +32,13 @@ CARD(CodeReleaseKickndlibbleCard,
   DEFINES_PARAMETERS(
   {,
     (float)(0.8f) walkSpeed,
-    (int)(500) initialWaitTime,
+    (int)(1000) initialWaitTime,
     (int)(7000) ballNotSeenTimeout,
     (Angle)(5_deg) ballAlignThreshold,
     (float)(500.f) ballNearThreshold,
-    (Angle)(90_deg) angleToGoalThreshold,//애초에 10_deg
+    (Angle)(10_deg) angleToGoalThreshold,
     (float)(400.f) ballAlignOffsetX,
-    (float)(500.f) b_ballYThreshold, //애초에 100
-    (float)(100.f) s_ballYThreshold,
+    (float)(100.f) ballYThreshold,
     (Angle)(2_deg) angleToGoalThresholdPrecise,
     (float)(150.f) ballOffsetX,
     (Rangef)({140.f, 170.f}) ballOffsetXRange,
@@ -50,7 +49,7 @@ CARD(CodeReleaseKickndlibbleCard,
   }),
 });
 
-class CodeReleaseKickndlibbleCard : public CodeReleaseKickndlibbleCardBase
+class CodeReleaseKickndlibbleCard: public CCodeReleaseKickndlibbleCardBase
 {
   bool preconditions() const override
   {
@@ -78,7 +77,7 @@ class CodeReleaseKickndlibbleCard : public CodeReleaseKickndlibbleCardBase
       {
         theLookForwardSkill();
         theStandSkill();
-        theSaySkill("initial state");
+        theSaySkill("inital state");
       }
     }
 
@@ -96,10 +95,11 @@ class CodeReleaseKickndlibbleCard : public CodeReleaseKickndlibbleCardBase
       {
         theLookForwardSkill();
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
-        theSaySkill("turn turn  turn turn turn to Ball");
+        theSaySkill("turn to ball");
       }
     }
-  state(walkToBall)
+
+    state(walkToBall)
     {
       transition
       {
@@ -113,8 +113,7 @@ class CodeReleaseKickndlibbleCard : public CodeReleaseKickndlibbleCardBase
       {
         theLookForwardSkill();
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
-        theSaySkill("walk walk walk walk to ball");
-
+        theSaySkill("walk to ball");
       }
     }
 
@@ -126,19 +125,38 @@ class CodeReleaseKickndlibbleCard : public CodeReleaseKickndlibbleCardBase
       {
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto searchForBall;
-        if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < b_ballYThreshold && std::abs(theFieldBall.positionRelative.y()) > s_ballYThreshold)
-          goto kick;
+        if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold)
+          goto alignBehindBall;
       }
 
       action
       {
         theLookForwardSkill();
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
-        theSaySkill("align align align align to ball");
+        theSaySkill("align to goal");
+
       }
     }
 
-  
+    state(alignBehindBall)
+    {
+      const Angle angleToGoal = calcAngleToGoal();
+
+      transition
+      {
+        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+          goto searchForBall;
+        if(std::abs(angleToGoal) < angleToGoalThresholdPrecise && ballOffsetXRange.isInside(theFieldBall.positionRelative.x()) && ballOffsetYRange.isInside(theFieldBall.positionRelative.y()))
+          goto kick;
+      }
+
+      action
+      {
+        theLookForwardSkill();
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+        theSaySkill("align behind ball");
+      }
+    }
 
     state(kick)
     {
@@ -154,7 +172,7 @@ class CodeReleaseKickndlibbleCard : public CodeReleaseKickndlibbleCardBase
       {
         theLookForwardSkill();
         theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
-        theSaySkill("kick kick kick");
+        theSaySkill("kick");
       }
     }
 
@@ -170,7 +188,7 @@ class CodeReleaseKickndlibbleCard : public CodeReleaseKickndlibbleCardBase
       {
         theLookForwardSkill();
         theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
-        theSaySkill("search search search search ball");
+        theSaySkill("search for ball");
       }
     }
   }
@@ -180,5 +198,6 @@ class CodeReleaseKickndlibbleCard : public CodeReleaseKickndlibbleCardBase
     return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
   }
 };
+
 
 MAKE_CARD(CodeReleaseKickndlibbleCard);
