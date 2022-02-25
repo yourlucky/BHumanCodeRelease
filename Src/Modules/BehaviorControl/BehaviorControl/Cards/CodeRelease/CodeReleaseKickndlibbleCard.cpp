@@ -37,10 +37,11 @@ CARD(CodeReleaseKickndlibbleCard,
     (Angle)(1_deg) ballAlignThreshold,
     (float)(500.f) ballNearThreshold,
     (Angle)(10_deg) angleToGoalThreshold,
-    (float)(400.f) ballAlignOffsetX,
+    (float)(20.f) ballAlignOffsetX,
+    (float)(20.f) ballAlignOffsetY,
     (float)(100.f) ballYThreshold,
     (Angle)(2_deg) angleToGoalThresholdPrecise,
-    (float)(150.f) ballOffsetX,
+    (float)(40.f) ballOffsetX,//inital 150
     (Rangef)({140.f, 170.f}) ballOffsetXRange,
     (float)(40.f) ballOffsetY,
     (Rangef)({20.f, 50.f}) ballOffsetYRange,
@@ -106,7 +107,7 @@ class CodeReleaseKickndlibbleCard: public CodeReleaseKickndlibbleCardBase
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto searchForBall;
         if(theFieldBall.positionRelative.squaredNorm() < sqr(ballNearThreshold))
-          goto alignToGoal_x;
+          goto alignToGoal_y;
       }
 
       action
@@ -135,7 +136,7 @@ class CodeReleaseKickndlibbleCard: public CodeReleaseKickndlibbleCardBase
       action
       {
         theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX ,theFieldBall.positionRelative.y() - ballAlignOffsetY));
         theSaySkill("align to goal x");
 
       }
@@ -159,7 +160,7 @@ class CodeReleaseKickndlibbleCard: public CodeReleaseKickndlibbleCardBase
       action
       {
         theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, 0.f,0.f));
         theSaySkill("align to goal y");
 
       }
@@ -181,7 +182,7 @@ class CodeReleaseKickndlibbleCard: public CodeReleaseKickndlibbleCardBase
       action
       {
         theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()- ballAlignOffsetY));
         theSaySkill("align behind ball");
       }
     }
