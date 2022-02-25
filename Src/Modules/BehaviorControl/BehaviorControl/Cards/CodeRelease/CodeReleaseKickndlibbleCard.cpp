@@ -106,7 +106,7 @@ class CodeReleaseKickndlibbleCard: public CodeReleaseKickndlibbleCardBase
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto searchForBall;
         if(theFieldBall.positionRelative.squaredNorm() < sqr(ballNearThreshold))
-          goto alignToGoal;
+          goto alignToGoal_x;
       }
 
       action
@@ -117,7 +117,7 @@ class CodeReleaseKickndlibbleCard: public CodeReleaseKickndlibbleCardBase
       }
     }
 
-    state(alignToGoal)
+    state(alignToGoal_x)
     {
       const Angle angleToGoal = calcAngleToGoal();
 
@@ -125,7 +125,10 @@ class CodeReleaseKickndlibbleCard: public CodeReleaseKickndlibbleCardBase
       {
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto searchForBall;
-        if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold)
+        if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold && std::abs(theFieldBall.positionRelative.x()) > ballYThreshold)
+          goto alignToGoal_y;
+
+         if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold && std::abs(theFieldBall.positionRelative.x()) < ballYThreshold)
           goto alignBehindBall;
       }
 
@@ -133,10 +136,35 @@ class CodeReleaseKickndlibbleCard: public CodeReleaseKickndlibbleCardBase
       {
         theLookForwardSkill();
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
-        theSaySkill("align to goal");
+        theSaySkill("align to goal x");
 
       }
     }
+
+  state(alignToGoal_y)
+    {
+      const Angle angleToGoal = calcAngleToGoal();
+
+      transition
+      {
+        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+          goto searchForBall;
+        if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.x()) < ballYThreshold&& std::abs(theFieldBall.positionRelative.y()) > ballYThreshold)
+          goto alignToGoal_y;
+
+         if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.x()) < ballYThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold)
+          goto alignBehindBall;
+      }
+
+      action
+      {
+        theLookForwardSkill();
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
+        theSaySkill("align to goal y");
+
+      }
+    }
+
 
     state(alignBehindBall)
     {
