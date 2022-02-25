@@ -17,7 +17,7 @@
 
 //#include "Representations/Sensing/FallDownState.h"
 
-CARD(CodeReleaseKickndlibbleCard,
+CARD(CodeReleaseKickndribbleCard,
 {,
   CALLS(Activity),
   CALLS(InWalkKick),
@@ -51,7 +51,7 @@ CARD(CodeReleaseKickndlibbleCard,
   }),
 });
 
-class CodeReleaseKickndlibbleCard : public CodeReleaseKickndlibbleCardBase
+class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 {
   bool preconditions() const override
   {
@@ -200,4 +200,4 @@ class CodeReleaseKickndlibbleCard : public CodeReleaseKickndlibbleCardBase
   }
 };
 
-MAKE_CARD(CodeReleaseKickndlibbleCard);
+MAKE_CARD(CodeReleaseKickndribbleCard);
