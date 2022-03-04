@@ -32,7 +32,7 @@ CARD(CodeReleaseKickAtGoalCard,
   DEFINES_PARAMETERS(
   {,
     (float)(0.8f) walkSpeed,
-    (int)(1000) initialWaitTime,
+    (int)(500) initialWaitTime,
     (int)(7000) ballNotSeenTimeout,
     (Angle)(5_deg) ballAlignThreshold,
     (float)(500.f) ballNearThreshold,
@@ -46,6 +46,8 @@ CARD(CodeReleaseKickAtGoalCard,
     (Rangef)({20.f, 50.f}) ballOffsetYRange,
     (int)(10) minKickWaitTime,
     (int)(3000) maxKickWaitTime,
+
+    (int)(-0.1f) angleParm,
   }),
 });
 
@@ -194,7 +196,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
   Angle calcAngleToGoal() const
   {
-    return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
+    return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle()*(1/10)+angleParm;
   }
 };
 
