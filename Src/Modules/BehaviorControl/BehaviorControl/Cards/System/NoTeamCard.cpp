@@ -36,9 +36,9 @@ class NoTeamCard : public NoTeamCardBase
     theTeammateRolesSkill(TeammateRoles());
 
     Role role;
-    role.isGoalkeeper = false;
-    role.playBall = false;
-    role.supporterIndex = -1;
+    role.isGoalkeeper = true;//initial : false
+    role.playBall = true;//initial : false
+    role.supporterIndex = 1; //initial : -1
     role.numOfActiveSupporters = 0;
     theRoleSkill(role);
   }
