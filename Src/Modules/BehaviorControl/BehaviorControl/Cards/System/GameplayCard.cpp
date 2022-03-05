@@ -72,6 +72,20 @@ class GameplayCard : public GameplayCardBase
       {
         dealer.deal(normalPlay)->call();
         setState("normalPlay");
+        /*
+        switch (theRobotInfo.number)
+        {
+          case 1: {dealer.deal(Keeper)->cal();setState("normalPlay");}break;
+          case 2: {dealer.deal(Striker)->cal();setState("normalPlay");}break;
+          case 3: {dealer.deal(Supporter)->cal();setState("normalPlay");}break;
+          case 4: {dealer.deal(LeftDefender)->cal();setState("normalPlay");}break;
+                    //{dealer.deal(FrontDefender)->cal();setState("normalPlay");}break;
+          case 5: {dealer.deal(RightDefender)->cal();setState("normalPlay");}break;
+                    //{dealer.deal(BackDefender)->cal();setState("normalPlay");}break;
+          default :break;
+        }
+        */
+
       }
     }
   }
