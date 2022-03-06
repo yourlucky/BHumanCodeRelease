@@ -72,11 +72,8 @@ class GameplayCard : public GameplayCardBase
       {
         dealer.deal(normalPlay)->call();
         setState("normalPlay");
-<<<<<<< HEAD
-=======
-        
->>>>>>> GamePlay
-        /*
+
+        /* -Mar.5
         switch (theRobotInfo.number)
         {
           case 1: {dealer.deal(Keeper)->cal();setState("normalPlay");}break;
