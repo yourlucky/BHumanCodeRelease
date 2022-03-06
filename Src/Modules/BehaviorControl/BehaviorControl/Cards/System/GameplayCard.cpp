@@ -72,6 +72,10 @@ class GameplayCard : public GameplayCardBase
       {
         dealer.deal(normalPlay)->call();
         setState("normalPlay");
+<<<<<<< HEAD
+=======
+        
+>>>>>>> GamePlay
         /*
         switch (theRobotInfo.number)
         {
