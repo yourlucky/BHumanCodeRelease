@@ -33,16 +33,11 @@ STREAMABLE(BehaviorStatus, COMMA public BHumanMessageParticle<idBehaviorStatus>
     
     codeReleaseRunSpeed, //striker
     codeReleaseGuardGoal, //GoalKeeper
-    //setting card <-don't know yet
+
     codeReleaseOwnKickoff, 	//own Kick off card
-    codeReleaseOwnfKickCard, 	//own free Kick card
+    codeReleaseOwnfKick, 	//own free Kick card
     codeReleaseOpKickoff, 	//oppenent Kick off card
     codeReleaseOpfKick, 	//oppenent free Kick card
-    
-    
-    
-    
-    
     
   });
 

@@ -32,7 +32,7 @@ class CodeReleaseOwnfKickCard : public CodeReleaseOwnfKickCardBase
 
   void execute() override
   {
-    //theActivitySkill(BehaviorStatus::codeReleaseOwnfKick);
+    theActivitySkill(BehaviorStatus::codeReleaseOwnfKick);
     //theLookForwardSkill();
     //theStandSkill();
     // Not implemented in the Code Release.
