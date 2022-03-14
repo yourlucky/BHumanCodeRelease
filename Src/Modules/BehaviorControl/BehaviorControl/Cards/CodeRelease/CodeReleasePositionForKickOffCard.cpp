@@ -31,11 +31,11 @@ class CodeReleasePositionForKickOffCard : public CodeReleasePositionForKickOffCa
 
   void execute() override
   {
-    //theActivitySkill(BehaviorStatus::codeReleasePositionForKickOff);
-    //theLookForwardSkill();
-    //theStandSkill();
+    theActivitySkill(BehaviorStatus::codeReleasePositionForKickOff);
+    theLookForwardSkill();
+    theStandSkill();
     // Not implemented in the Code Release.
-    theSaySkill("goal goal goal goal goal");
+    theSaySkill("Kick off Card");
   }
 };
 

@@ -64,7 +64,9 @@ class CodeReleaseRunSpeedCard : public CodeReleaseRunSpeedCardBase
 
     option
     {
-      theActivitySkill(BehaviorStatus::codeReleaseKickAtGoal);
+      //theActivitySkill(BehaviorStatus::codeReleaseKickAtGoal);
+      theActivitySkill(BehaviorStatus::codeReleaseRunSpeed);
+
 
       initial_state(start)
       {
@@ -78,7 +80,7 @@ class CodeReleaseRunSpeedCard : public CodeReleaseRunSpeedCardBase
         {
           theLookForwardSkill();
           theStandSkill();
-          theSaySkill("initial state");
+          theSaySkill("striker Card");
         }
       }
 
