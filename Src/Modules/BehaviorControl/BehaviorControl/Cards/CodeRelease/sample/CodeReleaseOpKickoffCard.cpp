@@ -10,7 +10,7 @@
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 
 
-CARD(CodeReleaseOpfKickoffCard,
+CARD(CodeReleaseOpKickoffCard,
  {,
   CALLS(Activity),
   CALLS(LookForward),
@@ -32,7 +32,7 @@ class CodeReleaseOpKickoffCard : public CodeReleaseOpKickoffCardBase
 
   void execute() override
   {
-    theActivitySkill(BehaviorStatus::codeReleaseOpKickoffCard);
+    //theActivitySkill(BehaviorStatus::codeReleaseOpKickoffCard);
     //theLookForwardSkill();
     //theStandSkill();
     // Not implemented in the Code Release.
