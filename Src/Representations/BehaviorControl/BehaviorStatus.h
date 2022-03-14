@@ -31,8 +31,18 @@ STREAMABLE(BehaviorStatus, COMMA public BHumanMessageParticle<idBehaviorStatus>
     codeReleaseKickAtGoal,
     codeReleasePositionForKickOff,
     
-    codeReleaseRunSpeed,
-    codeReleaseGuardGoal,
+    codeReleaseRunSpeed, //striker
+    codeReleaseGuardGoal, //GoalKeeper
+    //setting card <-don't know yet
+    codeReleaseOwnKickoff, 	//own Kick off card
+    codeReleaseOwnfKickCard, 	//own free Kick card
+    codeReleaseOpKickoff, 	//oppenent Kick off card
+    codeReleaseOpfKick, 	//oppenent free Kick card
+    
+    
+    
+    
+    
     
   });
 
