@@ -36,7 +36,7 @@ class CodeReleaseOwnKickoffCard : public CodeReleaseOwnKickoffCardBase
     //theLookForwardSkill();
     //theStandSkill();
     // Not implemented in the Code Release.
-    theSaySkill("yes! Goal Own Kick off card");
+    theSaySkill("yes Goal Own Kick off card");
   }
 };
 
