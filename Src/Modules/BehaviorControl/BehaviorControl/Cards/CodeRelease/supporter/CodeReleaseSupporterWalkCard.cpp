@@ -64,7 +64,7 @@ class CodeReleaseSupporterWalkCard : public CodeReleaseSupporterWalkCardBase
 
     option
     {
-      theActivitySkill(BehaviorStatus::codeReleaseKickAtGoal);
+      theActivitySkill(BehaviorStatus::codeReleaseSupporterWalk);
 
       initial_state(start)
       {
@@ -78,7 +78,7 @@ class CodeReleaseSupporterWalkCard : public CodeReleaseSupporterWalkCardBase
         {
           theLookForwardSkill();
           theStandSkill();
-          theSaySkill("Support Card initial state");
+          theSaySkill("Support Card");
         }
       }
 
