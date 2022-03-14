@@ -33,9 +33,9 @@ class CodeReleaseOwnKickoffCard : public CodeReleaseOwnKickoffCardBase
   void execute() override
   {
     //theActivitySkill(BehaviorStatus::codeReleasePositionForKickOff);
-    //theActivitySkill(BehaviorStatus::codeReleaseOwnKickoffCard);
-    //theLookForwardSkill();
-    //theStandSkill();
+    theActivitySkill(BehaviorStatus::codeReleaseOwnKickoff);
+    theLookForwardSkill();
+    theStandSkill();
     // Not implemented in the Code Release.
     theSaySkill("yes Goal Own Kick off card");
   }

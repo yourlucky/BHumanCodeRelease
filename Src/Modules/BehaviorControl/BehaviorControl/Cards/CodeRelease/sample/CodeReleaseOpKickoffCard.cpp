@@ -32,7 +32,7 @@ class CodeReleaseOpKickoffCard : public CodeReleaseOpKickoffCardBase
 
   void execute() override
   {
-    //theActivitySkill(BehaviorStatus::codeReleaseOpKickoffCard);
+    theActivitySkill(BehaviorStatus::codeReleaseOpKickoff);
     //theLookForwardSkill();
     //theStandSkill();
     // Not implemented in the Code Release.
