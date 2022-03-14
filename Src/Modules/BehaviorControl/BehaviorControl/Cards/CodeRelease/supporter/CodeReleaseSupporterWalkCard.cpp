@@ -48,7 +48,7 @@ CARD(CodeReleaseSupporterWalkCard,
       }),
     });
 
-class CodeReleaseSupporterWalkCard : public CodeReleaseSupporterWalkCard
+class CodeReleaseSupporterWalkCard : public CodeReleaseSupporterWalkCardBase
 {
     int c_time = 0; //current time
 
