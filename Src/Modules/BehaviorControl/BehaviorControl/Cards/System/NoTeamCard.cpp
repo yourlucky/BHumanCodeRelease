@@ -41,6 +41,8 @@ class NoTeamCard : public NoTeamCardBase
     role.supporterIndex = -1; //initial : -1
     role.numOfActiveSupporters = 0;
     theRoleSkill(role);
+
+ 
   }
 };
 
