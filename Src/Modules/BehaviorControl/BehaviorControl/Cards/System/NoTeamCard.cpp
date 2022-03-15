@@ -39,8 +39,17 @@ class NoTeamCard : public NoTeamCardBase
     role.isGoalkeeper = false;//initial : false
     role.playBall = true;//initial : false
     role.supporterIndex = -1; //initial : -1
-    role.numOfActiveSupporters = 1;
+    role.numOfActiveSupporters = 0;
     theRoleSkill(role);
+
+    Role role2;
+    role.isGoalkeeper = false;//initial : false
+    role.playBall = false;//initial : false
+    role.supporterIndex = -2; //initial : -1
+    role.numOfActiveSupporters = 1;
+    theRoleSkill(role2);
+
+
   }
 };
 
