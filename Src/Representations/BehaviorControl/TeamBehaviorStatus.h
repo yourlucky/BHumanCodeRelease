@@ -20,6 +20,7 @@ STREAMABLE(TeamBehaviorStatus, COMMA public BHumanMessageParticle<idTeamBehavior
   ENUM(TeamActivity,
   {,
     noTeam,
+    OneTeam,
   });
   static constexpr TeamActivity numOfTeamActivities = numOfTeamActivitys;
 
