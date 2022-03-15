@@ -62,7 +62,7 @@ class CodeReleaseRunSpeedCard : public CodeReleaseRunSpeedCardBase
         return true;
     }
 
-    option(Striker)
+    option
     {
       //theActivitySkill(BehaviorStatus::codeReleaseKickAtGoal);
       theActivitySkill(BehaviorStatus::codeReleaseRunSpeed);
