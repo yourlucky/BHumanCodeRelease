@@ -71,11 +71,11 @@ class GameplayCard : public GameplayCardBase
       else
       {
         //최초
-        //dealer.deal(normalPlay)->call();
-        //setState("normalPlay");
+        dealer.deal(normalPlay)->call();
+        setState("normalPlay");
 
-        //변경
-        switch (theRobotInfo.number)
+        /*
+        switch (idRobotInfo.number)
         {
           case 1: {dealer.deal(CodeReleaseRunSpeedCard)->cal();setState("normalPlay");}break;
           case 2: {dealer.deal(CodeReleaseRunSpeedCard)->cal();setState("normalPlay");}break;
@@ -86,6 +86,7 @@ class GameplayCard : public GameplayCardBase
                     //{dealer.deal(BackDefender)->cal();setState("normalPlay");}break;
           default :break;
         }
+         * */
 
       }
     }
