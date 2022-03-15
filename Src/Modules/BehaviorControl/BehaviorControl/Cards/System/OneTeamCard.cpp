@@ -42,15 +42,6 @@ class OneTeamCard : public OneTeamCardBase
     roleone.numOfActiveSupporters = 0;
     theRoleSkill(roleone);
 
-    Role role_t;
-    role_t.isGoalkeeper = false;//initial : false
-    role_t.playBall = false;//initial : false
-    role_t.supporterIndex = 1; //initial : -1
-    role_t.numOfActiveSupporters = 1;
-    theRoleSkill(role_t);
-
-
-
   }
 };
 

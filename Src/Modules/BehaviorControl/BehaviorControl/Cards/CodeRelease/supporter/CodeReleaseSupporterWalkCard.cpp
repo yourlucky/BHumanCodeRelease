@@ -62,7 +62,7 @@ class CodeReleaseSupporterWalkCard : public CodeReleaseSupporterWalkCardBase
         return true;
     }
 
-    option(supporter1)
+    option
     {
       theActivitySkill(BehaviorStatus::codeReleaseSupporterWalk);
 
