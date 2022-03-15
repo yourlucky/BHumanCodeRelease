@@ -39,7 +39,7 @@ class OneTeamCard : public OneTeamCardBase
     roleone.isGoalkeeper = false;//initial : false
     roleone.playBall = true;//initial : false
     roleone.supporterIndex = -2; //initial : -1
-    roleone.numOfActiveSupporters = 1;
+    roleone.numOfActiveSupporters = 5;
     theRoleSkill(roleone);
   }
 };
