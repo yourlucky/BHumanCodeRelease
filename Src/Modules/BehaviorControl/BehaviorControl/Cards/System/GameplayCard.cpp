@@ -9,8 +9,9 @@
 #include "Representations/Communication/GameInfo.h"
 #include "Representations/Communication/TeamInfo.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
+#include "Tools/BehaviorControl/Framework/Card/Dealer.h"
 
-#include "Representations/Communication/RobotInfo.h"
+//#include "Representations/Communication/RobotInfo.h"
 
 CARD(GameplayCard,
 {,
@@ -72,8 +73,9 @@ class GameplayCard : public GameplayCardBase
       else
       {
         //최초
-        //dealer.deal(normalPlay)->call();
-        //setState("normalPlay");
+        dealer.deal(normalPlay)->call();
+        setState("normalPlay");
+        /*
 
         
         switch (theRobotInfo.number)

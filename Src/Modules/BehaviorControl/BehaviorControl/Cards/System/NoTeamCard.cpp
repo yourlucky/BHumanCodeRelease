@@ -37,12 +37,36 @@ class NoTeamCard : public NoTeamCardBase
     theTimeToReachBallSkill(TimeToReachBall());
     theTeammateRolesSkill(TeammateRoles());
 
+         switch (theRobotInfo.number)
+        {
+          case 1: {
+            
+            Role role;
+            role.isGoalkeeper = false;//initial : false
+            role.playBall = true;//initial : false
+            role.supporterIndex = -1; //initial : -1
+            role.numOfActiveSupporters = 0;
+            theRoleSkill(role);
+            
+            }break;
+          case 2: {}break;
+          case 3: {}break;
+          case 4: {}break;
+                    //{dealer.deal(FrontDefender)->cal();setState("normalPlay");}break;
+          case 5: {}break;
+                    //{dealer.deal(BackDefender)->cal();setState("normalPlay");}break;
+          default :break;
+        }
+
+    
+    /*
     Role role;
     role.isGoalkeeper = false;//initial : false
     role.playBall = true;//initial : false
     role.supporterIndex = -1; //initial : -1
     role.numOfActiveSupporters = 0;
     theRoleSkill(role);
+    **/
 
  
   }
