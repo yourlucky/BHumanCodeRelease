@@ -9,7 +9,8 @@
 #include "Representations/Communication/GameInfo.h"
 #include "Representations/Communication/TeamInfo.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
-#include "Tools/BehaviorControl/Framework/Card/Dealer.h"
+
+#include "Representations/Communication/RobotInfo.h"
 
 CARD(GameplayCard,
 {,
@@ -71,11 +72,11 @@ class GameplayCard : public GameplayCardBase
       else
       {
         //최초
-        dealer.deal(normalPlay)->call();
-        setState("normalPlay");
+        //dealer.deal(normalPlay)->call();
+        //setState("normalPlay");
 
-        /*
-        switch (idRobotInfo.number)
+        
+        switch (theRobotInfo.number)
         {
           case 1: {dealer.deal(CodeReleaseRunSpeedCard)->cal();setState("normalPlay");}break;
           case 2: {dealer.deal(CodeReleaseRunSpeedCard)->cal();setState("normalPlay");}break;
@@ -86,7 +87,7 @@ class GameplayCard : public GameplayCardBase
                     //{dealer.deal(BackDefender)->cal();setState("normalPlay");}break;
           default :break;
         }
-         * */
+         
 
       }
     }

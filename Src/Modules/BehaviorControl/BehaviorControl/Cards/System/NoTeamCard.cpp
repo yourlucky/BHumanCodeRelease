@@ -9,6 +9,8 @@
 #include "Representations/BehaviorControl/TeamSkills.h"
 #include "Tools/BehaviorControl/Framework/Card/TeamCard.h"
 
+#include "Representations/Communication/RobotInfo.h" //내가 추가
+
 TEAM_CARD(NoTeamCard,
 {,
   CALLS(Role),
