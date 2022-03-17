@@ -37,6 +37,7 @@ option
     //theStandSkill();
     // Not implemented in the Code Release.
     theSaySkill("Own Kick");
+<<<<<<< HEAD
     theSaySkill("I can assign the role");
 
 
@@ -102,6 +103,8 @@ option
         }
     }
 
+=======
+>>>>>>> d7a2c0fc (new setting)
   }
   }
 };
