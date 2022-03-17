@@ -22,6 +22,7 @@
 #include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/supporter/Supporter.h"
 #include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/keeper/Keeper.h"
 
+#include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/sample/CodeReleaseOpKickoffCard.cpp"
 
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 #include "Tools/BehaviorControl/Framework/Card/Dealer.h"
@@ -121,10 +122,10 @@ option
         action
         {
           //if(state_time > initialWaitTime)
-           CodeReleaseOpKickoffCard();
+           //CodeReleaseOpKickoffCard();
            //dealer.deal(CodeReleaseRunSpeedCard)->call();
            //setState("normalPlay");
-           //theSaySkill("hi there");
+           theSaySkill("hi there");
         }
     }
     
