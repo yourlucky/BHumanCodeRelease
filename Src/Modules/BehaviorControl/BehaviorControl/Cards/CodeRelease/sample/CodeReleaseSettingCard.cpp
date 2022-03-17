@@ -18,21 +18,42 @@
 
 CARD(CodeReleaseSettingCard,
     { ,
+
       CALLS(Activity),
+      CALLS(InWalkKick),
       CALLS(LookForward),
       CALLS(Stand),
       CALLS(Say),
+      CALLS(SpecialAction),
+      CALLS(WalkAtRelativeSpeed),
+      CALLS(WalkToTarget),
+      REQUIRES(FallDownState),
+      REQUIRES(FieldBall),
+      REQUIRES(FieldDimensions),
       REQUIRES(RobotPose),
       DEFINES_PARAMETERS(
       {,
         (float)(0.2f) walkSpeed,
         (int)(1000) initialWaitTime,
- 
+        (int)(7000) ballNotSeenTimeout,
+        (Angle)(5_deg) ballAlignThreshold,
+        (float)(500.f) ballNearThreshold,
+        (Angle)(10_deg) angleToGoalThreshold,
+        (float)(400.f) ballAlignOffsetX,
+        (float)(100.f) ballYThreshold,
+        (Angle)(2_deg) angleToGoalThresholdPrecise,
+        (float)(150.f) ballOffsetX,
+        (Rangef)({140.f, 170.f}) ballOffsetXRange,
+        (float)(40.f) ballOffsetY,
+        (Rangef)({20.f, 50.f}) ballOffsetYRange,
+
       }),
+
     });
 
 class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
 {
+    
 
     bool preconditions() const override
     {
@@ -46,27 +67,29 @@ class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
 
     option
     {
-      //theActivitySkill(BehaviorStatus::codeReleaseKickAtGoal);
-      theActivitySkill(BehaviorStatus::codeReleaseSetting);
-
-
+      theActivitySkill(BehaviorStatus::codeReleaseSetting); 
       initial_state(start)
       {
         transition
         {
-          if (state_time > initialWaitTime)
-            //goto turnToBall;
+            goto turnToBall;
         }
-
-        action
+         action
         {
           theLookForwardSkill();
           theStandSkill();
-          theSaySkill("Yes, I can assign the role");
+          theSaySkill("I can setting the role");
         }
       }
 
-      
+      state(turnToBall)
+      {
+        action
+        {
+          theSaySkill("turn to ball");
+        }
+      }
+    }
 };
 
 MAKE_CARD(CodeReleaseSettingCard);
