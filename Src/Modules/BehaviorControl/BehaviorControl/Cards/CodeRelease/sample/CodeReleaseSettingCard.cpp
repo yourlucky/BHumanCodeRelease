@@ -84,7 +84,7 @@ option
       action
       {
          theLookForwardSkill();
-        theStandSkill();
+         theStandSkill();
       }
   }
     
@@ -107,15 +107,17 @@ option
     {
         action
         {
-            keeper();
+            theSaySkill("I am goal keeper");
         }
     }
     
     state(striker)
     {
+      
         action
         {
-            striker();
+          //if(state_time > initialWaitTime)
+            theSaySkill("striker striker");
         }
     }
     
@@ -123,7 +125,7 @@ option
     {
         action
         {
-            supporter();
+            theSaySkill("supporter supporter");
         }
     }
     
