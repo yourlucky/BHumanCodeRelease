@@ -42,7 +42,7 @@ CARD(CodeReleaseSettingCard,
       REQUIRES(FieldBall),
       REQUIRES(FieldDimensions),
       REQUIRES(RobotPose),
-       REQUIRES(RobotInfo),
+      REQUIRES(RobotInfo),
       DEFINES_PARAMETERS(
       {,
         (float)(0.2f) walkSpeed,
