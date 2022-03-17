@@ -1,4 +1,4 @@
-option(Striker)
+option
 {
   initial_state(start)
   {
