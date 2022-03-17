@@ -63,9 +63,72 @@ class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
     {
         return true;
     }
-    
-                            
 
+option
+{
+  initial_state(start)
+  {
+      transition
+      {
+          if(state_time > 1000)
+              goto judge;
+      }
+      action
+      {
+          LookForward();
+          Stand();
+      }
+  }
+    
+    state(judge)
+    {
+        transition
+        {
+            if(theRobotInfo.number == 1)
+                goto keeper;
+            else if(theRobotInfo.number == 2 || theRobotInfo.number == 5)
+                goto striker;
+            else if(theRobotInfo.number == 4 || theRobotInfo.number == 3 )
+                goto supporter;
+            else
+                goto stand;
+        }
+    }
+    
+    state(keeper)
+    {
+        action
+        {
+            keeper();
+        }
+    }
+    
+    state(striker)
+    {
+        action
+        {
+            striker();
+        }
+    }
+    
+    state(supporter)
+    {
+        action
+        {
+            supporter();
+        }
+    }
+    
+    state(stand)
+    {
+        action
+        {
+            LookForward();
+            Stand();
+        }
+    }
+
+  }      
         
 };
 
