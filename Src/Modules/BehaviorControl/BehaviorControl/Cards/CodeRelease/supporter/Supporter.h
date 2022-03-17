@@ -1,3 +1,4 @@
+/*
 option(Supporter)
 {
   initial_state(start)

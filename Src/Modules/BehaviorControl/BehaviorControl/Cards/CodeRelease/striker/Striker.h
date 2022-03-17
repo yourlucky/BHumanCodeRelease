@@ -1,3 +1,4 @@
+/*
 option
 {
   initial_state(start)
