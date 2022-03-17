@@ -89,6 +89,7 @@ class GameplayCard : public GameplayCardBase
                     //{dealer.deal(BackDefender)->cal();setState("normalPlay");}break;
           default :break;
         }
+        */
          
 
       }
