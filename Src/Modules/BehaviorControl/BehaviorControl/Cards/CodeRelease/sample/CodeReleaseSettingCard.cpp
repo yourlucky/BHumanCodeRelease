@@ -117,7 +117,7 @@ option
         action
         {
           //if(state_time > initialWaitTime)
-            theSaySkill("striker striker");
+           Striker();
         }
     }
     
