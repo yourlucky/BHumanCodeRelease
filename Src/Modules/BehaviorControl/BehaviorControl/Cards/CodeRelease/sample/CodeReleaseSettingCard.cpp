@@ -16,6 +16,13 @@
 
 #include "Representations/Sensing/FallDownState.h"
 
+#include "Representations/Communication/RobotInfo.h"
+
+#include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/striker/Striker.h"
+#include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/supporter/Supporter.h"
+#include "Modules/BehaviorControl/Cards/CodeRelease/keeper/Keepers.h"
+
+
 CARD(CodeReleaseSettingCard,
     { ,
 
@@ -31,6 +38,7 @@ CARD(CodeReleaseSettingCard,
       REQUIRES(FieldBall),
       REQUIRES(FieldDimensions),
       REQUIRES(RobotPose),
+       REQUIRES(RobotInfo),
       DEFINES_PARAMETERS(
       {,
         (float)(0.2f) walkSpeed,
@@ -75,8 +83,8 @@ option
       }
       action
       {
-          LookForward();
-          Stand();
+         theLookForwardSkill();
+        theStandSkill();
       }
   }
     
@@ -123,8 +131,8 @@ option
     {
         action
         {
-            LookForward();
-            Stand();
+          theLookForwardSkill();
+          theStandSkill();
         }
     }
 
