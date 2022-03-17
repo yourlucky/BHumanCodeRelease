@@ -117,7 +117,9 @@ option
         action
         {
           //if(state_time > initialWaitTime)
-           Striker();
+           //Striker();
+           dealer.deal(CodeReleaseRunSpeedCard)->cal();
+           //setState("normalPlay");
         }
     }
     
