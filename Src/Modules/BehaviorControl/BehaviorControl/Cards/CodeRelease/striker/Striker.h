@@ -7,7 +7,7 @@ option(Striker)
 
       initial_state(start)
       {
-        */
+        
         transition
         {
           if (state_time > initialWaitTime)
@@ -15,11 +15,13 @@ option(Striker)
         }
 
         action
-        {
+        {*/
           theLookForwardSkill();
           theStandSkill();
           theSaySkill("good good good striker Card");
-        }
+          goto turnToBall;
+      
+        //}
       //}
 
       state(getUP)
