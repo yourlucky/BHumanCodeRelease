@@ -46,7 +46,6 @@ CARD(CodeReleaseSettingCard,
         (Rangef)({140.f, 170.f}) ballOffsetXRange,
         (float)(40.f) ballOffsetY,
         (Rangef)({20.f, 50.f}) ballOffsetYRange,
-
       }),
 
     });
@@ -64,32 +63,10 @@ class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
     {
         return true;
     }
+    
+                            
 
-    option
-    {
-      theActivitySkill(BehaviorStatus::codeReleaseSetting); 
-      initial_state(start)
-      {
-        transition
-        {
-            goto turnToBall;
-        }
-         action
-        {
-          theLookForwardSkill();
-          theStandSkill();
-          theSaySkill("I can setting the role");
-        }
-      }
-
-      state(turnToBall)
-      {
-        action
-        {
-          theSaySkill("turn to ball");
-        }
-      }
-    }
+        
 };
 
 MAKE_CARD(CodeReleaseSettingCard);
