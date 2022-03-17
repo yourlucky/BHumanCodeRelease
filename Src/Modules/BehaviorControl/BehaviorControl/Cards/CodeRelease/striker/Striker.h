@@ -7,6 +7,7 @@ option(Striker)
 
       initial_state(start)
       {
+        */
         transition
         {
           if (state_time > initialWaitTime)
@@ -17,9 +18,9 @@ option(Striker)
         {
           theLookForwardSkill();
           theStandSkill();
-          theSaySkill("striker Card");
+          theSaySkill("good good good striker Card");
         }
-      }
+      //}
 
       state(getUP)
       {
@@ -183,5 +184,3 @@ option(Striker)
         return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
     }
     
-    
-    */
