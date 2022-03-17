@@ -15,14 +15,12 @@ option(Striker)
         }
 
         action
-        {*/
+        {
           theLookForwardSkill();
           theStandSkill();
           theSaySkill("good good good striker Card");
-          goto turnToBall;
-      
-        //}
-      //}
+        }
+      }
 
       state(getUP)
       {
@@ -185,4 +183,4 @@ option(Striker)
     {
         return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
     }
-    
+*/
