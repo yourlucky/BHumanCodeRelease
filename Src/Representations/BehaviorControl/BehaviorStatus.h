@@ -40,7 +40,7 @@ STREAMABLE(BehaviorStatus, COMMA public BHumanMessageParticle<idBehaviorStatus>
     codeReleaseOpKickoff, 	//oppenent Kick off card
     codeReleaseOpfKick, 	//oppenent free Kick card
     
-    CodeReleaseSetting, //Setting Role
+    codeReleaseSetting, //Setting Role
     
   });
 
