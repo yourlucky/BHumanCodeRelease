@@ -1,3 +1,4 @@
+/*
 option(Keeper)
 {
   initial_state(start)
