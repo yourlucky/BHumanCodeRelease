@@ -122,8 +122,9 @@ option
         {
           //if(state_time > initialWaitTime)
            //Striker();
-           dealer.deal(CodeReleaseRunSpeedCard)->call();
+           //dealer.deal(CodeReleaseRunSpeedCard)->call();
            //setState("normalPlay");
+           theSaySkill("hi there");
         }
     }
     
