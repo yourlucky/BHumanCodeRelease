@@ -40,6 +40,5 @@ class CodeReleaseOwnKickoffCard : public CodeReleaseOwnKickoffCardBase
     theSaySkill("yes Goal Own Kick off card");
   }
 };
-//fix git
-//fix git2
+
 MAKE_CARD(CodeReleaseOwnKickoffCard);
