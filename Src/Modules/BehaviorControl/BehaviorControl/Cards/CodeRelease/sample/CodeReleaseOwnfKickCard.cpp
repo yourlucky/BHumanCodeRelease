@@ -30,8 +30,8 @@ class CodeReleaseOwnfKickCard : public CodeReleaseOwnfKickCardBase
     return true;
   }
 
-  void execute() override
-  {
+option
+{
     theActivitySkill(BehaviorStatus::codeReleaseOwnfKick);
     //theLookForwardSkill();
     //theStandSkill();
@@ -39,8 +39,7 @@ class CodeReleaseOwnfKickCard : public CodeReleaseOwnfKickCardBase
     theSaySkill("Own Kick");
     theSaySkill("I can assign the role");
 
-option
-{
+
   initial_state(start)
   {
       transition
@@ -103,6 +102,7 @@ option
         }
     }
 
+  }
   }
 };
 
