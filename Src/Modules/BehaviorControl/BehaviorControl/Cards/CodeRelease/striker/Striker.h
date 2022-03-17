@@ -1,7 +1,8 @@
-option
+/*
+option(Striker)
     {
       //theActivitySkill(BehaviorStatus::codeReleaseKickAtGoal);
-      theActivitySkill(BehaviorStatus::codeReleaseRunSpeed);
+      //theActivitySkill(BehaviorStatus::codeReleaseRunSpeed);
 
 
       initial_state(start)
@@ -181,3 +182,6 @@ option
     {
         return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
     }
+    
+    
+    */

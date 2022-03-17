@@ -23,6 +23,10 @@
 #include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/keeper/Keeper.h"
 
 
+#include "Tools/BehaviorControl/Framework/Card/Card.h"
+#include "Tools/BehaviorControl/Framework/Card/Dealer.h"
+
+
 CARD(CodeReleaseSettingCard,
     { ,
 
@@ -118,7 +122,7 @@ option
         {
           //if(state_time > initialWaitTime)
            //Striker();
-           dealer.deal(CodeReleaseRunSpeedCard)->cal();
+           dealer.deal(CodeReleaseRunSpeedCard)->call();
            //setState("normalPlay");
         }
     }
