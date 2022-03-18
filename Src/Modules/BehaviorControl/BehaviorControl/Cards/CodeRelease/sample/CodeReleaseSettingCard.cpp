@@ -91,7 +91,7 @@ option
     {
         transition
         {
-            if(theRobotInfo.number == 1)
+            if(theRobotInfo.number == 1 || theRobotInfo.number == 2)
                 goto striker;
             else
                 goto notmove;
@@ -162,6 +162,7 @@ option
           theLookForwardSkill();
           theStandSkill();
           theSaySkill("Setting");
+          theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
         }
     }
 
