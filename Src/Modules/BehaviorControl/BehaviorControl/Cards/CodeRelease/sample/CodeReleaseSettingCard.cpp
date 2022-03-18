@@ -142,7 +142,7 @@ option
         transition
         {
           if (theFieldBall.ballWasSeen())
-            goto turnToBall;
+            goto striker;
         }
 
         action
