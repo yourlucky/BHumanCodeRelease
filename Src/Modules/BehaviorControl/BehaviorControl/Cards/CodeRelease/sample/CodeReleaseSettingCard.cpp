@@ -42,7 +42,7 @@ CARD(CodeReleaseSettingCard,
       DEFINES_PARAMETERS(
       {,
         (float)(0.5f) walkSpeed,
-        (int)(1000) initialWaitTime,
+        (int)(500) initialWaitTime,
         (int)(7000) ballNotSeenTimeout,
         (Angle)(5_deg) ballAlignThreshold,
         (float)(500.f) ballNearThreshold,
@@ -59,8 +59,7 @@ CARD(CodeReleaseSettingCard,
     });
 
 class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
-{
-    
+{    
 
     bool preconditions() const override
     {
@@ -78,7 +77,7 @@ option
   {
       transition
       {
-          if(state_time > 1000)
+         if (state_time > initialWaitTime)
               goto judge;
       }
       action
@@ -95,15 +94,12 @@ option
             if(theRobotInfo.number == 1)
                 goto striker;
             else
-                goto stand;
+                goto notmove;
         }
-    }
-    
-
+    } 
     
     state(striker)
     {
-      
       
         transition
         {
@@ -111,7 +107,6 @@ option
             goto searchForBall;
         if (std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
         {
-            c_time = state_time;
             goto walkToBall_1;
         }
         }
@@ -123,8 +118,6 @@ option
           theSaySkill("turn to ball");
         }
 
-
-
     }
 
     state(walkToBall_1) //walk speed 0.2
@@ -133,9 +126,6 @@ option
         {
           if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
             goto searchForBall;
-          
-          if (theFallDownState.state == FallDownState::fallen)
-            goto getUP;
 
         }
 
@@ -146,10 +136,26 @@ option
           theSaySkill("speed one");
         }
       }
+
+     state(searchForBall)
+      {
+        transition
+        {
+          if (theFieldBall.ballWasSeen())
+            goto turnToBall;
+        }
+
+        action
+        {
+          theLookForwardSkill();
+          theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+          theSaySkill("search");
+        }
+      }
     
     
 
-    state(stand)
+    state(notmove)
     {
         action
         {
