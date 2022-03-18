@@ -41,9 +41,14 @@ class CodeReleaseOwnKickoffCard : public CodeReleaseOwnKickoffCardBase
   }
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 //git fixing
 =======
 //fix git
 //fix git2
 >>>>>>> 54e00088be1ef0d3d4c336210eb69c3700cc1d2f
+=======
+//fix git
+//fix git2
+>>>>>>> 54e00088 (new git)
 MAKE_CARD(CodeReleaseOwnKickoffCard);
