@@ -40,7 +40,7 @@ class NoTeamCard : public NoTeamCardBase
 
     Role role;
     role.isGoalkeeper = false;//initial : false
-    role.playBall = true;//initial : false
+    role.playBall = false;//initial : false
     role.supporterIndex = -1; //initial : -1
     role.numOfActiveSupporters = 0;
     theRoleSkill(role);
