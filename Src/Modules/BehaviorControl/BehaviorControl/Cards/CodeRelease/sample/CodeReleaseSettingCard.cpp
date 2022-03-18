@@ -41,7 +41,7 @@ CARD(CodeReleaseSettingCard,
        REQUIRES(RobotInfo),
       DEFINES_PARAMETERS(
       {,
-        (float)(0.2f) walkSpeed,
+        (float)(0.5f) walkSpeed,
         (int)(1000) initialWaitTime,
         (int)(7000) ballNotSeenTimeout,
         (Angle)(5_deg) ballAlignThreshold,
@@ -93,48 +93,69 @@ option
         transition
         {
             if(theRobotInfo.number == 1)
-                goto keeper;
-            else if(theRobotInfo.number == 2 || theRobotInfo.number == 5)
                 goto striker;
-            else if(theRobotInfo.number == 4 || theRobotInfo.number == 3 )
-                goto supporter;
             else
                 goto stand;
         }
     }
     
-    state(keeper)
-    {
-        action
-        {
-            theSaySkill("I am goal keeper");
-        }
-    }
+
     
     state(striker)
     {
       
+      
+        transition
+        {
+          if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+            goto searchForBall;
+        if (std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
+        {
+            c_time = state_time;
+            goto walkToBall_1;
+        }
+        }
+
         action
         {
-          //if(state_time > initialWaitTime)
-            theSaySkill("striker striker");
+          theLookForwardSkill();
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
+          theSaySkill("turn to ball");
         }
+
+
+
     }
-    
-    state(supporter)
-    {
+
+    state(walkToBall_1) //walk speed 0.2
+      {
+        transition
+        {
+          if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+            goto searchForBall;
+          
+          if (theFallDownState.state == FallDownState::fallen)
+            goto getUP;
+
+        }
+
         action
         {
-            theSaySkill("supporter supporter");
+          theLookForwardSkill();
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
+          theSaySkill("speed one");
         }
-    }
+      }
     
+    
+
     state(stand)
     {
         action
         {
           theLookForwardSkill();
           theStandSkill();
+          theSaySkill("Setting");
         }
     }
 
