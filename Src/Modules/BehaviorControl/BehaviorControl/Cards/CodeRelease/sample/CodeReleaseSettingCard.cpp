@@ -78,7 +78,7 @@ option
       transition
       {
          if (state_time > initialWaitTime)
-              goto judge;
+              goto giverole;
       }
       action
       {
@@ -87,12 +87,14 @@ option
       }
   }
     
-    state(judge)
+    state(giverole)
     {
         transition
         {
             if(theRobotInfo.number == 1 || theRobotInfo.number == 2)
                 goto striker;
+            if(theRobotInfo.number == 3 || theRobotInfo.number == 4)
+                goto turnaround;
             else
                 goto notmove;
         }
@@ -120,7 +122,7 @@ option
 
     }
 
-    state(walkToBall_1) //walk speed 0.2
+    state(walkToBall_1)
       {
         transition
         {
@@ -149,11 +151,20 @@ option
         {
           theLookForwardSkill();
           theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
-          theSaySkill("search");
+          //theSaySkill("search");
         }
       }
     
-    
+    state(turnaround)
+    {
+        action
+        {
+          theLookForwardSkill();
+          theStandSkill();
+          theSaySkill("turn");
+          theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+        }
+    }
 
     state(notmove)
     {
@@ -161,8 +172,6 @@ option
         {
           theLookForwardSkill();
           theStandSkill();
-          theSaySkill("Setting");
-          theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
         }
     }
 
