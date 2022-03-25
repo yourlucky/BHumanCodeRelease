@@ -167,7 +167,7 @@ option
         transition
         {
           if (theFieldBall.ballWasSeen())
-            goto striker;
+            goto giverole;
         }
 
         action
