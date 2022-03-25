@@ -5,9 +5,7 @@
  *
  * @author 
  */
-
-#include <math.h> 
-
+/*
 #include "Representations/BehaviorControl/FieldBall.h"
 #include "Representations/BehaviorControl/Skills.h"
 #include "Representations/Configuration/FieldDimensions.h"
@@ -62,7 +60,6 @@ CARD(CodeReleaseSettingCard,
 
 class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
 {    
-  int b_r_d = 2147000000; 
 
     bool preconditions() const override
     {
@@ -92,17 +89,12 @@ option
     
     state(giverole)
     {
-
         transition
         {
-          int x_d = pow((theFieldBall.positionRelative.x()-theRobotPose.translation.x()),2);
-          int y_d = pow((theFieldBall.positionRelative.y()-theRobotPose.translation.y()),2);
-
-          if (x_d+y_d <  b_r_d) {
-
             if(theRobotInfo.number == 1 || theRobotInfo.number == 2)
                 goto striker;
-          }
+            if(theRobotInfo.number == 3 || theRobotInfo.number == 4)
+                goto turnaround;
             else
                 goto notmove;
         }
@@ -188,3 +180,4 @@ option
 };
 
 MAKE_CARD(CodeReleaseSettingCard);
+*/
