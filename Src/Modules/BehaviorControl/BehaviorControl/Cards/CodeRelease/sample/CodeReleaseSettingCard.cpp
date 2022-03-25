@@ -62,7 +62,8 @@ CARD(CodeReleaseSettingCard,
 
 class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
 {    
-  int b_r_d = 2147000000; 
+  int b_r_d_1 = 2147000000; 
+  int b_r_d_2 = 2147000000; 
 
     bool preconditions() const override
     {
@@ -100,12 +101,17 @@ option
           
           if(theRobotInfo.number == 3 || theRobotInfo.number == 4 || theRobotInfo.number == 5)
             goto notmove;
-          
 
-          if (x_d+y_d <  b_r_d) {
-            b_r_d=x_d+y_d;
-            goto striker;
-            
+          if(theRobotInfo.number == 1) {
+            b_r_d_1 = x_d+y_d;
+            if (b_r_d_1 < b_r_d_2)
+              goto striker;            
+          }
+
+          if(theRobotInfo.number == 2) {
+            b_r_d_2 = x_d+y_d;
+            if (b_r_d_2 < b_r_d_1)
+              goto striker;            
           }
             
         }
@@ -113,7 +119,7 @@ option
         {
           theLookForwardSkill();
           if(theRobotInfo.number==1)
-            theSaySkill("not yet");
+            theSaySkill("Supporter");
           theStandSkill();
         }
     } 
@@ -125,13 +131,23 @@ option
         {
           int x_d = pow((theFieldBall.positionRelative.x()-theRobotPose.translation.x()),2);
           int y_d = pow((theFieldBall.positionRelative.y()-theRobotPose.translation.y()),2);
+          
+          if(theRobotInfo.number == 1) {
+            b_r_d_1 = x_d+y_d;
+            if (b_r_d_1 > b_r_d_2) {
+              theSaySkill("Change the rule");        
+              goto giverole;             
+            }    
+          }
 
-          if (x_d+y_d >  b_r_d)
-            goto changeRole; 
+           if(theRobotInfo.number == 2) {
+            b_r_d_2 = x_d+y_d;
+            if (b_r_d_2 > b_r_d_1)
+              goto giverole;            
+          }
+
           if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
             goto searchForBall;
-          if (std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
-            goto walkToBall_1;
         }
 
         action
@@ -145,42 +161,6 @@ option
 
     }
 
-     state(changeRole)
-    {
-        transition
-        {
-          int x_d = pow((theFieldBall.positionRelative.x()-theRobotPose.translation.x()),2);
-          int y_d = pow((theFieldBall.positionRelative.y()-theRobotPose.translation.y()),2);
-
-          if (x_d+y_d <  b_r_d)
-            goto striker;
-        }
-
-        action
-        {
-          theLookForwardSkill();
-          if(theRobotInfo.number==1)
-            theSaySkill("Role Change");          
-        }
-
-    }
-
-    state(walkToBall_1)
-      {
-        transition
-        {
-          if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-            goto searchForBall;
-
-        }
-
-        action
-        {
-          theLookForwardSkill();
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
-          theSaySkill("speed one");
-        }
-      }
 
      state(searchForBall)
       {
