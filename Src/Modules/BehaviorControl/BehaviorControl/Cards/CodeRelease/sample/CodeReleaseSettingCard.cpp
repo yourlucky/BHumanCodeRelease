@@ -103,12 +103,18 @@ option
             goto notmove;
 
           if(theRobotInfo.number == 1) {
+            std::cout << "robot 2 distance by #1" << std::endl;
+            std::cout << b_r_d_2 << std::endl;
+
             b_r_d_1 = x_d+y_d;
             if (b_r_d_1 < b_r_d_2)
               goto striker;            
           }
 
           if(theRobotInfo.number == 2) {
+            std::cout << "robot 1 distance by #2" << std::endl;
+            std::cout << b_r_d_1 << std::endl;
+            
             b_r_d_2 = x_d+y_d;
             if (b_r_d_2 < b_r_d_1)
               goto striker;            
@@ -142,8 +148,10 @@ option
 
            if(theRobotInfo.number == 2) {
             b_r_d_2 = x_d+y_d;
-            if (b_r_d_2 > b_r_d_1)
-              goto giverole;            
+            if (b_r_d_2 > b_r_d_1) {
+              theSaySkill("Change the rule");   
+              goto giverole;        
+            }    
           }
 
           if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
