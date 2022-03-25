@@ -7,6 +7,8 @@
  */
 
 #include <math.h> 
+#include <iostream>
+#include <string>
 
 #include "Representations/BehaviorControl/FieldBall.h"
 #include "Representations/BehaviorControl/Skills.h"
