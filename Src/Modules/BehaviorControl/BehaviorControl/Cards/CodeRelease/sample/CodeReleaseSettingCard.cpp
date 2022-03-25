@@ -112,7 +112,9 @@ option
         action
         {
           theLookForwardSkill();
-          theSaySkill("not yet");
+          if(theRobotInfo.number==1)
+            theSaySkill("not yet");
+          theStandSkill();
         }
     } 
     
@@ -125,7 +127,7 @@ option
           int y_d = pow((theFieldBall.positionRelative.y()-theRobotPose.translation.y()),2);
 
           if (x_d+y_d >  b_r_d)
-            goto giverole; 
+            goto changeRole; 
           if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
             goto searchForBall;
           if (std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
@@ -136,7 +138,29 @@ option
         {
           theLookForwardSkill();
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
-          theSaySkill("Striker");
+          if(theRobotInfo.number==1)
+            theSaySkill("Striker");
+          
+        }
+
+    }
+
+     state(changeRole)
+    {
+        transition
+        {
+          int x_d = pow((theFieldBall.positionRelative.x()-theRobotPose.translation.x()),2);
+          int y_d = pow((theFieldBall.positionRelative.y()-theRobotPose.translation.y()),2);
+
+          if (x_d+y_d <  b_r_d)
+            goto striker;
+        }
+
+        action
+        {
+          theLookForwardSkill();
+          if(theRobotInfo.number==1)
+            theSaySkill("Role Change");          
         }
 
     }
@@ -170,7 +194,6 @@ option
         {
           theLookForwardSkill();
           theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
-          //theSaySkill("search");
         }
       }
     
