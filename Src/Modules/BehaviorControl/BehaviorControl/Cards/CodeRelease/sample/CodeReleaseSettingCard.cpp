@@ -105,8 +105,7 @@ option
           if (x_d+y_d <  b_r_d) {
             b_r_d=x_d+y_d;
             goto striker;
-            //if(theRobotInfo.number == 1 || theRobotInfo.number == 2)
-                
+            
           }
             
         }
@@ -122,12 +121,15 @@ option
       
         transition
         {
+          int x_d = pow((theFieldBall.positionRelative.x()-theRobotPose.translation.x()),2);
+          int y_d = pow((theFieldBall.positionRelative.y()-theRobotPose.translation.y()),2);
+
+          if (x_d+y_d >  b_r_d)
+            goto giverole; 
           if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
             goto searchForBall;
-        if (std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
-        {
+          if (std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
             goto walkToBall_1;
-        }
         }
 
         action
