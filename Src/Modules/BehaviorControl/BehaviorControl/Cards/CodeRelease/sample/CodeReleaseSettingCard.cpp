@@ -99,6 +99,7 @@ option
           int y_d = pow((theFieldBall.positionRelative.y()-theRobotPose.translation.y()),2);
 
           if (x_d+y_d <  b_r_d) {
+            b_r_d=x_d+y_d;
 
             if(theRobotInfo.number == 1 || theRobotInfo.number == 2)
                 goto striker;
