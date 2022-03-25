@@ -97,15 +97,23 @@ option
         {
           int x_d = pow((theFieldBall.positionRelative.x()-theRobotPose.translation.x()),2);
           int y_d = pow((theFieldBall.positionRelative.y()-theRobotPose.translation.y()),2);
+          
+          if(theRobotInfo.number == 3 || theRobotInfo.number == 4 || theRobotInfo.number == 5)
+            goto notmove;
+          
 
           if (x_d+y_d <  b_r_d) {
             b_r_d=x_d+y_d;
-
-            if(theRobotInfo.number == 1 || theRobotInfo.number == 2)
-                goto striker;
+            goto striker;
+            //if(theRobotInfo.number == 1 || theRobotInfo.number == 2)
+                
           }
-            else
-                goto notmove;
+            
+        }
+        action
+        {
+          theLookForwardSkill();
+          theSaySkill("not yet");
         }
     } 
     
@@ -126,7 +134,7 @@ option
         {
           theLookForwardSkill();
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
-          theSaySkill("turn to ball");
+          theSaySkill("Striker");
         }
 
     }
