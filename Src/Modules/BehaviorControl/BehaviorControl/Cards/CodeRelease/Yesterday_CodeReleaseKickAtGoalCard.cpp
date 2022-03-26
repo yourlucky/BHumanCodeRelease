@@ -1,3 +1,4 @@
+
 /**
  * @file CodeReleaseKickAtGoalCard.cpp
  *
@@ -8,21 +9,14 @@
  *
  * @author Arne Hasselbring
  */
-
+/*
 #include "Representations/BehaviorControl/FieldBall.h"
+#include "Representations/BehaviorControl/Skills.h"
 #include "Representations/Configuration/FieldDimensions.h"
 #include "Representations/Modeling/RobotPose.h"
-
-
-#include "Representations/BehaviorControl/Skills.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 #include "Tools/BehaviorControl/Framework/Card/CabslCard.h"
 #include "Tools/Math/BHMath.h"
-
-#include "Tools/Module/Blackboard.h"
-#include "Representations/Infrastructure/GroundTruthWorldState.h"
-
-
 
 CARD(CodeReleaseKickAtGoalCard,
 {,
@@ -74,15 +68,6 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
   {
     theActivitySkill(BehaviorStatus::codeReleaseKickAtGoal);
 
-    const GroundTruthRobotPose &theGroundTruthRobotPose =
-    static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
-
-    const GroundTruthWorldState& theGroundTruthWorldState =
-    static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
-
-
-
-
     initial_state(start)
     {
       transition
@@ -110,7 +95,6 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
       action
       {
-
         theLookForwardSkill();
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
         theSaySkill("inital");
@@ -129,10 +113,8 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
       action
       {
-        const Vector2f ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
-
         theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), ballPosition);//chagned
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
         theSaySkill("walk to ball");
       
       }
@@ -220,3 +202,4 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 };
 
 MAKE_CARD(CodeReleaseKickAtGoalCard);
+*/
