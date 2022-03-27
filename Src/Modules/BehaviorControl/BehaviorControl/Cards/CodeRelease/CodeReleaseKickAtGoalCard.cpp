@@ -22,6 +22,8 @@
 #include "Tools/Module/Blackboard.h"
 #include "Representations/Infrastructure/GroundTruthWorldState.h"
 
+#include "Angle.h"
+
 
 
 CARD(CodeReleaseKickAtGoalCard,
@@ -80,9 +82,6 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
     const GroundTruthWorldState& theGroundTruthWorldState =
     static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
 
-
-
-
     initial_state(start)
     {
       transition
@@ -130,14 +129,15 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       action
       {
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
+        Angle v_angle = 3.1f
         float virtualBallXPosition = _ballPosition[0];
         float virtualBallYPosition = _ballPosition[1];
 
 
         theLookForwardSkill();
-        //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),theFieldBall.positionRelative);//chagned
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),theFieldBall.positionRelative);//chagned
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),_ballPosition);//아 벡터 2f가 아니라 pose2f구나!!!
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(virtualBallXPosition,virtualBallYPosition));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle, virtualBallXPosition,virtualBallYPosition));
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(virtualBallXPosition,virtualBallYPosition));
         
         theSaySkill("walk to ball");
