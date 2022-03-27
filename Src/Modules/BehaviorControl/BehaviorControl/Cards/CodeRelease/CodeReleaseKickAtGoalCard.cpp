@@ -120,8 +120,8 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
     {
       transition
       {
-        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-          goto searchForBall;
+        //if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+          //goto searchForBall;
         if(theFieldBall.positionRelative.squaredNorm() < sqr(ballNearThreshold))
           goto notmove;
       }
@@ -134,14 +134,15 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       //float virtualBallYPosition = -1*_ballPosition[1];
       float virtualBallXPosition = theFieldBall.positionRelative.x();
       float virtualBallYPosition = theFieldBall.positionRelative.y();
-        Angle v_angle = 0.20 *pi;
-        theLookForwardSkill();
+       Angle v_angle =1.45*pi;
+       theLookForwardSkill();
+       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle,virtualBallXPosition,virtualBallYPosition));
+
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),theFieldBall.positionRelative);//chagned
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),_ballPosition);
 
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(virtualBallXPosition,virtualBallYPosition));
 
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle,virtualBallXPosition,virtualBallYPosition));
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(virtualBallXPosition,virtualBallYPosition));
 
         
