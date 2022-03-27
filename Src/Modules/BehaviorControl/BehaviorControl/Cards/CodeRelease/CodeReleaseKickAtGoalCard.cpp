@@ -22,7 +22,7 @@
 #include "Tools/Module/Blackboard.h"
 #include "Representations/Infrastructure/GroundTruthWorldState.h"
 
-#include "Angle.h"
+#include "Tools/Math/Angle.h"
 
 
 
@@ -133,9 +133,8 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         float virtualBallXPosition = -1*_ballPosition[0];
         float virtualBallYPosition = -1*_ballPosition[1];
 
-        Angle v_angle = 3.1f
-        float virtualBallXPosition = _ballPosition[0];
-        float virtualBallYPosition = _ballPosition[1];
+        Angle v_angle = 0.f;
+
 
 
 
@@ -145,7 +144,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(virtualBallXPosition,virtualBallYPosition));
 
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle, virtualBallXPosition,virtualBallYPosition));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f( virtualBallXPosition,virtualBallYPosition));
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(virtualBallXPosition,virtualBallYPosition));
 
         
