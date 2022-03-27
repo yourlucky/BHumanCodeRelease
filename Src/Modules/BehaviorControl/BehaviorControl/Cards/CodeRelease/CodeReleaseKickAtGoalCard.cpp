@@ -130,13 +130,13 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       {
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
 
-        float virtualBallXPosition = -1*_ballPosition[0];
-        float virtualBallYPosition = -1*_ballPosition[1];
-
-        Angle v_angle = 0.f;
-
-
-
+      //float virtualBallXPosition = -1*_ballPosition[0];
+      //float virtualBallYPosition = -1*_ballPosition[1];
+      float virtualBallXPosition = theFieldBall.positionRelative.x();
+      float virtualBallYPosition = theFieldBall.positionRelative.y();
+      
+      
+        Angle v_angle = 0.20 *pi;
 
         theLookForwardSkill();
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),theFieldBall.positionRelative);//chagned
@@ -144,7 +144,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(virtualBallXPosition,virtualBallYPosition));
 
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f( virtualBallXPosition,virtualBallYPosition));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f( v_angle,virtualBallXPosition,virtualBallYPosition));
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(virtualBallXPosition,virtualBallYPosition));
 
         
