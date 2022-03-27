@@ -129,10 +129,11 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
       action
       {
-        const Vector2f ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
+        const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
 
         theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),theFieldBall.positionRelative);//chagned
+        //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),theFieldBall.positionRelative);//chagned
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),_ballPosition);//아 벡터 2f가 아니라 pose2f구나!!!
         theSaySkill("walk to ball");
       
       }
