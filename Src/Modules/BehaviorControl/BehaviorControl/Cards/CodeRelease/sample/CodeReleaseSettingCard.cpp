@@ -26,6 +26,11 @@
 #include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/supporter/Supporter.h"
 #include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/keeper/Keeper.h"
 
+#include "Tools/Module/Blackboard.h"
+#include "Representations/Infrastructure/GroundTruthWorldState.h"
+
+#include "Tools/Math/Angle.h"
+
 
 CARD(CodeReleaseSettingCard,
     { ,
