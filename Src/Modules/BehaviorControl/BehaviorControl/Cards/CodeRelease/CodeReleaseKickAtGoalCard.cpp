@@ -79,7 +79,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
     const GroundTruthRobotPose &theGroundTruthRobotPose =
     static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
 
-    const GroundTruthWorldState& theGroundTruthWorldState =
+    const GroundTruthWorldState&theGroundTruthWorldState =
     static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
 
     initial_state(start)
@@ -128,15 +128,20 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
       action
       {
-        const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
+        const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
+        const Vector2f _ownPosition = theGroundTruthWorldState.ownPose[0].position.head<2>();  
 
       //float virtualBallXPosition = -1*_ballPosition[0];
       //float virtualBallYPosition = -1*_ballPosition[1];
-      float virtualBallXPosition = theFieldBall.positionRelative.x();
-      float virtualBallYPosition = theFieldBall.positionRelative.y();
+      //float virtualBallXPosition = theFieldBall.positionRelative.x();
+      //float virtualBallYPosition = theFieldBall.positionRelative.y();
+      float myownXposition = _ownPosition[0]*2; 
+      float myownXposition = _ownPosition[0]*3; 
+
+
        Angle v_angle =1.45*pi;
        theLookForwardSkill();
-       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle,virtualBallXPosition,virtualBallYPosition));
+       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(virtualBallXPosition,virtualBallYPosition));
 
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),theFieldBall.positionRelative);//chagned
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),_ballPosition);
