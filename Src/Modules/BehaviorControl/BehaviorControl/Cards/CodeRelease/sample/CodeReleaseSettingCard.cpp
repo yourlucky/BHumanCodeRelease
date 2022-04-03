@@ -98,10 +98,14 @@ option
 
         transition
         {
+          if(theRobotInfo.number == 4)
+            goto skeeper;
+
+
           int x_d = pow((theFieldBall.positionRelative.x()-theRobotPose.translation.x()),2);
           int y_d = pow((theFieldBall.positionRelative.y()-theRobotPose.translation.y()),2);
           
-          if(theRobotInfo.number == 3 || theRobotInfo.number == 4 || theRobotInfo.number == 5)
+          if(theRobotInfo.number == 3)
             goto notmove;
 
           if(theRobotInfo.number == 1) {
@@ -131,48 +135,18 @@ option
           theStandSkill();
         }
     } 
-    
-    state(striker)
-    {
-      
-        transition
-        {
-          int x_d = pow((theFieldBall.positionRelative.x()-theRobotPose.translation.x()),2);
-          int y_d = pow((theFieldBall.positionRelative.y()-theRobotPose.translation.y()),2);
-          
-          if(theRobotInfo.number == 1) {
-            b_r_d_1 = x_d+y_d;
-            if (b_r_d_1 > b_r_d_2) {
-              theSaySkill("Change the rule");        
-              goto giverole;             
-            }    
-          }
 
-           if(theRobotInfo.number == 2) {
-            b_r_d_2 = x_d+y_d;
-            if (b_r_d_2 > b_r_d_1) {
-              theSaySkill("Change the rule");   
-              goto giverole;        
-            }    
-          }
-
-          if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-            goto searchForBall;
-        }
-
+     state(skeeper)
+      {
         action
         {
           theLookForwardSkill();
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
-          if(theRobotInfo.number==1)
-            theSaySkill("Striker");
-          
+          Angle v_angle =(-5/6)*pi;
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle,4.5,0.0));
         }
+      }
 
-    }
-
-
-     state(searchForBall)
+       state(searchForBall)
       {
         transition
         {
