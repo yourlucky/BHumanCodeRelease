@@ -129,19 +129,23 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       action
       {
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
-        Vector2f _ownPosition = theGroundTruthWorldState.ownPose[0].position.head<2>();  
+        Pose2f _ownPosition = theGroundTruthWorldState.ownPose.translation;  
 
+      float virtualBallXPosition = 200;
+      float virtualBallYPosition = 200;
+      
       //float virtualBallXPosition = -1*_ballPosition[0];
-      //float virtualBallYPosition = -1*_ballPosition[1];
+      //float virtualBallYPosition = -1*_ballPosition[1]+200;
+      
       //float virtualBallXPosition = theFieldBall.positionRelative.x();
       //float virtualBallYPosition = theFieldBall.positionRelative.y();
-      float myownXposition = _ownPosition[0]*2; 
-      float myownXposition = _ownPosition[0]*3; 
+      float myownXposition = _ownPosition.x(); 
+      float myownYposition = _ownPosition.y(); 
 
 
        Angle v_angle =1.45*pi;
        theLookForwardSkill();
-       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(virtualBallXPosition,virtualBallYPosition));
+       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(myownXposition,myownYposition);
 
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),theFieldBall.positionRelative);//chagned
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),_ballPosition);
