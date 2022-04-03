@@ -130,7 +130,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       {
 
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
-        const pose2f _ownPosition = theGroundTruthWorldState.ownPose;  
+        const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;  
 
       float virtualBallXPosition = _ballPosition(0)*-1;
       float virtualBallYPosition = _ballPosition(1)*-1;
