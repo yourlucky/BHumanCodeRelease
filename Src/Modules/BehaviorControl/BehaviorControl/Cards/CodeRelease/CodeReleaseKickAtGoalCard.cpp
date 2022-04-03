@@ -131,10 +131,10 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
         const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;  
-        const Pose2f _FriendPosition = theGroundTruthWorldState.firstTeamPlayers[0].pose.translation;
+        const Pose2f _FriendPosition = theGroundTruthWorldState.firstTeamPlayers[0].pose;
 
-        float x_firstTeamPlayers = _FriendPosition.translation(0);
-        float x_firstTeamPlayers = _FriendPosition.translation(1);
+        float x_firstTeamPlayers = _FriendPosition.translation(0)*-1;
+        float y_firstTeamPlayers = _FriendPosition.translation(1)*-1;
 
 
         //float x_ownPosition = _ownPosition.translation(0)+300;
