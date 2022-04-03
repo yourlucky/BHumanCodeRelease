@@ -145,12 +145,16 @@ option
       {
         action
         {
+          const GroundTruthWorldState&theGroundTruthWorldState =
           static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
+          const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
           
-          float x_ = _ownPosition.translation(0)+0.5;
-          float y_ = _ownPosition.translation(1)-2;
-          Angle v_angle =-1*pi;
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle,Vector2f(x_,y_));
+          //float x_ = _ownPosition.translation(0)*-1-0.5;
+          //float y_ = _ownPosition.translation(1)*-1-2;
+          float x_ = 1600;
+          float y_ = -2000;
+          Angle v_angle =-0.8*pi;
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle,Vector2f(x_,y_)));
         }
       }
 
@@ -176,8 +180,10 @@ option
           const GroundTruthWorldState&theGroundTruthWorldState =
           static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
           const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
-          float x_ownPosition = _ownPosition.translation(0);
-          float y_ownPosition = _ownPosition.translation(1); 
+         // float x_ownPosition = _ownPosition.translation(0)*-1;
+          //float y_ownPosition = _ownPosition.translation(1)*-1; 
+          float x_ownPosition = 0;
+          float y_ownPosition = 0; 
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(x_ownPosition,y_ownPosition));
         }
     }
