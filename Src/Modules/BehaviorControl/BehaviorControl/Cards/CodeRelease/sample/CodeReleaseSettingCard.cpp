@@ -22,9 +22,9 @@
 
 #include "Representations/Communication/RobotInfo.h"
 
-#include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/striker/Striker.h"
-#include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/supporter/Supporter.h"
-#include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/keeper/Keeper.h"
+//#include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/striker/Striker.h"
+//#include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/supporter/Supporter.h"
+//#include "Modules/BehaviorControl/BehaviorControl/Cards/CodeRelease/keeper/Keeper.h"
 
 #include "Tools/Module/Blackboard.h"
 #include "Representations/Infrastructure/GroundTruthWorldState.h"
@@ -119,7 +119,7 @@ option
 
             b_r_d_1 = x_d+y_d;
             if (b_r_d_1 < b_r_d_2)
-              goto shuffle_dance;            
+              goto turnaround;            
           }
 
           if(theRobotInfo.number == 2) {
@@ -147,7 +147,7 @@ option
         {
           theLookForwardSkill();
           Angle v_angle =(-5/6)*pi;
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle,4.5,0.0));
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle,10.0,20.0));
         }
       }
 
