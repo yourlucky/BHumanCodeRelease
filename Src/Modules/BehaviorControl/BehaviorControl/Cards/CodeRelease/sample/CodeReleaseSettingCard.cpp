@@ -114,7 +114,7 @@ option
 
             b_r_d_1 = x_d+y_d;
             if (b_r_d_1 < b_r_d_2)
-              goto striker;            
+              goto shuffle_dance;            
           }
 
           if(theRobotInfo.number == 2) {
@@ -123,7 +123,7 @@ option
             
             b_r_d_2 = x_d+y_d;
             if (b_r_d_2 < b_r_d_1)
-              goto striker;            
+              goto shuffle_dance;            
           }
             
         }
@@ -160,6 +160,19 @@ option
           theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
         }
       }
+
+    state(shuffle_dance)
+    {
+        action
+        {
+          const GroundTruthWorldState&theGroundTruthWorldState =
+          static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
+          const Pose2f _ownPosition = theGroundTruthWorldState.ownPose; 
+          theLookForwardSkill();
+          theStandSkill();
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(_ownPosition));
+        }
+    }
     
     state(turnaround)
     {
