@@ -136,7 +136,7 @@ option
         {
           theLookForwardSkill();
           if(theRobotInfo.number==1)
-            theSaySkill("Supporter");
+            //theSaySkill("Supporter");
           theStandSkill();
         }
     } 
@@ -145,9 +145,12 @@ option
       {
         action
         {
-          theLookForwardSkill();
-          Angle v_angle =(-5/6)*pi;
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle,10.0,20.0));
+          static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
+          
+          float x_ = _ownPosition.translation(0)+0.5;
+          float y_ = _ownPosition.translation(1)-2;
+          Angle v_angle =-1*pi;
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle,Vector2f(x_,y_));
         }
       }
 
@@ -172,10 +175,10 @@ option
         {
           const GroundTruthWorldState&theGroundTruthWorldState =
           static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
-          const Pose2f _ownPosition = theGroundTruthWorldState.ownPose; 
-          theLookForwardSkill();
-          theStandSkill();
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(_ownPosition));
+          const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
+          float x_ownPosition = _ownPosition.translation(0);
+          float y_ownPosition = _ownPosition.translation(1); 
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(x_ownPosition,y_ownPosition));
         }
     }
     
