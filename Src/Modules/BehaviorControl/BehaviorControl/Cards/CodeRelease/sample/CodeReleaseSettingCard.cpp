@@ -116,9 +116,9 @@ option
           static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
           const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
           //my position and ball distance
-          float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2)
-          float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2)
-          float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2)
+          float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+          float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
+          float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
 
 
           if(ball_I > ball_F && ball_I > ball_S)
@@ -147,9 +147,7 @@ option
           const GroundTruthWorldState&theGroundTruthWorldState =
           static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
           const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
-          
-          //float x_ = _ownPosition.translation(0)*-1-0.5;
-          //float y_ = _ownPosition.translation(1)*-1-2;
+
           float x_ = 1600;
           float y_ = -2000;
           Angle v_angle =-0.8*pi;
@@ -191,9 +189,9 @@ option
           static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
           const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
           //my position and ball distance
-          float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2)
-          float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2)
-          float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2)
+          float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+          float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
+          float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
 
           if(ball_I < ball_F || ball_I < ball_S)
             goto giverole; 
@@ -203,8 +201,7 @@ option
 
         action
         {
-          //float x_ownPosition = 0.f;
-          //float y_ownPosition = 0.f; 
+
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(0.f,0.f));
         }
     }
@@ -216,9 +213,6 @@ option
           if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
             goto searchForBall;
 
-          if(theRobotInfo.number == 4)
-            goto skeeper;
-
           const GroundTruthWorldState&theGroundTruthWorldState =
           static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
           const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
@@ -229,9 +223,9 @@ option
           static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
           const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
           //my position and ball distance
-          float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2)
-          float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2)
-          float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2)
+          float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+          float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
+          float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
 
 
         if(ball_I > ball_F && ball_I > ball_S)
@@ -257,9 +251,6 @@ option
           if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
             goto searchForBall;
 
-          if(theRobotInfo.number == 4)
-            goto skeeper;
-
           const GroundTruthWorldState&theGroundTruthWorldState =
           static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
           const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
@@ -270,9 +261,9 @@ option
           static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
           const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
           //my position and ball distance
-          float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2)
-          float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2)
-          float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2)
+          float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+          float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
+          float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
 
           if(ball_I > ball_F && ball_I > ball_S)
             goto shuffle_dance;
