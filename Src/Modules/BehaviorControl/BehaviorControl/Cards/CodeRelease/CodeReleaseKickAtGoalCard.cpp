@@ -128,15 +128,21 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
       action
       {
-        const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
-        Vector2f _ownPosition = theGroundTruthWorldState.ownPose[0].position.head<2>();  
+        //const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
+        const Vector2f _ballPosition = theGroundTruthWorldState.balls[0];
+        
+        //Vector2f _ownPosition = theGroundTruthWorldState.ownPose[0].position.head<2>();  
+
+      float virtualBallXPosition = _ballPosition(0)*-1;
+      float virtualBallYPosition = _ballPosition(1)*-1;
+      
 
       //float virtualBallXPosition = -1*_ballPosition[0];
       //float virtualBallYPosition = -1*_ballPosition[1];
       //float virtualBallXPosition = theFieldBall.positionRelative.x();
       //float virtualBallYPosition = theFieldBall.positionRelative.y();
-      float myownXposition = _ownPosition[0]*2; 
-      float myownXposition = _ownPosition[0]*3; 
+      //float myownXposition = _ownPosition[0]*2; 
+      //float myownXposition = _ownPosition[0]*3; 
 
 
        Angle v_angle =1.45*pi;
