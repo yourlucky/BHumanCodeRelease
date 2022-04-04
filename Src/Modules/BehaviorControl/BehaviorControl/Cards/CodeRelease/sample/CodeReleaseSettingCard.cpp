@@ -99,8 +99,8 @@ option
 
         transition
         {
-          if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-            goto searchForBall;
+          //if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+            //goto searchForBall;
 
           if(theRobotInfo.number == 1)
             goto movetoother;
