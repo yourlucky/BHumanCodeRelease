@@ -96,6 +96,9 @@ option
   }  
     state(giverole)
     {
+      float ball_I = 0;
+      float ball_F = 0;
+      float ball_S = 0;
 
         transition
         {
@@ -123,9 +126,9 @@ option
           const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
 
           //my position and ball distance
-          float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
-          float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
-          float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
+          ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+          ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
+          ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
 
 
 
