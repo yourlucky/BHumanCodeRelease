@@ -80,20 +80,12 @@ class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
     }
 
 option
-{
+{   
 
 
   initial_state(start)
   {
-const GroundTruthWorldState&theGroundTruthWorldState =
- static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
-const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
-const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
- const Pose2f _secondteam = theGroundTruthWorldState.secondTeamPlayers[0].pose;
 
-const GroundTruthRobotPose &theGroundTruthRobotPose =
-static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
-const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
       
       transition
       {
@@ -117,6 +109,19 @@ const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2
 
           if(theRobotInfo.number == 4)
             goto skeeper;
+          
+          if(theRobotInfo.number == 2 || theRobotInfo.number == 3)
+            goto notmove;
+
+          const GroundTruthWorldState&theGroundTruthWorldState =
+          static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
+          const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
+          const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
+          const Pose2f _secondteam = theGroundTruthWorldState.secondTeamPlayers[0].pose;
+
+          const GroundTruthRobotPose &theGroundTruthRobotPose =
+          static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
+          const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
 
 
           //my position and ball distance
@@ -182,9 +187,9 @@ const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2
             goto searchForBall;
 
           //my position and ball distance
-          float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
-          float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
-          float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
+          //float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+          //float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
+          //float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
 
           if(ball_I < ball_F || ball_I < ball_S)
             goto giverole; 
@@ -207,16 +212,16 @@ const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2
             goto searchForBall;
 
           //my position and ball distance
-          float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
-          float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
-          float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
+          //float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+          //float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
+          //float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
 
 
-        if(ball_I > ball_F && ball_I > ball_S)
-            goto shuffle_dance;
+        // if(ball_I > ball_F && ball_I > ball_S)
+        //     goto shuffle_dance;
 
-        if(ball_I < ball_F && ball_I < ball_S)
-            goto notmove;
+        // if(ball_I < ball_F && ball_I < ball_S)
+        //     goto notmove;
         
             
         }
@@ -236,15 +241,15 @@ const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2
             goto searchForBall;
 
           //my position and ball distance
-          float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
-          float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
-          float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
+          // float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+          // float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
+          // float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
 
-          if(ball_I > ball_F && ball_I > ball_S)
-            goto shuffle_dance;
+          // if(ball_I > ball_F && ball_I > ball_S)
+          //   goto shuffle_dance;
 
-          if(ball_I > ball_F || ball_I > ball_S)
-            goto giverole;
+          // if(ball_I > ball_F || ball_I > ball_S)
+          //   goto giverole;
             
         }
         action
