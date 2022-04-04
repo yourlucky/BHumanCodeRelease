@@ -66,7 +66,7 @@ CARD(CodeReleaseSettingCard,
 
         (float)(0.f)ball_I,
         (float)(0.f)ball_F,
-        (float)(0.f)ball_S,
+        //(float)(0.f)ball_S,
       }),
 
     });
@@ -106,10 +106,15 @@ option
           if(theRobotInfo.number == 4)
             goto skeeper;
           
-          if(theRobotInfo.number == 1 ||theRobotInfo.number == 2  ) {
-            if (ball_I > ball_F && ball_I > ball_S) {
+          if(theRobotInfo.number == 1 ||theRobotInfo.number == 3) {
+            if (ball_I > ball_F) {
               goto shuffle_dance;
             }
+            if (ball_I < ball_F) {
+              goto notmove;
+            }
+
+
           }
                      
         }
@@ -218,7 +223,7 @@ option
 
         action
         {
-          theSaySkill("come come come");
+          theSaySkill("shuffle");
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(0.f,0.f));
         }
     }
