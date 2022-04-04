@@ -86,7 +86,7 @@ option
       transition
       {
          if (state_time > initialWaitTime)
-              goto skeeper;
+              goto giverole;
       }
       action
       {
@@ -102,7 +102,6 @@ option
           if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
             goto searchForBall;
 
-
           if(theRobotInfo.number == 1)
             goto movetoother;
 
@@ -111,16 +110,6 @@ option
           
           if(theRobotInfo.number == 2 || theRobotInfo.number == 3)
             goto notmove;
-
-          const GroundTruthWorldState&theGroundTruthWorldState =
-          static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
-          const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
-          const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
-          const Pose2f _secondteam = theGroundTruthWorldState.secondTeamPlayers[0].pose;
-
-          const GroundTruthRobotPose &theGroundTruthRobotPose =
-          static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
-          const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
 
           //my position and ball distance
           // float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
@@ -176,11 +165,8 @@ option
           static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
           const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
 
-          float _x = _firstteam(0) * -1;
-          float _y = _firstteam(1) * -1;
-
-
-
+          float _x = _firstteam.translation.x() * -1;
+          float _y = _firstteam.translation.y()* -1;
 
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(_x,_y));
         }
@@ -194,13 +180,12 @@ option
       {
         action
         { 
-
           float x_ = 1600;
           float y_ = -2000;
           Angle v_angle =-0.8*pi;
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(v_angle,Vector2f(x_,y_)));
-          theLookForwardSkill();
-          theStandSkill();
+          //theLookForwardSkill();
+          //theStandSkill();
         }
       }
 
