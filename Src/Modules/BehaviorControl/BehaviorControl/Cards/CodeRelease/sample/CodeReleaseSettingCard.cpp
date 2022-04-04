@@ -84,13 +84,11 @@ option
 
 
   initial_state(start)
-  {
-
-      
+  {     
       transition
       {
          if (state_time > initialWaitTime)
-              goto searchForBall;
+              goto skeeper;
       }
       action
       {
@@ -191,8 +189,8 @@ option
           //float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
           //float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
 
-          if(ball_I < ball_F || ball_I < ball_S)
-            goto giverole; 
+          //if(ball_I < ball_F || ball_I < ball_S)
+            //goto giverole; 
             
         }
 
