@@ -47,7 +47,7 @@ CARD(CodeReleaseSettingCard,
       REQUIRES(FieldBall),
       REQUIRES(FieldDimensions),
       REQUIRES(RobotPose),
-       REQUIRES(RobotInfo),
+      REQUIRES(RobotInfo),
       DEFINES_PARAMETERS(
       {,
         (float)(0.5f) walkSpeed,
@@ -210,20 +210,19 @@ option
           if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
             goto searchForBall;
 
-          //my position and ball distance
-          //float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
-          //float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
-          //float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
-
-          //if(ball_I < ball_F || ball_I < ball_S)
-            //goto giverole; 
-            
+          
+          if(ball_I < ball_F)
+            goto notmove;
+               
         }
 
 
         action
         {
-          theSaySkill("shuffle");
+          ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+          ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
+          if(theRobotInfo.number == 1)
+            theSaySkill("shuffle");
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(0.f,0.f));
         }
     }
@@ -234,12 +233,6 @@ option
         {
           if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
             goto searchForBall;
-
-          //my position and ball distance
-          //float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
-          //float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
-          //float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
-
 
         // if(ball_I > ball_F && ball_I > ball_S)
         //     goto shuffle_dance;
@@ -254,6 +247,8 @@ option
           theLookForwardSkill();
           theStandSkill();
           theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+          //ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+          //ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
         }
     }
 
@@ -264,20 +259,17 @@ option
           if (!theFieldBall.ballWasSeen(ballNotSeenTimeout))
             goto searchForBall;
 
-          //my position and ball distance
-          // float ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
-          // float ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
-          // float ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
+          if(ball_I > ball_F)
+            goto shuffle_dance;
 
-          // if(ball_I > ball_F && ball_I > ball_S)
-          //   goto shuffle_dance;
-
-          // if(ball_I > ball_F || ball_I > ball_S)
-          //   goto giverole;
             
         }
         action
         {
+          ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+          ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
+          if(theRobotInfo.number == 1)
+            theSaySkill("change");
           theLookForwardSkill();
           theStandSkill();
         }
