@@ -85,8 +85,7 @@ class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
 
 option
 {   
-   
-    
+     
   initial_state(start)
   {     
       transition
@@ -107,7 +106,7 @@ option
           if(theRobotInfo.number == 4)
             goto skeeper;
           
-          if(theRobotInfo.number == 1 ||theRobotInfo.number == 2 || theRobotInfo.number == 3 ) {
+          if(theRobotInfo.number == 1 ||theRobotInfo.number == 2  ) {
             if (ball_I > ball_F && ball_I > ball_S) {
               goto shuffle_dance;
             }
@@ -128,7 +127,7 @@ option
                     //my position and ball distance
           ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
           ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
-          ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
+          //ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
           
           theLookForwardSkill();
           theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
