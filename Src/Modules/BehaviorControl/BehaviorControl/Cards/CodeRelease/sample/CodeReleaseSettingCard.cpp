@@ -81,6 +81,19 @@ class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
 
 option
 {   
+      float ball_I = 0;
+      float ball_F = 0;
+      float ball_S = 0;
+      const GroundTruthWorldState&theGroundTruthWorldState =
+      static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
+      const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
+      const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
+      const Pose2f _secondteam = theGroundTruthWorldState.secondTeamPlayers[0].pose;
+      const GroundTruthRobotPose &theGroundTruthRobotPose =
+       static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
+       const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
+      
+    
   initial_state(start)
   {     
       transition
@@ -96,9 +109,7 @@ option
   }  
     state(giverole)
     {
-      float ball_I = 0;
-      float ball_F = 0;
-      float ball_S = 0;
+
 
         transition
         {
@@ -107,33 +118,21 @@ option
           
           if(theRobotInfo.number == 1 ||theRobotInfo.number == 2 || theRobotInfo.number == 3 ) {
             if (ball_I > ball_F && ball_I > ball_S) {
-              goto shuffle_dance
+              goto shuffle_dance;
             }
-
           }
                      
         }
         action
-        {
-          const GroundTruthWorldState&theGroundTruthWorldState =
-          static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
-          const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
-          const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
-          const Pose2f _secondteam = theGroundTruthWorldState.secondTeamPlayers[0].pose;
-
-          const GroundTruthRobotPose &theGroundTruthRobotPose =
-          static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
-          const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
-
-          //my position and ball distance
+        {      
+                    //my position and ball distance
           ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
           ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
           ball_S = pow((_secondteam.translation.x()-_ballPosition(0)),2) + pow((_secondteam.translation.y()-_ballPosition(1)),2);
-
-
-
+          
           theLookForwardSkill();
-          theStandSkill();
+          theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+
         }
     } 
     // state(movetoother)
@@ -220,7 +219,7 @@ option
 
         action
         {
-
+          theSaySkill("come come come");
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(0.f,0.f));
         }
     }
