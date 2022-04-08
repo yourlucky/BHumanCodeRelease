@@ -6,7 +6,6 @@
  * @author 
  */
 
-
 #include "Representations/BehaviorControl/FieldBall.h"
 #include "Representations/BehaviorControl/Skills.h"
 #include "Representations/Configuration/FieldDimensions.h"
@@ -73,7 +72,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 
   option
   {
-    theActivitySkill(BehaviorStatus::codeReleaseKickndribble);
+    //theActivitySkill(BehaviorStatus::codeReleaseKickndribble);
 
     initial_state(start)
     {
@@ -102,7 +101,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
           }                     
         action
         {               
-          theLookForwardSkill();
+          //theLookForwardSkill();
           theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
         }
     }
@@ -118,8 +117,9 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
       action
       {
         theLookForwardSkill();
+        theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
         //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
-        theSaySkill("inital");
+        //theSaySkill("inital");
       }
     }
 
@@ -127,15 +127,16 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
     {
       transition
         {
-            if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-               goto giverole;
+            //if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+               //goto giverole;
             
         }
         action
         {
-          theLookForwardSkill();
+          //theLookForwardSkill();
           walkSpeed =1.f;
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(1000,0));
+          Angle v_angle =0.f*pi;
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, 4000,0));
         }
     }
 
