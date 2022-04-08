@@ -102,16 +102,18 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
             if (state_time > c_time + 5000) //if not fallen for 10secs
             {
               c_time = state_time;
-              goto kicker;
+              goto walktoBall;
             }
 
+          }  
           else
             goto runner;
           }                     
         action
-        {     
-          initalWaitTime += 10000;          
-          theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+        {              
+          theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));         
+          //theLookForwardSkill();
+          //theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
         }
     }
 
@@ -125,9 +127,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 
       action
       {
-        theLookForwardSkill();
-        theSaySkill("time up");
-        
+        theLookForwardSkill();        
       }
     }
 
@@ -144,7 +144,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
           //theLookForwardSkill();
           walkSpeed =1.f;
           Angle v_angle =0.f*pi;
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, 4000,0));
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, 3500,0));
         }
     }
 
@@ -159,8 +159,8 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 
       action
       {
+        theSaySkill("time up");
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 2.f,2.f));
-        theSaySkill("walk to ball");
         Angle v_angle =-0.1*pi;
         theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle,0.f,0.f));
       
