@@ -113,10 +113,8 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
     {
       transition
       {
-        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-          goto searchForBall;
-        //if(std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
-          //goto walkToBall;
+       if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+                goto searchForBall;
       }
 
       action
@@ -131,7 +129,8 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
     {
       transition
         {
-          
+            if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+                goto searchForBall;
             
         }
         action
