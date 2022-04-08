@@ -99,16 +99,15 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
               goto kicker;
 
           }
-            
-          
+                      
           else
             goto runner;
           }                     
         action
         {     
-          initalWaitTime += 10000;          
+          initialWaitTime += 10;          
           //theLookForwardSkill();
-          theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+          //theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
         }
     }
 
@@ -142,7 +141,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
           //theLookForwardSkill();
           walkSpeed =1.f;
           Angle v_angle =0.f*pi;
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, 4000,0));
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, 3500,0));
         }
     }
 
