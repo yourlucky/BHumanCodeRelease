@@ -6,7 +6,7 @@
       <Rotation z="150degree"/>
     </Body>
     <Body ref="Nao" name="robot3">
-      <Translation x="2.7" y="1.2" z="320mm"/>
+      <Translation x="1.7" y="2.0" z="320mm"/>
       <Rotation z="180degree"/>
     </Body>
   </Compound>

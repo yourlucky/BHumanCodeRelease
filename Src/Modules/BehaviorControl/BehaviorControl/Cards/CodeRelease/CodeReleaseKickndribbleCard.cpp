@@ -94,13 +94,19 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         transition
         {
           if(theRobotInfo.number == 1)
-            goto kicker;
+          {
+            if(state_time > initialWaitTime)
+              goto kicker;
+
+          }
+            
           
           else
             goto runner;
           }                     
         action
-        {               
+        {     
+          initalWaitTime += 10000;          
           //theLookForwardSkill();
           theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
         }
@@ -117,9 +123,9 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
       action
       {
         theLookForwardSkill();
-        theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
-        //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
-        //theSaySkill("inital");
+        theSaySkill("time up");
+        Angle v_angle =-0.1*pi;
+        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle,0.f,0.f));
       }
     }
 
