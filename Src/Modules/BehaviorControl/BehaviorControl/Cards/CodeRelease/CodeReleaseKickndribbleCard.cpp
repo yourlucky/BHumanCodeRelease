@@ -15,6 +15,9 @@
 #include "Tools/BehaviorControl/Framework/Card/CabslCard.h"
 #include "Tools/Math/BHMath.h"
 
+
+#include "Representations/Communication/RobotInfo.h"
+
 //#include "Representations/Sensing/FallDownState.h"
 
 CARD(CodeReleaseKickndribbleCard,
@@ -22,6 +25,7 @@ CARD(CodeReleaseKickndribbleCard,
   CALLS(Activity),
   CALLS(InWalkKick),
   CALLS(LookForward),
+  CALLS(PathToTarget),
   CALLS(Stand),
   CALLS(WalkAtRelativeSpeed),
   CALLS(WalkToTarget),
@@ -29,6 +33,7 @@ CARD(CodeReleaseKickndribbleCard,
   REQUIRES(FieldBall),
   REQUIRES(FieldDimensions),
   REQUIRES(RobotPose),
+  REQUIRES(RobotInfo),
   DEFINES_PARAMETERS(
   {,
     (float)(0.8f) walkSpeed,
@@ -48,6 +53,9 @@ CARD(CodeReleaseKickndribbleCard,
     (int)(3000) maxKickWaitTime,
     
     (float)(-0.01f) addAngle,
+
+    (float)(0.f)ball_I,
+    (float)(0.f)ball_F,
   }),
 });
 
@@ -72,7 +80,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
       transition
       {
         if(state_time > initialWaitTime)
-          goto turnToBall;
+          goto giverole;
       }
 
       action
@@ -81,6 +89,62 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         theStandSkill();
       }
     }
+
+    state(giverole)
+    {
+        transition
+        {
+          if(theRobotInfo.number == 1)
+            goto kicker;
+          
+          else
+            goto runner;
+          }
+                     
+        }
+        action
+        {               
+          theLookForwardSkill();
+          theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+
+        }
+    }
+    state(kicker)
+    {
+      transition
+      {
+        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+          goto searchForBall;
+        //if(std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
+          //goto walkToBall;
+      }
+
+      action
+      {
+        theLookForwardSkill();
+        //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
+        theSaySkill("inital");
+      }
+    }
+
+    state(runner)
+    {
+      transition
+        {
+          
+            
+        }
+        action
+        {
+          theLookForwardSkill();
+          walkSpeed =1.f;
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(1000,0));
+        }
+    }
+
+
+
+
 
     state(turnToBall)
     {
