@@ -99,22 +99,20 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
           
           else
             goto runner;
-          }
-                     
-        }
+          }                     
         action
         {               
           theLookForwardSkill();
           theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
-
         }
     }
+
     state(kicker)
     {
       transition
       {
        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-                goto searchForBall;
+          goto giverole;
       }
 
       action
@@ -130,7 +128,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
       transition
         {
             if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-                goto searchForBall;
+               goto giverole;
             
         }
         action
@@ -145,122 +143,122 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 
 
 
-    state(turnToBall)
-    {
-      transition
-      {
-        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-          goto searchForBall;
-        if(std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
-          goto walkToBall;
-      }
+    // state(turnToBall)
+    // {
+    //   transition
+    //   {
+    //     if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+    //       goto searchForBall;
+    //     if(std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
+    //       goto walkToBall;
+    //   }
 
-      action
-      {
-        theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
-        theSaySkill("inital");
-      }
-    }
+    //   action
+    //   {
+    //     theLookForwardSkill();
+    //     theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
+    //     theSaySkill("inital");
+    //   }
+    // }
 
-    state(walkToBall)
-    {
-      transition
-      {
-        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-          goto searchForBall;
-        if(theFieldBall.positionRelative.squaredNorm() < sqr(ballNearThreshold))
-          goto alignToGoal;
-      }
+    // state(walkToBall)
+    // {
+    //   transition
+    //   {
+    //     if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+    //       goto searchForBall;
+    //     if(theFieldBall.positionRelative.squaredNorm() < sqr(ballNearThreshold))
+    //       goto alignToGoal;
+    //   }
 
-      action
-      {
-        theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
-        theSaySkill("walk to ball");
+    //   action
+    //   {
+    //     theLookForwardSkill();
+    //     theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
+    //     theSaySkill("walk to ball");
       
-      }
-    }
+    //   }
+    // }
 
-    state(alignToGoal)
-    {
-      const Angle angleToGoal = calcAngleToGoal();
+    // state(alignToGoal)
+    // {
+    //   const Angle angleToGoal = calcAngleToGoal();
 
-      transition
-      {
-        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-          goto searchForBall;
-        if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold)
-          goto alignBehindBall;
-      }
+    //   transition
+    //   {
+    //     if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+    //       goto searchForBall;
+    //     if(std::abs(angleToGoal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold)
+    //       goto alignBehindBall;
+    //   }
 
-      action
-      {
-        theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
-        theSaySkill("align to goal");
-      }
-    }
+    //   action
+    //   {
+    //     theLookForwardSkill();
+    //     theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
+    //     theSaySkill("align to goal");
+    //   }
+    // }
 
-    state(alignBehindBall)
-    {
-      const Angle angleToGoal = calcAngleToGoal();
+    // state(alignBehindBall)
+    // {
+    //   const Angle angleToGoal = calcAngleToGoal();
 
-      transition
-      {
-        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-          goto searchForBall;
-        if(std::abs(angleToGoal) < angleToGoalThresholdPrecise && ballOffsetXRange.isInside(theFieldBall.positionRelative.x()) && ballOffsetYRange.isInside(theFieldBall.positionRelative.y()))
-          goto kick;
-      }
+    //   transition
+    //   {
+    //     if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+    //       goto searchForBall;
+    //     if(std::abs(angleToGoal) < angleToGoalThresholdPrecise && ballOffsetXRange.isInside(theFieldBall.positionRelative.x()) && ballOffsetYRange.isInside(theFieldBall.positionRelative.y()))
+    //       goto kick;
+    //   }
 
-      action
-      {
-        theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
-        theSaySkill("align behind ball");
-      }
-    }
+    //   action
+    //   {
+    //     theLookForwardSkill();
+    //     theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+    //     theSaySkill("align behind ball");
+    //   }
+    // }
 
-    state(kick)
-    {
-      const Angle angleToGoal = calcAngleToGoal();
+    // state(kick)
+    // {
+    //   const Angle angleToGoal = calcAngleToGoal();
 
-      transition
-      {
-        if(state_time > maxKickWaitTime || (state_time > minKickWaitTime && theInWalkKickSkill.isDone()))
-          goto start;
-      }
+    //   transition
+    //   {
+    //     if(state_time > maxKickWaitTime || (state_time > minKickWaitTime && theInWalkKickSkill.isDone()))
+    //       goto start;
+    //   }
 
-      action
-      {
-        theLookForwardSkill();
-        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
-        theSaySkill("kick");
-      }
-    }
+    //   action
+    //   {
+    //     theLookForwardSkill();
+    //     theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+    //     theSaySkill("kick");
+    //   }
+    // }
 
-    state(searchForBall)
-    {
-      transition
-      {
-        if(theFieldBall.ballWasSeen())
-          goto turnToBall;
-      }
+    // state(searchForBall)
+    // {
+    //   transition
+    //   {
+    //     if(theFieldBall.ballWasSeen())
+    //       goto turnToBall;
+    //   }
 
-      action
-      {
-        theLookForwardSkill();
-        theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
-        theSaySkill("search for ball");
-      }
-    }
+    //   action
+    //   {
+    //     theLookForwardSkill();
+    //     theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+    //     theSaySkill("search for ball");
+    //   }
+    // }
   }
 
-  Angle calcAngleToGoal() const
-  {
-    return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle()*(1/10)+addAngle;
-  }
+  // Angle calcAngleToGoal() const
+  // {
+  //   return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle()*(1/10)+addAngle;
+  // }
 };
 
 MAKE_CARD(CodeReleaseKickndribbleCard);
