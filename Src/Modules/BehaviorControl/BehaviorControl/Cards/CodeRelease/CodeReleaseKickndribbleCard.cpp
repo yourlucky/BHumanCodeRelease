@@ -60,6 +60,8 @@ CARD(CodeReleaseKickndribbleCard,
 
 class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 {
+ 
+
   bool preconditions() const override
   {
     return true;
@@ -95,19 +97,20 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         {
           if(theRobotInfo.number == 1)
           {
-            if(state_time > initialWaitTime)
-              goto kicker;
-
-          }
+            int c_time = 0; //current time
             
-          
+            if (state_time > c_time + 5000) //if not fallen for 10secs
+            {
+              c_time = state_time;
+              goto kicker;
+            }
+
           else
             goto runner;
           }                     
         action
         {     
           initalWaitTime += 10000;          
-          //theLookForwardSkill();
           theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
         }
     }
@@ -124,8 +127,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
       {
         theLookForwardSkill();
         theSaySkill("time up");
-        Angle v_angle =-0.1*pi;
-        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle,0.f,0.f));
+        
       }
     }
 
@@ -144,6 +146,25 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
           Angle v_angle =0.f*pi;
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, 4000,0));
         }
+    }
+
+    state(walkToBall)
+    {
+      transition
+      {
+        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+          goto giverole;
+
+      }
+
+      action
+      {
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 2.f,2.f));
+        theSaySkill("walk to ball");
+        Angle v_angle =-0.1*pi;
+        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle,0.f,0.f));
+      
+      }
     }
 
 
