@@ -19,6 +19,8 @@
 
 //#include "Representations/Sensing/FallDownState.h"
 
+#include <cmath> 
+
 CARD(CodeReleaseKickndribbleCard,
 {,
   CALLS(Activity),
@@ -53,8 +55,8 @@ CARD(CodeReleaseKickndribbleCard,
     
     (float)(-0.01f) addAngle,
 
-    (float)(0.f)ball_I,
-    (float)(0.f)ball_F,
+    (float)(0.f)ball_X,
+    (float)(0.f)ball_Y,
   }),
 });
 
@@ -102,7 +104,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
             if (state_time > c_time + 5000) //if not fallen for 10secs
             {
               c_time = state_time;
-              goto walktoBall;
+              goto walkToBall;
             }
 
           }  
@@ -111,9 +113,8 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
           }                     
         action
         {              
-          theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));         
-          //theLookForwardSkill();
-          //theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+           if(theRobotInfo.number == 1)
+                theLookForwardSkill();
         }
     }
 
@@ -127,7 +128,8 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 
       action
       {
-        theLookForwardSkill();        
+        Angle v_angle =-0.1*pi;
+     theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle,0.f,0.f));
       }
     }
 
@@ -154,15 +156,29 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
       {
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto giverole;
-
+        if(ball_X <ballOffsetX  && bal_Y < ballOffsetY)
+            goto kicker;       
       }
 
       action
       {
         theSaySkill("time up");
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 2.f,2.f));
-        Angle v_angle =-0.1*pi;
-        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle,0.f,0.f));
+        
+        const GroundTruthWorldState&theGroundTruthWorldState =
+        static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
+        
+        const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
+        const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
+        
+        ball_X = std::ads(_ownPosition.translation.X)-_ballPosition(0));
+       ball_Y =  std::ads(_ownPosition.translation.Y)-_ballPosition(1));
+        
+        ballOffsetX =0.5f;
+        ballOffsetY= 0.5f;
+        
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, theFieldBall.positionRelative.x() - ballOffsetX,theFieldBall.positionRelative.x() - ballOffsetX));
+     //Angle v_angle =-0.1*pi;
+     // theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle,0.f,0.f));
       
       }
     }
