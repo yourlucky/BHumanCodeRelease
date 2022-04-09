@@ -118,7 +118,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         }
     }
 
-    state(kicker)
+    state(kicks)
     {
       transition
       {
@@ -127,9 +127,18 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
       }
 
       action
-      {
+      {    
+        const GroundTruthWorldState&theGroundTruthWorldState =
+        static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
+        
+        const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
+        const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
+        
+        ballOffsetX =0.5f;
+        ballOffsetY= 0.5f;
+
         Angle v_angle =-0.1*pi;
-     theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle,0.f,0.f));
+        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle,theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
       }
     }
 
@@ -157,7 +166,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto giverole;
         if(ball_X <ballOffsetX  && bal_Y < ballOffsetY)
-            goto kicker;       
+            goto kicks;       
       }
 
       action
@@ -171,7 +180,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
         
         ball_X = std::ads(_ownPosition.translation.X)-_ballPosition(0));
-       ball_Y =  std::ads(_ownPosition.translation.Y)-_ballPosition(1));
+        ball_Y =  std::ads(_ownPosition.translation.Y)-_ballPosition(1));
         
         ballOffsetX =0.5f;
         ballOffsetY= 0.5f;
@@ -182,6 +191,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
       
       }
     }
+    
 
 
 
