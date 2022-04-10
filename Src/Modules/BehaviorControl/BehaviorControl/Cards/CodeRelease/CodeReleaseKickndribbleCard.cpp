@@ -189,7 +189,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         ballOffsetX =0.1f;
         ballOffsetY= 0.1f;
 
-        const Angle v_angle=theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),0.f).angle();
+        const Angle v_angle=(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
         
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, theFieldBall.positionRelative.x() - ballOffsetX,theFieldBall.positionRelative.x() - ballOffsetX));
      //Angle v_angle =-0.1*pi;
