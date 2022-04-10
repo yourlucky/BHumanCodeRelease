@@ -17,6 +17,9 @@
 
 #include "Representations/Communication/RobotInfo.h"
 
+#include "Tools/Module/Blackboard.h"
+#include "Representations/Infrastructure/GroundTruthWorldState.h"
+
 //#include "Representations/Sensing/FallDownState.h"
 
 #include <cmath> 
@@ -165,7 +168,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
       {
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto giverole;
-        if(ball_X <ballOffsetX  && bal_Y < ballOffsetY)
+        if(ball_X <0.2f && ball_Y < 0.2f)
             goto kicks;       
       }
 
@@ -179,13 +182,13 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
         
-        ball_X = std::ads(_ownPosition.translation.X)-_ballPosition(0));
-        ball_Y =  std::ads(_ownPosition.translation.Y)-_ballPosition(1));
+        ball_X = std::abs(_ownPosition.translation.x()-_ballPosition(0));
+        ball_Y =  std::abs(_ownPosition.translation.y()-_ballPosition(1));
         
-        ballOffsetX =0.5f;
-        ballOffsetY= 0.5f;
+        ballOffsetX =0.1f;
+        ballOffsetY= 0.1f;
         
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, theFieldBall.positionRelative.x() - ballOffsetX,theFieldBall.positionRelative.x() - ballOffsetX));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(-0.5f, theFieldBall.positionRelative.x() - ballOffsetX,theFieldBall.positionRelative.x() - ballOffsetX));
      //Angle v_angle =-0.1*pi;
      // theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle,0.f,0.f));
       
@@ -313,6 +316,9 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
   // {
   //   return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle()*(1/10)+addAngle;
   // }
+
+  
+  
 };
 
 MAKE_CARD(CodeReleaseKickndribbleCard);
