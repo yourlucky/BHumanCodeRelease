@@ -181,14 +181,17 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         
         const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
+        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
         
         ball_X = std::abs(_ownPosition.translation.x()-_ballPosition(0));
         ball_Y =  std::abs(_ownPosition.translation.y()-_ballPosition(1));
         
         ballOffsetX =0.1f;
         ballOffsetY= 0.1f;
+
+        v_angle=theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y()).angle();
         
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(-0.5f, theFieldBall.positionRelative.x() - ballOffsetX,theFieldBall.positionRelative.x() - ballOffsetX));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, theFieldBall.positionRelative.x() - ballOffsetX,theFieldBall.positionRelative.x() - ballOffsetX));
      //Angle v_angle =-0.1*pi;
      // theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle,0.f,0.f));
       
