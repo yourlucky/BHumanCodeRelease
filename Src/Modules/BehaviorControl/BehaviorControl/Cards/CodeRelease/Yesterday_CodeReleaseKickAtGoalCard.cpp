@@ -9,14 +9,25 @@
  *
  * @author Arne Hasselbring
  */
+
 /*
+
 #include "Representations/BehaviorControl/FieldBall.h"
-#include "Representations/BehaviorControl/Skills.h"
 #include "Representations/Configuration/FieldDimensions.h"
 #include "Representations/Modeling/RobotPose.h"
+
+
+#include "Representations/BehaviorControl/Skills.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 #include "Tools/BehaviorControl/Framework/Card/CabslCard.h"
 #include "Tools/Math/BHMath.h"
+
+#include "Tools/Module/Blackboard.h"
+#include "Representations/Infrastructure/GroundTruthWorldState.h"
+
+#include "Tools/Math/Angle.h"
+
+
 
 CARD(CodeReleaseKickAtGoalCard,
 {,
@@ -68,6 +79,12 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
   {
     theActivitySkill(BehaviorStatus::codeReleaseKickAtGoal);
 
+    const GroundTruthRobotPose &theGroundTruthRobotPose =
+    static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
+
+    const GroundTruthWorldState&theGroundTruthWorldState =
+    static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
+
     initial_state(start)
     {
       transition
@@ -95,6 +112,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
       action
       {
+
         theLookForwardSkill();
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
         theSaySkill("inital");
@@ -105,20 +123,64 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
     {
       transition
       {
-        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
-          goto searchForBall;
+        //if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+          //goto searchForBall;
         if(theFieldBall.positionRelative.squaredNorm() < sqr(ballNearThreshold))
-          goto alignToGoal;
+          goto notmove;
       }
 
       action
       {
-        theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
+
+        const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
+        const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;  
+        const Pose2f _FriendPosition = theGroundTruthWorldState.firstTeamPlayers[0].pose;
+
+        float x_firstTeamPlayers = _FriendPosition.translation(0)*-1;
+        float y_firstTeamPlayers = _FriendPosition.translation(1)*-1;
+
+
+        //float x_ownPosition = _ownPosition.translation(0)+300;
+        //float y_ownPosition = _ownPosition.translation(1)+4000;
+
+        //float virtualBallXPosition = _ballPosition(0)*-1;
+        //float virtualBallYPosition = _ballPosition(1)*-1;
+      
+
+      //float virtualBallXPosition = -1*_ballPosition[0];
+      //float virtualBallYPosition = -1*_ballPosition[1];
+      //float virtualBallXPosition = theFieldBall.positionRelative.x();
+      //float virtualBallYPosition = theFieldBall.positionRelative.y();
+      //float myownXposition = _ownPosition[0]*2; 
+      //float myownXposition = _ownPosition[0]*3; 
+
+
+       Angle v_angle =1.45*pi;
+       theLookForwardSkill();
+       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(x_firstTeamPlayers,y_firstTeamPlayers));
+
+        //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),theFieldBall.positionRelative);//chagned
+        //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),_ballPosition);
+
+        //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Pose2f(virtualBallXPosition,virtualBallYPosition));
+
+        //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(virtualBallXPosition,virtualBallYPosition));
+
+        
         theSaySkill("walk to ball");
       
       }
     }
+    
+    state(notmove)
+    {
+
+      action
+      {
+        theSaySkill("not move");
+      }
+    }
+
 
     state(alignToGoal)
     {
@@ -202,4 +264,5 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 };
 
 MAKE_CARD(CodeReleaseKickAtGoalCard);
+
 */
