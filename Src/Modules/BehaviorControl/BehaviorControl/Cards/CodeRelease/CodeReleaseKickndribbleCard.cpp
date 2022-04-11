@@ -131,7 +131,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         {
           //theLookForwardSkill();
           walkSpeed =1.f;
-          Angle v_angle =0.f*pi;
+          Angle v_angle =0;
           theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, 3500,0));
         }
     }
