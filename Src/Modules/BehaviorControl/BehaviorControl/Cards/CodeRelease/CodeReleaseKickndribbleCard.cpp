@@ -44,10 +44,10 @@ CARD(CodeReleaseKickndribbleCard,
     (int)(1000) initialWaitTime,
     (int)(7000) ballNotSeenTimeout,
     (Angle)(5_deg) ballAlignThreshold,
-    (float)(200.f) ballNearThreshold,
+    (float)(300.f) ballNearThreshold,
     (Angle)(10_deg) angleToGoalThreshold,
     (float)(400.f) ballAlignOffsetX,
-    (float)(10.f) ballYThreshold,
+    (float)(100.f) ballYThreshold,
     (Angle)(2_deg) angleToGoalThresholdPrecise,
     (float)(150.f) ballOffsetX,
     (Rangef)({140.f, 170.f}) ballOffsetXRange,
@@ -102,7 +102,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         {
           if(theRobotInfo.number == 1)
           {
-            int c_time = 0; //current time            
+            int c_time = 5000; //current time            
             if (state_time > c_time + 5000) //if not fallen for 10secs
             {
               c_time = state_time;
@@ -147,22 +147,8 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 
       action
       {
-        theSaySkill("time up");
-        
-        const GroundTruthWorldState&theGroundTruthWorldState =
-        static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
-        
-        const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
-        const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
-        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
-        
-        ball_X = std::abs(_ownPosition.translation.x()-_ballPosition(0));
-        ball_Y =  std::abs(_ownPosition.translation.y()-_ballPosition(1));
-        
-        const Angle v_angle=(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
-        
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, theFieldBall.positionRelative.x(),theFieldBall.positionRelative.y()));
-      
+        theSaySkill("time up");     
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), theFieldBall.positionRelative.x(),theFieldBall.positionRelative.y()));
       }
     }
 
@@ -176,6 +162,15 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 
       action
       {
+          
+        theSaySkill("kick");
+        const GroundTruthWorldState&theGroundTruthWorldState =
+        static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
+        
+        const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
+        const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
+        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;          
+          
         const Angle v_angle=(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
         theLookForwardSkill();
         theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle, 0.f, 0.f));
