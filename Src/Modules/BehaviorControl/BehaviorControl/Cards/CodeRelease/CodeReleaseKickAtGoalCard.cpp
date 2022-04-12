@@ -196,7 +196,8 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
   Angle calcAngleToGoal() const
   {
-    return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle()*(1/10);
+    //return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle()*(1/10);
+    return (theRobotPose.inversePose * Vector2f(0.f, theFieldDimensions.xPosOpponentGroundline)).angle();
   }
 };
 
