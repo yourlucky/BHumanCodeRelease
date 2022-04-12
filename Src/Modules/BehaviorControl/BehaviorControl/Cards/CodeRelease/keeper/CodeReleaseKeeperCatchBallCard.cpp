@@ -6,6 +6,7 @@
  * @author Chen Chao
  */
 
+/*
 
 #include "Representations/BehaviorControl/FieldBall.h"
 #include "Representations/BehaviorControl/Skills.h"
@@ -45,7 +46,7 @@ CARD(CodeReleaseKeeperCatchBallCard,
     (int)(3000) maxKickWaitTime,
     (Angle)(15_deg) ballAlignThreshold,
     (float)(0.8f) walkSpeed,
-*/
+
     (float)(80.f) sitBlockLen,
   }),
 });
@@ -65,16 +66,17 @@ class CodeReleaseKeeperCatchBallCard : public CodeReleaseKeeperCatchBallCardBase
   
   void execute() override
   {
-    theActivitySkill(BehaviorStatus::codeReleaseKeeperCatchBall);
+    //theActivitySkill(BehaviorStatus::codeReleaseKeeperCatchBall);
     theLookForwardSkill();
     theSaySkill("I'm catching!");
     if (theFieldBall.intersectionPositionWithOwnYAxis.y() >  sitBlockLen )
-       theSpecialActionSkill(SpecialActionRequest::groundPunchLeft);
+       //theSpecialActionSkill(SpecialActionRequest::groundPunchLeft);
     else if (theFieldBall.intersectionPositionWithOwnYAxis.y() < sitBlockLen)
-        theSpecialActionSkill(SpecialActionRequest::groundPunchRight);
+        //theSpecialActionSkill(SpecialActionRequest::groundPunchRight);
     else
         theSpecialActionSkill(SpecialActionRequest::sumo);
   }
 };
 
 MAKE_CARD(CodeReleaseKeeperCatchBallCard);
+*/

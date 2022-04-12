@@ -136,6 +136,11 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       {
         theSaySkill("align to goal");
           theLookForwardSkill();
+          
+          //Angle angleToGoal_2 = (theRobotPose.inversePose * Vector2f(5.f, 0.f)).angle();
+          //Angle angleToGoal_2 = 0;
+          
+          
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
       }
     }
@@ -155,7 +160,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       action
       {
         theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
         theSaySkill("align behind ball");
       }
     }
@@ -173,7 +178,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       action
       {
         theLookForwardSkill();
-        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(angleToGoal,  theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
       }
     }
 
@@ -196,8 +201,8 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
   Angle calcAngleToGoal() const
   {
-    //return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle()*(1/10);
-    return (theRobotPose.inversePose * Vector2f(0.f, theFieldDimensions.xPosOpponentGroundline)).angle();
+    return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
+    //return (theRobotPose.inversePose * Vector2f(0.f, theFieldDimensions.xPosOpponentGroundline)).angle();
   }
 };
 

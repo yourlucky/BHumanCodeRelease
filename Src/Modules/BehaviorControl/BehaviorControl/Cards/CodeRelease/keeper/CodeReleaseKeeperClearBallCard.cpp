@@ -62,7 +62,7 @@ class CodeReleaseKeeperClearBallCard : public CodeReleaseKeeperClearBallCardBase
   
 option
   {
-    theActivitySkill(BehaviorStatus::codeReleaseKeeperClearBall);
+    //theActivitySkill(BehaviorStatus::codeReleaseKeeperClearBall);
     initial_state(start)
     {
       theSaySkill("clear the ball");
