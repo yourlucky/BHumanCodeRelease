@@ -1,4 +1,3 @@
-
 /**
  * @file CodeReleaseKickAtGoalCard.cpp
  *
@@ -33,7 +32,7 @@ CARD(CodeReleaseKickAtGoalCard,
   DEFINES_PARAMETERS(
   {,
     (float)(0.8f) walkSpeed,
-    (int)(500) initialWaitTime,
+    (int)(1000) initialWaitTime,
     (int)(7000) ballNotSeenTimeout,
     (Angle)(5_deg) ballAlignThreshold,
     (float)(500.f) ballNearThreshold,
@@ -47,8 +46,6 @@ CARD(CodeReleaseKickAtGoalCard,
     (Rangef)({20.f, 50.f}) ballOffsetYRange,
     (int)(10) minKickWaitTime,
     (int)(3000) maxKickWaitTime,
-
-    (int)(-0.1f) angleParm,
   }),
 });
 
@@ -90,12 +87,12 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto searchForBall;
         if(std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
-           goto walkToBall;
+          goto walkToBall;
       }
 
       action
       {
-          theSaySkill("turn to ball");
+        theSaySkill("turn to ball");
         theLookForwardSkill();
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
       }
@@ -116,7 +113,6 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         theLookForwardSkill();
         theSaySkill("walk to ball");
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), theFieldBall.positionRelative);
-      
       }
     }
 
@@ -135,12 +131,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       action
       {
         theSaySkill("align to goal");
-          theLookForwardSkill();
-          
-          //Angle angleToGoal_2 = (theRobotPose.inversePose * Vector2f(5.f, 0.f)).angle();
-          //Angle angleToGoal_2 = 0;
-          
-          
+        theLookForwardSkill();
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
       }
     }
@@ -160,7 +151,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       action
       {
         theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
         theSaySkill("align behind ball");
       }
     }
@@ -178,7 +169,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       action
       {
         theLookForwardSkill();
-        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(angleToGoal,  theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
+        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(angleToGoal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
       }
     }
 
@@ -192,7 +183,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
       action
       {
-        //theLookForwardSkill();
+        theLookForwardSkill();
         theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
         theSaySkill("search for ball");
       }
@@ -202,7 +193,6 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
   Angle calcAngleToGoal() const
   {
     return (theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
-    //return (theRobotPose.inversePose * Vector2f(0.f, theFieldDimensions.xPosOpponentGroundline)).angle();
   }
 };
 
