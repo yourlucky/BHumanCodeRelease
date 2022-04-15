@@ -34,13 +34,14 @@ CARD(CodeReleaseKickndribbleCard,
   CALLS(WalkAtRelativeSpeed),
   CALLS(WalkToTarget),
   CALLS(Say),
+  CALLS(PassTarget),
   REQUIRES(FieldBall),
   REQUIRES(FieldDimensions),
   REQUIRES(RobotPose),
   REQUIRES(RobotInfo),
   DEFINES_PARAMETERS(
   {,
-    (float)(0.8f) walkSpeed,
+    (float)(1.0f) walkSpeed,
     (int)(1000) initialWaitTime,
     (int)(7000) ballNotSeenTimeout,
     (Angle)(5_deg) ballAlignThreshold,
@@ -81,7 +82,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 
   option
   {
-    //theActivitySkill(BehaviorStatus::codeReleaseKickndribble);
+    theActivitySkill(BehaviorStatus::codeReleaseKickndribbleCard);
 
     initial_state(start)
     {
@@ -93,7 +94,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 
       action
       {
-        theLookForwardSkill();
+        //theLookForwardSkill();
         theStandSkill();
       }
     }
@@ -104,10 +105,10 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         {
           if(theRobotInfo.number == 1)
           {
-            if (state_time > c_time + 5000) //if not fallen for 10secs
+            if (state_time > c_time - 5000) //if not fallen for 10secs
             {
               c_time = state_time;
-              goto walkToBall;
+              goto searchForBall;
             }
           }  
           else
@@ -130,10 +131,48 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         action
         {
           //theLookForwardSkill();
-          walkSpeed =1.f;
-          Angle v_angle =0;
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, 3500,0));
+          //const Angle v_angle=(theRobotPose.inversePose * Vector2f(4000,500)).angle();
+          
+          //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 4000,500));
+          theSaySkill("one"); 
         }
+    }
+
+    state(searchForBall)
+    {
+      transition
+      {
+        if(theFieldBall.ballWasSeen())
+          goto turnToBall;
+      }
+
+      action
+      {
+        theLookForwardSkill();
+        //theSaySkill("search for ball");
+        theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+
+      }
+    }
+  
+    
+    
+    state(turnToBall)
+    {
+      transition
+      {
+        if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
+          goto searchForBall;
+        if(std::abs(theFieldBall.positionRelative.angle()) < ballAlignThreshold)
+          goto walkToBall;
+      }
+
+      action
+      {
+        //theSaySkill("turn to ball");
+        theLookForwardSkill();
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), 0.f, 0.f));
+      }
     }
 
     state(walkToBall)
@@ -148,7 +187,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 
       action
       {
-        theSaySkill("time up");     
+        //theSaySkill("time up");     
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(theFieldBall.positionRelative.angle(), theFieldBall.positionRelative.x(),theFieldBall.positionRelative.y()));
       }
     }
@@ -174,65 +213,62 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
           
         const Angle v_angle=(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
         theLookForwardSkill();
-        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+        //theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+        Skills::thePassTarget(3,Vector2f(theFieldBall.positionRelative.x(),theFieldBall.positionRelative.y()));
+      
       }
     }
 
     state(alignkick)
-    {
-     //const Angle k_angle =180;
+    {       
+        const GroundTruthWorldState&theGroundTruthWorldState =
+        static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);        
+        const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
+        const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
+        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
+        const Angle v_angle =(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
+
       transition
       {
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto giverole;
-        if(std::abs(theFieldBall.positionRelative.y()) < ballYThreshold)
+        
+        if(std::abs(v_angle) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold)
           goto alignBehindBall;
       }
 
       action
       {
-        const GroundTruthWorldState&theGroundTruthWorldState =
-        static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
         
-        const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
-        const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
-        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
+        ball_X = (_ownPosition.translation.x()-_ballPosition(0))*2;
         
-        ball_X = std::abs(_ownPosition.translation.x()-_ballPosition(0));
-        ball_Y =  std::abs(_ownPosition.translation.y()-_ballPosition(1));
-        
-        const Angle v_angle =(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
-
+        float target_X = theFieldBall.positionRelative.x() + ball_X;
 
         theSaySkill("align first");
           theLookForwardSkill();
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, theFieldBall.positionRelative.x() - ballAlignOffsetX, theFieldBall.positionRelative.y()));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, target_X, theFieldBall.positionRelative.y()));
       }
     }
 
     state(alignBehindBall)
     {
         const GroundTruthWorldState&theGroundTruthWorldState =
-        static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
-        
+        static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);        
         const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
         const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
-        
-        int I_X =  std::abs(_firstteam.translation.x()-_ownPosition.translation.x());
-        int I_Y = std::abs( _firstteam.translation.y()-_ownPosition.translation.y());
+        const Angle v_angle =(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
         
       transition
       {
         if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
           goto giverole;
-       if(I_X+ I_Y > 2000  && ballOffsetYRange.isInside(theFieldBall.positionRelative.y()))
+       if(  std::abs(v_angle) < angleToGoalThresholdPrecise && ballOffsetYRange.isInside(theFieldBall.positionRelative.y()))
           goto kick;
       }
 
       action
       {        
-        const Angle v_angle=(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
         theLookForwardSkill();
         theSaySkill("align second");
         theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
