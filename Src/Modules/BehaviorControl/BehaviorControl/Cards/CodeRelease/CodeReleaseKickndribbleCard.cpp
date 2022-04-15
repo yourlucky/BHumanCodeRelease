@@ -212,7 +212,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
         const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;                    
         const Angle v_angle=(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
-        theLookForwardSkill();
+       
         //theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
         //thePassTargetSkill(2,Vector2f(theFieldBall.positionRelative.x()-ballOffsetX,theFieldBall.positionRelative.y()-ballOffsetY));
         
@@ -221,11 +221,12 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         float D_y =pow ( _firstteam.translation.y()-theFieldBall.positionRelative.y(),2);
         
         //float D_t = pow((D_x+D_y),0.5);
-        float D_t = 9999.f;
+        float D_t = 5.5f;
         
         
         
-        theKickSkill(KickRequest::kickForward,false,D_t,true);
+         theLookForwardSkill();
+        theKickSkill(KickRequest::kickForward,false,D_t,false);
         theSaySkill("kick");
       
       }
