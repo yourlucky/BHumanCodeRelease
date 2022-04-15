@@ -27,6 +27,7 @@
 CARD(CodeReleaseKickndribbleCard,
 {,
   CALLS(Activity),
+  CALLS(Kick),
   CALLS(InWalkKick),
   CALLS(LookForward),
   CALLS(PathToTarget),
@@ -50,9 +51,9 @@ CARD(CodeReleaseKickndribbleCard,
     (float)(400.f) ballAlignOffsetX,
     (float)(100.f) ballYThreshold,
     (Angle)(2_deg) angleToGoalThresholdPrecise,
-    (float)(150.f) ballOffsetX,
+    (float)(80.f) ballOffsetX,
     (Rangef)({140.f, 170.f}) ballOffsetXRange,
-    (float)(100.f) ballOffsetY,
+    (float)(80.f) ballOffsetY,
     (Rangef)({-20.f, 500.f}) ballOffsetYRange,
     (int)(10) minKickWaitTime,
     (int)(3000) maxKickWaitTime,
@@ -203,18 +204,29 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
       action
       {
           
-        theSaySkill("kick");
+        
         const GroundTruthWorldState&theGroundTruthWorldState =
         static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
         
         const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
-        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;          
-          
+        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;                    
         const Angle v_angle=(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
         theLookForwardSkill();
         //theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
-        Skills::thePassTarget(3,Vector2f(theFieldBall.positionRelative.x(),theFieldBall.positionRelative.y()));
+        //thePassTargetSkill(2,Vector2f(theFieldBall.positionRelative.x()-ballOffsetX,theFieldBall.positionRelative.y()-ballOffsetY));
+        
+        
+        float D_x =pow( _firstteam.translation.x()-theFieldBall.positionRelative.x(),2);
+        float D_y =pow ( _firstteam.translation.y()-theFieldBall.positionRelative.y(),2);
+        
+        //float D_t = pow((D_x+D_y),0.5);
+        float D_t = 9999.f;
+        
+        
+        
+        theKickSkill(KickRequest::kickForward,false,D_t,true);
+        theSaySkill("kick");
       
       }
     }
