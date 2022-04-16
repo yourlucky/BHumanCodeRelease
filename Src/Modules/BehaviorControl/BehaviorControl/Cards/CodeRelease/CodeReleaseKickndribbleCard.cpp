@@ -51,10 +51,13 @@ CARD(CodeReleaseKickndribbleCard,
     (float)(400.f) ballAlignOffsetX,
     (float)(100.f) ballYThreshold,
     (Angle)(2_deg) angleToGoalThresholdPrecise,
-    (float)(80.f) ballOffsetX,
+    //(float)(80.f) ballOffsetX,
+    (float)(150.f) ballOffsetX,
     (Rangef)({140.f, 170.f}) ballOffsetXRange,
-    (float)(80.f) ballOffsetY,
-    (Rangef)({-20.f, 500.f}) ballOffsetYRange,
+   // (float)(80.f) ballOffsetY,
+    (float)(40.f) ballOffsetY,
+    
+    (Rangef)({20.f, 50.f}) ballOffsetYRange,
     (int)(10) minKickWaitTime,
     (int)(3000) maxKickWaitTime,
     
@@ -213,20 +216,20 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;                    
         const Angle v_angle=(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
        
-        //theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
+        theInWalkKickSkill(WalkKickVariant(WalkKicks::forward, Legs::left), Pose2f(v_angle, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
         //thePassTargetSkill(2,Vector2f(theFieldBall.positionRelative.x()-ballOffsetX,theFieldBall.positionRelative.y()-ballOffsetY));
         
         
         float D_x =pow( _firstteam.translation.x()-theFieldBall.positionRelative.x(),2);
         float D_y =pow ( _firstteam.translation.y()-theFieldBall.positionRelative.y(),2);
         
-        //float D_t = pow((D_x+D_y),0.5);
-        float D_t = 5.5f;
+        float D_t = pow((D_x+D_y),0.5);
+        //float D_t = 5.5f;
         
         
         
          theLookForwardSkill();
-        theKickSkill(KickRequest::kickForward,false,D_t,false);
+        //theKickSkill(KickRequest::kickForward,true,D_t,false);
         theSaySkill("kick");
       
       }
