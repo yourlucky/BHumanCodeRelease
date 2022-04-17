@@ -109,7 +109,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         {
           if(theRobotInfo.number == 1)
           {
-            if (state_time > c_time + 15000) //if not fallen for 10secs
+            if (state_time > c_time + 13000) //if not fallen for 10secs
             {
               c_time = state_time;
               goto InitialWait;
