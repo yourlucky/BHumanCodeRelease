@@ -105,11 +105,26 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 
     state(giverole)
     {
+      const GroundTruthWorldState&theGroundTruthWorldState =
+      static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
+      const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
+      const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
+      const Pose2f _secondteam = theGroundTruthWorldState.secondTeamPlayers[0].pose;
+
+      const GroundTruthRobotPose &theGroundTruthRobotPose =
+      static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
+      const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
+                    //my position and ball distance
+      ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+      ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
+
+
+
         transition
         {
           if(theRobotInfo.number == 1)
           {
-            if (state_time > c_time + 13000) //if not fallen for 10secs
+            if (state_time > c_time + 13000 && ball_I<ball_F) //if not fallen for 10secs
             {
               c_time = state_time;
               goto InitialWait;
@@ -141,10 +156,24 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
           
     state(runner)
     {
+      const GroundTruthWorldState&theGroundTruthWorldState =
+      static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
+      const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
+      const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
+      const Pose2f _secondteam = theGroundTruthWorldState.secondTeamPlayers[0].pose;
+
+      const GroundTruthRobotPose &theGroundTruthRobotPose =
+      static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
+      const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
+                    //my position and ball distance
+      ball_I = pow((_ownPosition.translation.x()-_ballPosition(0)),2) + pow((_ownPosition.translation.y()-_ballPosition(1)),2);
+      ball_F = pow((_firstteam.translation.x()-_ballPosition(0)),2) + pow((_firstteam.translation.y()-_ballPosition(1)),2);
+
+
       transition
         {
-          if (state_time < -1)
-              goto giverole;            
+          if (state_time > 13000 && ball_I >ball_F)
+              goto searchForBall;            
         }
         action
         {
