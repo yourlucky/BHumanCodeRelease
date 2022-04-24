@@ -11,12 +11,16 @@
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 #include "Tools/BehaviorControl/Framework/Card/Dealer.h"
 
+#include "Representations/Communication/RobotInfo.h"
+
+
 //#include "Representations/Communication/RobotInfo.h"
 
 CARD(GameplayCard,
 {,
   REQUIRES(GameInfo),
   REQUIRES(OwnTeamInfo),
+  REQUIRES(RobotInfo),
   LOADS_PARAMETERS(
   {,
     (DeckOfCards<CardRegistry>) ownKickoff,
@@ -73,10 +77,9 @@ class GameplayCard : public GameplayCardBase
       else
       {
         //최초
-        dealer.deal(normalPlay)->call();
-        setState("normalPlay");
-        /*
-
+        //dealer.deal(normalPlay)->call();
+        //setState("normalPlay");
+      
         
         switch (theRobotInfo.number)
         {
@@ -89,8 +92,7 @@ class GameplayCard : public GameplayCardBase
                     //{dealer.deal(BackDefender)->cal();setState("normalPlay");}break;
           default :break;
         }
-        */
-         
+    
 
       }
     }
