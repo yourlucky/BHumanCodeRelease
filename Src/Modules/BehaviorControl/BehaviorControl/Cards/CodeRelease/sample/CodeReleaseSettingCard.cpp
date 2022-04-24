@@ -5,7 +5,7 @@
  *
  * @author 
  */
-
+/*
 #include <math.h> 
 #include <iostream>
 #include <string>
@@ -89,3 +89,5 @@ class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
 };
 
 MAKE_CARD(CodeReleaseSettingCard);
+
+*/
