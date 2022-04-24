@@ -16,6 +16,12 @@ CARD(CodeReleaseOwnfKickCard,
   CALLS(LookForward),
   CALLS(Say),
   CALLS(Stand),
+  CALLS(WalkAtRelativeSpeed),
+  DEFINES_PARAMETERS(
+  {,
+    (float)(0.2f) walkSpeed,
+  }),
+
 });
 
 class CodeReleaseOwnfKickCard : public CodeReleaseOwnfKickCardBase
@@ -36,7 +42,8 @@ class CodeReleaseOwnfKickCard : public CodeReleaseOwnfKickCardBase
     //theLookForwardSkill();
     //theStandSkill();
     // Not implemented in the Code Release.
-    theSaySkill("Own Kick");
+    theSaySkill("Shuffle");
+    theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
   }
 };
 
