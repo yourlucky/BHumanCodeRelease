@@ -42,7 +42,7 @@ class CodeReleaseOwnfKickCard : public CodeReleaseOwnfKickCardBase
     //theLookForwardSkill();
     //theStandSkill();
     // Not implemented in the Code Release.
-    theSaySkill("Shuffle");
+    theSaySkill("Turn");
     theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
   }
 };

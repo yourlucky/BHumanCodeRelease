@@ -16,7 +16,7 @@ CARD(CodeReleaseOpfKickCard,
   CALLS(LookForward),
   CALLS(Say),
   CALLS(Stand),
-  CALLS(WalkToTargetSkill),
+  CALLS(WalkToTarget),
   DEFINES_PARAMETERS(
   {,
     (float)(0.2f) walkSpeed,
@@ -41,7 +41,7 @@ class CodeReleaseOpfKickCard : public CodeReleaseOpfKickCardBase
     //theLookForwardSkill();
     //theStandSkill();
     // Not implemented in the Code Release.
-    theSaySkill("Turn");
+    theSaySkill("suffle");
     theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed),Vector2f(0.f,0.f));
   }
 };
