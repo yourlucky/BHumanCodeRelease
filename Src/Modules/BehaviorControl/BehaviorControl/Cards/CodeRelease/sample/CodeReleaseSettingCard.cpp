@@ -1,7 +1,5 @@
 /**
- * @file CodeReleaseKickAtGoalCard.cpp
- *
- * This file is just practice
+*This file is just practice
  *
  * @author 
  */
@@ -72,17 +70,17 @@ class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
 
     if(theRobotInfo.number == 1)
     {
-       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 4000.f,0));
+       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.7f*pi, 3500.f,-100.f));
     }
 
     if(theRobotInfo.number == 2)
     {
-       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 400.f,0));
+       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.5f*pi, 1500.f,0.f));
     }
 
     if(theRobotInfo.number == 3)
     {
-       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 400.f,0));
+       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.5f*pi, 3000.f,0.f));
     }
         
    
