@@ -5,7 +5,7 @@
  *
  * @author 
  */
-/*
+
 #include <math.h> 
 #include <iostream>
 #include <string>
@@ -36,7 +36,6 @@
 
 CARD(CodeReleaseSettingCard,
     { ,
-
       CALLS(Activity),
       CALLS(InWalkKick),
       CALLS(LookForward),
@@ -50,13 +49,12 @@ CARD(CodeReleaseSettingCard,
       REQUIRES(FieldDimensions),
       REQUIRES(RobotPose),
       REQUIRES(RobotInfo),
- LOADS_PARAMETERS(
+      DEFINES_PARAMETERS(
   {,
-    (DeckOfCards<CardRegistry>) one,
-    (DeckOfCards<CardRegistry>) two,
-     (DeckOfCards<CardRegistry>) three,
+    (float)(1.0f) walkSpeed,
   }),
     });
+    
 
 class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
 {    
@@ -71,14 +69,23 @@ class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
     }
   void execute() override
   {
+
+    if(theRobotInfo.number == 1)
+    {
+       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 4000.f,0));
+    }
+
+    if(theRobotInfo.number == 2)
+    {
+       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 400.f,0));
+    }
+
+    if(theRobotInfo.number == 3)
+    {
+       theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 400.f,0));
+    }
         
-        switch (theRobotInfo.number)
-        {       
-          case 1: {dealer.deal(one)->call();}break;
-          case 3: {dealer.deal(two)->call();}break;
-          case 4: {dealer.deal(three)->call();}break;
-          default :break;
-        }
+   
   }
  
   void reset() override
@@ -90,4 +97,3 @@ class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
 
 MAKE_CARD(CodeReleaseSettingCard);
 
-*/
