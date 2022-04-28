@@ -268,10 +268,10 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);        
         const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
-        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
+        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[1].pose;
         const Angle v_angle =(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
         //const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOwnGroundline*-1, 0.f)).angle();
-        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline*-1, 0.f)).angle();
+        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOwnGroundline, 0.f)).angle();
         
       transition
       {
@@ -282,7 +282,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
             if(std::abs(v_angle) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold)
             goto alignBehindBall;           
             }
-        if(theRobotInfo.number == 3){
+        if(theRobotInfo.number == 2){
             if(std::abs(v_angle_goal) < angleToGoalThreshold && std::abs(theFieldBall.positionRelative.y()) < ballYThreshold)
                  goto alignBehindBall; 
             }
@@ -297,7 +297,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
           theLookForwardSkill();
           if(theRobotInfo.number == 1)
             theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, target_X, theFieldBall.positionRelative.y()));
-          if (theRobotInfo.number == 3) {
+          if (theRobotInfo.number == 2) {
              theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle_goal, theFieldBall.positionRelative.x()-ballOffsetX, theFieldBall.positionRelative.y()));
              //theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle_goal, target_X, theFieldBall.positionRelative.y()));
           }
@@ -313,7 +313,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
         const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
         const Angle v_angle =(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
-        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
+        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOwnGroundline, 0.f)).angle();
         
       transition
       {
@@ -323,7 +323,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
            if( std::abs(v_angle) < angleToGoalThresholdPrecise && ballOffsetYRange.isInside(theFieldBall.positionRelative.y())) {
                goto kick; }
        }
-              if( theRobotInfo.number == 3) {
+              if( theRobotInfo.number == 2) {
           if( std::abs(v_angle_goal) < angleToGoalThresholdPrecise && ballOffsetYRange.isInside(theFieldBall.positionRelative.y())) {
           goto walktotarget; }
       }
@@ -335,7 +335,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         theSaySkill("align second");
          if(theRobotInfo.number == 1)
          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
-         if(theRobotInfo.number == 3)
+         if(theRobotInfo.number == 2)
          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle_goal, theFieldBall.positionRelative.x() - ballOffsetX, theFieldBall.positionRelative.y() - ballOffsetY));
       }
     }
