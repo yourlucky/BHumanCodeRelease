@@ -87,8 +87,8 @@ class GameplayCard : public GameplayCardBase
         {
           case 1: {dealer.deal(twoPlay)->call();setState("normalPlay");}break;
           //case 2: {dealer.deal(ownFreeKick)->call();setState("normalPlay");}break;
+          case 2: {dealer.deal(twoPlay)->call();setState("normalPlay");}break;
           case 3: {dealer.deal(onePlay)->call();setState("normalPlay");}break;
-          case 4: {dealer.deal(normalPlay)->call();setState("normalPlay");}break;
                     //{dealer.deal(FrontDefender)->cal();setState("normalPlay");}break;
           //case 5: {dealer.deal(normalPlay)->call();setState("normalPlay");}break;
                     //{dealer.deal(BackDefender)->cal();setState("normalPlay");}break;
