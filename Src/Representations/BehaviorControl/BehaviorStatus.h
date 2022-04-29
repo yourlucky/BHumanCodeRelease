@@ -42,6 +42,11 @@ STREAMABLE(BehaviorStatus, COMMA public BHumanMessageParticle<idBehaviorStatus>
     
     codeReleaseSetting, //Setting Role
     codeReleaseKickndribbleCard,//
+
+    codeReleaseKickAtGoalCard,
+
+    codeReleaseSettingCard,
+
     
   });
 
