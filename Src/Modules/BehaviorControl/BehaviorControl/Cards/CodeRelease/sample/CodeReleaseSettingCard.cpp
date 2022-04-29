@@ -67,7 +67,7 @@ class CodeReleaseSettingCard : public CodeReleaseSettingCardBase
     }
   void execute() override
   {
-    theActivitySkill(BehaviorStatus::codeReleaseSettingCard);
+    theActivitySkill(BehaviorStatus::codeReleaseSetting);
 
     if(theRobotInfo.number == 1)
     {
