@@ -19,7 +19,7 @@ CARD(CodeReleaseOwnfKickCard,
   CALLS(WalkAtRelativeSpeed),
   DEFINES_PARAMETERS(
   {,
-    (float)(0.2f) walkSpeed,
+    (float)(1.0f) walkSpeed,
   }),
 
 });

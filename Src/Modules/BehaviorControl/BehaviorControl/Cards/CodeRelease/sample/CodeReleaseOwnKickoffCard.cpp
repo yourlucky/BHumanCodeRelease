@@ -9,6 +9,22 @@
 #include "Representations/BehaviorControl/Skills.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 
+#include "Representations/Configuration/FieldDimensions.h"
+#include "Representations/Modeling/RobotPose.h"
+
+
+#include "Representations/BehaviorControl/FieldBall.h"
+
+
+
+#include "Tools/BehaviorControl/Framework/Card/Card.h"
+
+
+//#include "Tools/BehaviorControl/Framework/Card/CabslCard.h"
+//#include "Tools/Math/BHMath.h"
+//#include "Representations/Communication/RobotInfo.h"
+//#include "Tools/Module/Blackboard.h"
+//#include "Representations/Infrastructure/GroundTruthWorldState.h"
 
 CARD(CodeReleaseOwnKickoffCard,
  {,
@@ -16,6 +32,12 @@ CARD(CodeReleaseOwnKickoffCard,
   CALLS(LookForward),
   CALLS(Say),
   CALLS(Stand),
+   CALLS(WalkToTarget),
+    REQUIRES(FieldDimensions),
+   DEFINES_PARAMETERS(
+  {,
+    (float)(1.0f) walkSpeed,
+    }),
 });
 
 class CodeReleaseOwnKickoffCard : public CodeReleaseOwnKickoffCardBase
@@ -32,12 +54,15 @@ class CodeReleaseOwnKickoffCard : public CodeReleaseOwnKickoffCardBase
 
   void execute() override
   {
+   
     //theActivitySkill(BehaviorStatus::codeReleasePositionForKickOff);
     theActivitySkill(BehaviorStatus::codeReleaseOwnKickoff);
     theLookForwardSkill();
     theStandSkill();
     // Not implemented in the Code Release.
-    theSaySkill("yes Goal Own Kick off card");
+    //theSaySkill("yes Goal Own Kick off card");
+    theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f,Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)));
+
   }
 };
 

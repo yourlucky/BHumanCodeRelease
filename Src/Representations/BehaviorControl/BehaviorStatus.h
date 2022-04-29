@@ -42,11 +42,6 @@ STREAMABLE(BehaviorStatus, COMMA public BHumanMessageParticle<idBehaviorStatus>
     
     codeReleaseSetting, //Setting Role
     codeReleaseKickndribble,//
-
-    codeReleaseKickAtGoal,
-
-
-
     
   });
 

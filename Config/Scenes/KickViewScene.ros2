@@ -15,12 +15,12 @@
     <Compound name="robots">
       <Body ref="Nao" name="robot1">
       <Translation x="-0.5" y="0.3" z="320mm"/>
-      <Rotation z="78degree"/>
+      <Rotation z="0degree"/>
     </Body>
 
     <Body ref="Nao" name="robot2">
       <Translation x="-0.5" y="2" z="320mm"/>
-      <Rotation z="-102degree"/>
+      <Rotation z="0degree"/>
     </Body>
 
     </Compound>
