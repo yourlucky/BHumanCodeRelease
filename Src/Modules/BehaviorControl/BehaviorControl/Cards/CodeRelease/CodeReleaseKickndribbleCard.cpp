@@ -52,7 +52,7 @@ CARD(CodeReleaseKickndribbleCard,
     (float)(100.f) ballYThreshold,
     (Angle)(2_deg) angleToGoalThresholdPrecise,
     //(float)(80.f) ballOffsetX,
-    (float)(150.f) ballOffsetX,
+    (float)(200.f) ballOffsetX,
     (Rangef)({140.f, 170.f}) ballOffsetXRange,
    // (float)(80.f) ballOffsetY,
     (float)(40.f) ballOffsetY,
@@ -107,7 +107,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         {
           if(theRobotInfo.number == 1)
           {
-            if (state_time > c_time + 13000 ) //if not fallen for 10secs
+            if (state_time > c_time + 10000 ) //if not fallen for 10secs
             {
               c_time = state_time;
               goto InitialWait;
@@ -172,7 +172,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         {
           //theLookForwardSkill();
           //const Angle v_angle=(theRobotPose.inversePose * Vector2f(4000,500)).angle();
-          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 4000,0));
+          theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f, 3500,0));
           //theSaySkill("one"); 
         }
     }
@@ -268,10 +268,10 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);        
         const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
-        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
+        Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
         const Angle v_angle =(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
         //const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOwnGroundline*-1, 0.f)).angle();
-        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
+        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOwnGroundline, 0.f)).angle();
         
       transition
       {
@@ -311,9 +311,9 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);        
         const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
-        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
+        Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
         const Angle v_angle =(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
-        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
+        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOwnGroundline, 0.f)).angle();
         
       transition
       {
@@ -348,13 +348,13 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
         const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
         const Angle v_angle =(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
-        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
+        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOwnGroundline, 0.f)).angle();
         
         transition
         {
             if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
               goto giverole;
-           if(std::abs(v_angle_goal) > angleToGoalThreshold)
+           if(std::abs(v_angle_goal) > angleToGoalThreshold*2)
             goto alignBehindBall;
           
             
@@ -366,10 +366,9 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
         const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
-        const Angle v_angle =(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
-        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
+        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOwnGroundline, 0.f)).angle();
             
-             theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle_goal,theFieldBall.positionRelative.x(),theFieldBall.positionRelative.y()));
+             theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(v_angle_goal ,theFieldBall.positionRelative.x(),theFieldBall.positionRelative.y()));
         }
     }
 
