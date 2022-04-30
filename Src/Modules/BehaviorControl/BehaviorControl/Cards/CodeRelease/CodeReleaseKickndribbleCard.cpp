@@ -84,7 +84,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
 
   option
   {
-    theActivitySkill(BehaviorStatus::codeReleaseKickndribble);
+    theActivitySkill(BehaviorStatus::codeReleaseKickAtGoal);
 
     initial_state(start)
     {

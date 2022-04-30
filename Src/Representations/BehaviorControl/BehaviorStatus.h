@@ -51,7 +51,7 @@ STREAMABLE(BehaviorStatus, COMMA public BHumanMessageParticle<idBehaviorStatus>
    */
   bool goesToBall() const
   {
-    return activity == codeReleaseOwnfKick;
+    return activity == codeReleaseKickAtGoal;
   }
 
   /** BHumanMessageParticle functions */
