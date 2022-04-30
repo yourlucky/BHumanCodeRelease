@@ -127,7 +127,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
     {
         transition
         { 
-     const GroundTruthWorldState&theGroundTruthWorldState =
+      const GroundTruthWorldState&theGroundTruthWorldState =
       static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
       const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
       const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
@@ -268,10 +268,10 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);        
         const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
-        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[1].pose;
+        const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
         const Angle v_angle =(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
         //const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOwnGroundline*-1, 0.f)).angle();
-        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOwnGroundline, 0.f)).angle();
+        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
         
       transition
       {
@@ -313,7 +313,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>();
         const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
         const Angle v_angle =(theRobotPose.inversePose * Vector2f(_firstteam.translation.x(),_firstteam.translation.y())).angle();
-        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOwnGroundline, 0.f)).angle();
+        const Angle v_angle_goal =(theRobotPose.inversePose * Vector2f(theFieldDimensions.xPosOpponentGroundline, 0.f)).angle();
         
       transition
       {
