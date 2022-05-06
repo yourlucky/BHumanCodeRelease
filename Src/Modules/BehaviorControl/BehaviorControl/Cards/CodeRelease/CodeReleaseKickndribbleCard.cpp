@@ -51,11 +51,11 @@ CARD(CodeReleaseKickndribbleCard,
     (float)(400.f) ballAlignOffsetX,
     (float)(100.f) ballYThreshold,
     (Angle)(2_deg) angleToGoalThresholdPrecise,
-    //(float)(80.f) ballOffsetX,
-    (float)(250.f) ballOffsetX,
+    (float)(200.f) ballOffsetX,
+    //(float)(150.f) ballOffsetX,
     (Rangef)({140.f, 170.f}) ballOffsetXRange,
    // (float)(80.f) ballOffsetY,
-    (float)(80.f) ballOffsetY,
+    (float)(40.f) ballOffsetY,
     
     (Rangef)({20.f, 50.f}) ballOffsetYRange,
     (int)(10) minKickWaitTime,
@@ -107,7 +107,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         {
           if(theRobotInfo.number == 1)
           {
-            if (state_time > c_time + 5000 ) //if not fallen for 10secs
+            if (state_time > c_time + 13000 ) //if not fallen for 10secs
             {
               c_time = state_time;
               goto InitialWait;
@@ -354,7 +354,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
         {
             if(!theFieldBall.ballWasSeen(ballNotSeenTimeout))
               goto giverole;
-           if(std::abs(v_angle_goal) > angleToGoalThreshold*2)
+           if(std::abs(v_angle_goal) > angleToGoalThreshold)
             goto alignBehindBall;
           
             

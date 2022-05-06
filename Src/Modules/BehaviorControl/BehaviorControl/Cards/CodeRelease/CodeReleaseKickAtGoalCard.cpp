@@ -82,7 +82,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       std::cout<<str;
 
       theSaySkill(str);
-      if(theRobotInfo.number == 1)
+      if(theRobotInfo.number == 3)
         goto goalkeeper;
       else
         goto start;
