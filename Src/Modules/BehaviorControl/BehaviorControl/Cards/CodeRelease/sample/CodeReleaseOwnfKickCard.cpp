@@ -17,6 +17,7 @@ CARD(CodeReleaseOwnfKickCard,
   CALLS(Say),
   CALLS(Stand),
   CALLS(WalkAtRelativeSpeed),
+  REQUIRES(RobotInfo),
   DEFINES_PARAMETERS(
   {,
     (float)(1.0f) walkSpeed,
@@ -42,8 +43,13 @@ class CodeReleaseOwnfKickCard : public CodeReleaseOwnfKickCardBase
     //theLookForwardSkill();
     //theStandSkill();
     // Not implemented in the Code Release.
-    theSaySkill("Turn");
-    theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed, 0.f, 0.f));
+    if(theRobotInfo.number == 2) {
+    theWalkAtRelativeSpeedSkill(Pose2f(0.9f, 0.f, 0.f));}
+
+    if(theRobotInfo.number == 1){
+    //theWalkAtRelativeSpeedSkill(Pose2f(0.9f, 0.f, 0.f));}
+     theSaySkill("good setting");}
+
   }
 };
 
