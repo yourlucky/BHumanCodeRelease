@@ -11,6 +11,8 @@
 
 #include "Representations/Communication/RobotInfo.h"
 
+#include "Representations/Communication/TeamData.h"
+
 
 CARD(CodeReleaseOwnfKickCard,
  {,
@@ -20,6 +22,7 @@ CARD(CodeReleaseOwnfKickCard,
   CALLS(Stand),
   CALLS(WalkAtRelativeSpeed),
   REQUIRES(RobotInfo),
+   REQUIRES(TeamData),
   DEFINES_PARAMETERS(
   {,
     (float)(1.0f) walkSpeed,
@@ -51,7 +54,8 @@ class CodeReleaseOwnfKickCard : public CodeReleaseOwnfKickCardBase
     }
 
     if(theRobotInfo.number == 1){
-    theWalkAtRelativeSpeedSkill(Pose2f(0.9f, 0.f, 0.f));
+    theWalkAtRelativeSpeedSkill(Pose2f(0.9f, theTeamData.teammates.translation.x(), theTeamData.teammates.translation.y()));
+    //theTeamData.teammates.translation.x()
 }
      
 
