@@ -60,7 +60,7 @@ class CodeReleaseOwnfKickCard : public CodeReleaseOwnfKickCardBase
         float _x = theTeamData.teammates[0].theRobotPose.translation.x()-theRobotPose.translation.x();
         float _y = theTeamData.teammates[0].theRobotPose.translation.y()-theRobotPose.translation.y();
         
-        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f,_x,0.f));
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f,_x,_y));
 }
      
 
