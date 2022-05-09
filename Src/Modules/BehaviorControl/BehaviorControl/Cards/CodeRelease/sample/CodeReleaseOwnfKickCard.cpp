@@ -9,6 +9,8 @@
 #include "Representations/BehaviorControl/Skills.h"
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 
+#include "Representations/Communication/RobotInfo.h"
+
 
 CARD(CodeReleaseOwnfKickCard,
  {,
@@ -44,11 +46,15 @@ class CodeReleaseOwnfKickCard : public CodeReleaseOwnfKickCardBase
     //theStandSkill();
     // Not implemented in the Code Release.
     if(theRobotInfo.number == 2) {
-    theWalkAtRelativeSpeedSkill(Pose2f(0.9f, 0.f, 0.f));}
+    //theWalkAtRelativeSpeedSkill(Pose2f(0.9f, 0.f, 0.f));}
+    theSaySkill("good setting");
+    }
 
     if(theRobotInfo.number == 1){
-    //theWalkAtRelativeSpeedSkill(Pose2f(0.9f, 0.f, 0.f));}
-     theSaySkill("good setting");}
+    theWalkAtRelativeSpeedSkill(Pose2f(0.9f, 0.f, 0.f));
+}
+     
+
 
   }
 };
