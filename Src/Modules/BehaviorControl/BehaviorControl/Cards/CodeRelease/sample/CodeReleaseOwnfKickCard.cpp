@@ -10,7 +10,7 @@
 #include "Tools/BehaviorControl/Framework/Card/Card.h"
 
 #include "Representations/Communication/RobotInfo.h"
-
+#include "Representations/Modeling/RobotPose.h"
 #include "Representations/Communication/TeamData.h"
 
 
@@ -21,7 +21,9 @@ CARD(CodeReleaseOwnfKickCard,
   CALLS(Say),
   CALLS(Stand),
   CALLS(WalkAtRelativeSpeed),
+  CALLS(WalkToTarget),
   REQUIRES(RobotInfo),
+  REQUIRES(RobotPose),
    REQUIRES(TeamData),
   DEFINES_PARAMETERS(
   {,
@@ -54,8 +56,11 @@ class CodeReleaseOwnfKickCard : public CodeReleaseOwnfKickCardBase
     }
 
     if(theRobotInfo.number == 1){
-    theWalkAtRelativeSpeedSkill(Pose2f(0.9f, theTeamData.teammates.translation.x(), theTeamData.teammates.translation.y()));
-    //theTeamData.teammates.translation.x()
+        
+        float _x = theTeamData.teammates[0].theRobotPose.translation.x()-theRobotPose.translation.x();
+        float _y = theTeamData.teammates[0].theRobotPose.translation.y()-theRobotPose.translation.y();
+        
+        theWalkToTargetSkill(Pose2f(walkSpeed, walkSpeed, walkSpeed), Pose2f(0.f,_x,0.f));
 }
      
 
