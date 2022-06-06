@@ -131,8 +131,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
       static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
       const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
       const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
-      const Pose2f _secondteam = theGroundTruthWorldState.secondTeamPlayers[0].pose;
-
+      
       const GroundTruthRobotPose &theGroundTruthRobotPose =
       static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
       const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
@@ -154,8 +153,7 @@ class CodeReleaseKickndribbleCard : public CodeReleaseKickndribbleCardBase
       static_cast<const GroundTruthWorldState&>(Blackboard::getInstance()["GroundTruthWorldState"]);
       const Pose2f _ownPosition = theGroundTruthWorldState.ownPose;
       const Pose2f _firstteam = theGroundTruthWorldState.firstTeamPlayers[0].pose;
-      const Pose2f _secondteam = theGroundTruthWorldState.secondTeamPlayers[0].pose;
-
+      
       const GroundTruthRobotPose &theGroundTruthRobotPose =
       static_cast<const GroundTruthRobotPose &>( Blackboard::getInstance()["GroundTruthRobotPose"]);
       const Vector2f _ballPosition = theGroundTruthWorldState.balls[0].position.head<2>(); 
