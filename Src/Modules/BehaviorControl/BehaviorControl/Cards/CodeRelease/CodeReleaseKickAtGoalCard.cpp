@@ -75,18 +75,14 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
   {
     theActivitySkill(BehaviorStatus::codeReleaseKickAtGoal);
 
-    initial_state(giveRole)
+    initial_state(start)
     {
-      std::string str = "Robot Number:"+theRobotInfo.number;
-      str = str+"yes";
-      std::cout<<str;
-
-      theSaySkill(str);
-      if(theRobotInfo.number == 3)
-        goto goalkeeper;
-      else
-        goto start;
-      
+        transition{
+            if(theRobotInfo.number == 3)
+                goto goalkeeper;
+            else
+                goto start_2;
+        }
     }
 
     state(goalkeeper)
@@ -220,7 +216,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       }
     }
 
-    state(start)
+    state(start_2)
     {
       transition
       {
@@ -314,7 +310,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       transition
       {
         if(state_time > maxKickWaitTime || (state_time > minKickWaitTime && theInWalkKickSkill.isDone()))
-          goto start;
+          goto start_2;
       }
 
       action
