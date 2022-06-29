@@ -28,7 +28,7 @@ CARD(CodeReleaseKickAtGoalCard,
   DEFINES_PARAMETERS(
   {,
     (float)(0.8f) walkSpeed,
-    (int)(1000) initalWaitTime,
+    (int)(1000) initialWaitTime,
   }),
 });
 
@@ -73,9 +73,10 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
         action
       {
         theLookForwardSkill();
-        theWalkAtRelativeSpeedSkill(Pose2f(walkSpeed,0.f,0.f));
+        theWalkAtRelativeSpeedSkill(Pose2f(0.f,0.8f,0.f));
       }
     }
+  }
 };
 
 MAKE_CARD(CodeReleaseKickAtGoalCard);
