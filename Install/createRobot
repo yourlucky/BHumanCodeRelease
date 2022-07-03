@@ -18,7 +18,7 @@ robotPart=""
 deleteBeforeWrite=""
 deleteOnly=""
 profilesOnly=""
-ip="192.168.89.3"
+ip=""
 head=""
 body=""
 
