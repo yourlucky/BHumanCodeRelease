@@ -23,6 +23,7 @@ CARD(CodeReleaseKickAtGoalCard,
   CALLS(InWalkKick),
   CALLS(LookForward),
   CALLS(Stand),
+  CALLS(Say),
   CALLS(WalkAtRelativeSpeed),
   REQUIRES(RobotPose),
   DEFINES_PARAMETERS(
@@ -58,6 +59,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
 
       action
       {
+        theSaySkill("Success myown robocup code");
         theLookForwardSkill();
         theStandSkill();
       }
@@ -72,6 +74,7 @@ class CodeReleaseKickAtGoalCard : public CodeReleaseKickAtGoalCardBase
       }
         action
       {
+        theSaySkill("Success walk status");
         theLookForwardSkill();
         theWalkAtRelativeSpeedSkill(Pose2f(0.f,0.8f,0.f));
       }
